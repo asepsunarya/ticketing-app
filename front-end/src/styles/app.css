@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.text-overline,
+.text-overline-sm {
+  @apply uppercase;
+}

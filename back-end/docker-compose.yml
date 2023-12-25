@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  nest-app:
+    build: .
+    image: nest-app
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017/boosticket
+    ports:
+      - '8085:8085'
+    depends_on:
+      - mongodb
+    networks:
+      - boost-network
+
+  mongodb:
+    image: mongo:7-jammy
+    ports:
+      - '27017:27017'
+    networks:
+      - boost-network
+
+
+networks:
+  boost-network:
+    driver: bridge
