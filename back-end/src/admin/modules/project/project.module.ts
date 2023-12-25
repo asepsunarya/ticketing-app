@@ -1,0 +1,27 @@
+import * as mongoosePaginate from 'mongoose-paginate-v2';
+
+import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ProjectController } from './project.controller';
+import { ProjectService } from './project.service';
+import { ProjectSchema } from './project.model';
+import { CoreAuthModule } from '@/auth/modules/auth/core.auth.module';
+
+@Module({
+  imports: [
+    CoreAuthModule,
+    MongooseModule.forFeatureAsync([
+      {
+        name: 'project',
+        useFactory: () => {
+          const schema = ProjectSchema;
+          schema.plugin(mongoosePaginate);
+          return schema;
+        },
+      },
+    ]),
+  ],
+  providers: [ProjectService],
+  controllers: [ProjectController],
+})
+export class ProjectModule {}
