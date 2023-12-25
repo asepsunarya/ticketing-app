@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { BugReportModule } from './modules/bug-report/bug-report.module';
+import { TicketModule } from './modules/ticket/ticket.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/boosticket'),
-    BugReportModule,
+    TicketModule,
   ],
 })
 export class AdminAppModule {}

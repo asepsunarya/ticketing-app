@@ -2,9 +2,9 @@ import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { BugReportController } from './bug-report.controller';
-import { BugReportService } from './bug-report.service';
-import { BugReportSchema } from './bug-report.model';
+import { TicketController } from './ticket.controller';
+import { TicketService } from './ticket.service';
+import { TicketSchema } from './ticket.model';
 import { CoreAuthModule } from '@/auth/modules/auth/core.auth.module';
 
 @Module({
@@ -12,16 +12,16 @@ import { CoreAuthModule } from '@/auth/modules/auth/core.auth.module';
     CoreAuthModule,
     MongooseModule.forFeatureAsync([
       {
-        name: 'bug-report',
+        name: 'ticket',
         useFactory: () => {
-          const schema = BugReportSchema;
+          const schema = TicketSchema;
           schema.plugin(mongoosePaginate);
           return schema;
         },
       },
     ]),
   ],
-  providers: [BugReportService],
-  controllers: [BugReportController],
+  providers: [TicketService],
+  controllers: [TicketController],
 })
-export class BugReportModule {}
+export class TicketModule {}

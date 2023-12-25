@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Date, Document, Types, now } from 'mongoose';
 
-export type BugReportDocument = BugReportModel & Document;
+export type TicketDocument = TicketModel & Document;
 
 class User {
   @Prop()
@@ -12,7 +12,7 @@ class User {
 }
 
 @Schema()
-export class BugReportModel {
+export class TicketModel {
   @Prop()
   product: string;
 
@@ -59,4 +59,4 @@ export class BugReportModel {
   note?: string;
 }
 
-export const BugReportSchema = SchemaFactory.createForClass(BugReportModel);
+export const TicketSchema = SchemaFactory.createForClass(TicketModel);

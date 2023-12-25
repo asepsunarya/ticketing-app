@@ -1,11 +1,11 @@
-export class PaginateBugReport {
+export class PaginateTicket {
   page: number;
   limit: number;
   search?: string;
   isAssigned?: boolean;
 }
 
-export class BugReport {
+export class Ticket {
   product: string;
   description: string;
   email: string;

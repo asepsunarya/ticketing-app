@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
-export class PaginateBugReportDto {
+export class PaginateTicketDto {
   @IsNotEmpty()
   @ApiProperty({ default: 1 })
   page: number;
@@ -17,7 +17,7 @@ export class PaginateBugReportDto {
   isAssigned?: boolean;
 }
 
-export class CreateBugReportDto {
+export class CreateTicketDto {
   @ApiProperty({ default: 'manypage' })
   product: string;
 
