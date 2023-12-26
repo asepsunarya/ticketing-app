@@ -2,7 +2,7 @@
   <div>
     <div class="flex justify-between">
       <div class="text-3xl font-semibold">Proyek</div>
-      <c-button text="Buat Proyek" type="default" />
+      <ui-button text="Buat Proyek" />
     </div>
 
     <div class="relative overflow-x-auto sm:rounded-lg">
@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import cButton from "@/components/button/c-button.vue";
+import uiButton from "@/components/button/ui-button.vue";
 import cPagination from "@/components/pagination/c-pagination.vue";
 
 function handlePaginate() {

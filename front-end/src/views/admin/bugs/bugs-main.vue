@@ -5,7 +5,7 @@
       <div class="text-zinc-400">Menampilkan list bugs</div>
     </div>
     <div class="self-center">
-      <c-button
+      <ui-button
         text="Tambah"
         type="outline-default"
         icon="bi bi-plus"
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import cButton from "@/components/button/c-button.vue";
+import uiButton from "@/components/button/ui-button.vue";
 import cCard from "@/components/card/c-card.vue";
 import cPagination from "@/components/pagination/c-pagination.vue";
 import bugsFilter from "@/views/admin/bugs/bugs-list/bugs-filter.vue";

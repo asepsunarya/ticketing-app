@@ -102,7 +102,7 @@
       </div>
     </div>
     <div class="w-28">
-      <c-button text="Simpan" type="default" />
+      <ui-button text="Simpan" type="default" />
     </div>
   </c-card>
 </template>
@@ -113,7 +113,7 @@ import cInput from "@/components/input/c-input.vue";
 import cInputRadio from "@/components/input/c-input-radio.vue";
 import { reactive } from "vue";
 import CInputFile from "@/components/input/c-input-file.vue";
-import CButton from "@/components/button/c-button.vue";
+import uiButton from "@/components/button/ui-button.vue";
 
 const form = reactive({
   product: "",

@@ -1,19 +1,19 @@
 <template>
   <div class="mt-6 flex w-full">
-    <c-button
+    <ui-button
       @click="authGoogle()"
-      type="light"
+      type="ghost"
       custom-class="w-full bg-white text-center flex gap-x-4 text-center justify-center py-2"
       text="Masuk dengan Google"
     >
       <template #icon>
         <img src="@assets/svgs/google.svg" />
       </template>
-    </c-button>
+    </ui-button>
   </div>
 </template>
 
 <script setup lang="ts">
-import cButton from "@/components/button/c-button.vue";
+import uiButton from "@/components/button/ui-button.vue";
 import { authGoogle } from "../services/auth-google.service";
 </script>

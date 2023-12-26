@@ -22,18 +22,17 @@
         {{ v$.password.$errors[0]?.$message }}
       </template>
     </c-input>
-    <c-button
+    <ui-button
       :is-loading="isLoading"
       @click="loginAdmin()"
       type="dark"
       text="Masuk"
-      custom-class="bg-zinc-800 text-white"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import CButton from "@/components/button/c-button.vue";
+import uiButton from "@/components/button/ui-button.vue";
 import CInput from "@/components/input/c-input.vue";
 import { reactive, ref } from "vue";
 import { loginAdminService } from "@/views/guest/auth-admin/login/services/login-admin.service";
