@@ -47,7 +47,7 @@
 import uiInput from "@/components/input/ui-input.vue";
 import axios from "@/libraries/axios";
 
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import type { User } from "@/views/user/services/user.struct";
 
 const timeOut = ref<number>(0);
@@ -85,4 +85,8 @@ async function searchUsers(): Promise<void> {
 function handleSelectUser(user: User): void {
   emits("select", user);
 }
+
+onMounted(async () => {
+  await searchUsers();
+});
 </script>

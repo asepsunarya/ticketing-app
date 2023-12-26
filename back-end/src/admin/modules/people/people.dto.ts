@@ -15,12 +15,15 @@ export class PaginatePeopleDto {
 }
 
 export class CreatePeopleDto {
+  @IsNotEmpty()
   @ApiProperty()
   projectId: string;
 
+  @IsNotEmpty()
   @ApiProperty()
   userId: string;
 
+  @IsNotEmpty()
   @ApiProperty()
   role: string;
 }

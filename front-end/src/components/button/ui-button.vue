@@ -15,7 +15,11 @@
     <button :class="[customClass, btnClass]" @click="handleClick">
       <i v-if="icon" :class="icon" />
       <slot v-if="$slots.icon" name="icon"></slot>
-      <span class="loading loading-spinner" v-if="props.isLoading"></span>
+      <span
+        class="loading loading-spinner"
+        :class="{ 'w-4 h-4': size === 'sm' }"
+        v-if="props.isLoading"
+      ></span>
       {{ text }}
     </button>
   </template>
