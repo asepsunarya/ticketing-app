@@ -62,7 +62,7 @@
           </div>
           <div
             v-show="showOption"
-            class="ml-7 mt-2 w-max z-10 font-normal text-xs bg-white rounded shadow  "
+            class="ml-7 mt-2 w-max z-10 font-normal text-xs bg-white rounded shadow"
           >
             <div class="flex flex-col my-1">
               <div class="hover:bg-zinc-100 py-2 px-4">Semua Tiket Open</div>

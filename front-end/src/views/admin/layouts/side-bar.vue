@@ -68,17 +68,3 @@ function handleClick(menu: Menu) {
   else displayMenu.value = menu.name;
 }
 </script>
-
-<style scoped>
-.menu-css::before {
-  width: 5px;
-  position: absolute;
-  top: 12px;
-  bottom: 12px;
-  left: -1px;
-  background: rgb(37 99 235);
-  border-radius: 20px;
-  content: "";
-  z-index: 0;
-}
-</style>
