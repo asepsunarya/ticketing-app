@@ -3,7 +3,7 @@
     <top-bar />
     <side-bar />
     <main class="p-4" :class="{ 'sm:ml-64': false }">
-      <div class="p-4 rounded-lg dark:border-gray-700 mt-14">
+      <div class="p-4 rounded-lg mt-14">
         <router-view />
       </div>
     </main>

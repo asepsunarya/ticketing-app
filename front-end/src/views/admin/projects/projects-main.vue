@@ -6,10 +6,8 @@
     </div>
 
     <div class="relative overflow-x-auto sm:rounded-lg">
-      <table
-        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-      >
-        <thead class="text-black dark:text-gray-400 border-b">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-black border-b">
           <tr>
             <th scope="col" class="px-6 py-3 font-semibold">Nama</th>
             <th scope="col" class="px-6 py-3 font-semibold">ID</th>
@@ -21,12 +19,10 @@
           </tr>
         </thead>
         <tbody class="border-b text-black">
-          <tr
-            class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-          >
+          <tr class="bg-white hover:bg-gray-50">
             <th
               scope="row"
-              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
             >
               <div class="flex gap-x-2 items-center">
                 <img
@@ -40,11 +36,7 @@
             <td class="px-6 py-4">Kelola Posting</td>
             <td class="px-6 py-4">$2999</td>
             <td class="px-6 py-4 text-right">
-              <a
-                href="#"
-                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >Edit</a
-              >
+              <a href="#" class="font-medium text-blue-600">Edit</a>
             </td>
           </tr>
         </tbody>

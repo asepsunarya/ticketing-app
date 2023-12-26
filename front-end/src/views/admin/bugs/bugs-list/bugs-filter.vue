@@ -1,12 +1,12 @@
 <template>
   <div
-    class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900"
+    class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white"
   >
     <div>
       <button
         id="dropdownActionButton"
         data-dropdown-toggle="dropdownAction"
-        class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+        class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5"
         type="button"
       >
         <span class="sr-only">Action button</span>
@@ -30,30 +30,20 @@
       <!-- Dropdown menu -->
       <div
         id="dropdownAction"
-        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44"
       >
         <ul
-          class="py-1 text-sm text-gray-700 dark:text-gray-200"
+          class="py-1 text-sm text-gray-700"
           aria-labelledby="dropdownActionButton"
         >
           <li>
-            <a
-              href="#"
-              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >Reward</a
-            >
+            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Reward</a>
           </li>
           <li>
-            <a
-              href="#"
-              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >Promote</a
-            >
+            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Promote</a>
           </li>
           <li>
-            <a
-              href="#"
-              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+            <a href="#" class="block px-4 py-2 hover:bg-gray-100"
               >Activate account</a
             >
           </li>
@@ -61,7 +51,7 @@
         <div class="py-1">
           <a
             href="#"
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >Delete User</a
           >
         </div>

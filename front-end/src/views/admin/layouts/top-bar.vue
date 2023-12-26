@@ -1,7 +1,5 @@
 <template>
-  <nav
-    class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"
-  >
+  <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-start rtl:justify-end">
@@ -10,7 +8,7 @@
             data-drawer-toggle="logo-sidebar"
             aria-controls="logo-sidebar"
             type="button"
-            class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
           >
             <span class="sr-only">Open sidebar</span>
             <svg
@@ -30,20 +28,20 @@
           <div @click="toHome" class="cursor-pointer flex ms-2 md:me-24">
             <img src="@/assets/logo.svg" class="h-8 me-3" alt="FlowBite Logo" />
             <span
-              class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white"
+              class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap"
               >BoostTicket</span
             >
           </div>
 
           <div class="hidden w-full md:flex items-center" id="navbar-dropdown">
             <ul
-              class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
+              class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white md:"
             >
               <li class="!text-blue">
                 <button
                   id="dropdownNavbarLink"
                   data-dropdown-toggle="dropdownNavbar2"
-                  class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 !text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+                  class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 !text-blue-700 md:p-0 md:w-auto"
                 >
                   Kerjaanmu
                   <svg
@@ -67,7 +65,7 @@
                 <button
                   id="dropdownNavbarLink"
                   data-dropdown-toggle="dropdownNavbar"
-                  class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+                  class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
                 >
                   Proyek
                   <svg
@@ -88,22 +86,20 @@
                 </button>
                 <div
                   id="dropdownNavbar"
-                  class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-64 dark:bg-gray-700 dark:divide-gray-600"
+                  class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-64"
                 >
                   <div class="pt-2">
                     <div class="py-2 px-4 text-sm font-bold">Terbaru</div>
-                    <div class="text-sm text-gray-700 dark:text-gray-400">
+                    <div class="text-sm text-gray-700">
                       <div
-                        class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                        class="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
                       >
                         <img
                           src="https://media.licdn.com/dms/image/D560BAQHdDHdh6paD8w/company-logo_200_200/0/1683694599437/manypage_id_logo?e=2147483647&v=beta&t=AR8JGUIgIDaqYxBEHizyD1IgGVUzaf6AUxIA8qHrKGc"
                           class="w-8 h-8 rounded"
                         />
                         <div class="flex flex-col px-4">
-                          <a
-                            href="#"
-                            class="block hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          <a href="#" class="block hover:bg-gray-100"
                             >Manypage.id</a
                           >
                           <span class="text-zinc-400 text-xs"
@@ -112,16 +108,14 @@
                         </div>
                       </div>
                       <div
-                        class="flex items-center px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                        class="flex items-center px-4 hover:bg-gray-100 cursor-pointer"
                       >
                         <img
                           src="https://media.licdn.com/dms/image/D560BAQHdDHdh6paD8w/company-logo_200_200/0/1683694599437/manypage_id_logo?e=2147483647&v=beta&t=AR8JGUIgIDaqYxBEHizyD1IgGVUzaf6AUxIA8qHrKGc"
                           class="w-8 h-8 rounded"
                         />
                         <div class="flex flex-col px-4 py-2">
-                          <a
-                            href="#"
-                            class="block hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          <a href="#" class="block hover:bg-gray-100"
                             >Manychat.id</a
                           >
                           <span class="text-zinc-400 text-xs">Kelola Chat</span>
@@ -132,12 +126,12 @@
                   <div class="py-1">
                     <a
                       href="#"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >Lihat Semua</a
                     >
                     <a
                       href="#"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >Buat Aplikasi</a
                     >
                   </div>
@@ -147,7 +141,7 @@
                 <button
                   id="dropdownNavbarLink"
                   data-dropdown-toggle="dropdownTeam"
-                  class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+                  class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
                 >
                   Tim
                   <svg
@@ -168,40 +162,32 @@
                 </button>
                 <div
                   id="dropdownTeam"
-                  class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-64 dark:bg-gray-700 dark:divide-gray-600"
+                  class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-64"
                 >
                   <div class="pt-2">
                     <div class="py-2 px-4 text-sm font-bold">Tim</div>
-                    <div class="text-sm text-gray-700 dark:text-gray-400">
+                    <div class="text-sm text-gray-700">
                       <div
-                        class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                        class="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
                       >
                         <img
                           src="https://media.licdn.com/dms/image/D560BAQHdDHdh6paD8w/company-logo_200_200/0/1683694599437/manypage_id_logo?e=2147483647&v=beta&t=AR8JGUIgIDaqYxBEHizyD1IgGVUzaf6AUxIA8qHrKGc"
                           class="w-8 h-8 rounded"
                         />
                         <div class="flex flex-col px-4">
-                          <a
-                            href="#"
-                            class="block hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                            >Tim A</a
-                          >
+                          <a href="#" class="block hover:bg-gray-100">Tim A</a>
                           <span class="text-zinc-400 text-xs">Manychat.id</span>
                         </div>
                       </div>
                       <div
-                        class="flex items-center px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                        class="flex items-center px-4 hover:bg-gray-100 cursor-pointer"
                       >
                         <img
                           src="https://media.licdn.com/dms/image/D560BAQHdDHdh6paD8w/company-logo_200_200/0/1683694599437/manypage_id_logo?e=2147483647&v=beta&t=AR8JGUIgIDaqYxBEHizyD1IgGVUzaf6AUxIA8qHrKGc"
                           class="w-8 h-8 rounded"
                         />
                         <div class="flex flex-col px-4 py-2">
-                          <a
-                            href="#"
-                            class="block hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                            >Tim B</a
-                          >
+                          <a href="#" class="block hover:bg-gray-100">Tim B</a>
                           <span class="text-zinc-400 text-xs">Manypage.id</span>
                         </div>
                       </div>
@@ -210,12 +196,12 @@
                   <div class="py-1">
                     <a
                       href="#"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >Lihat Semua</a
                     >
                     <a
                       href="#"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >Buat Tim</a
                     >
                   </div>
@@ -236,7 +222,7 @@
             <div>
               <button
                 type="button"
-                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300"
                 aria-expanded="false"
                 data-dropdown-toggle="dropdown-user"
               >
@@ -249,15 +235,15 @@
               </button>
             </div>
             <div
-              class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+              class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow"
               id="dropdown-user"
             >
               <div class="px-4 py-3" role="none">
-                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                <p class="text-sm text-gray-900" role="none">
                   {{ authStore.user.displayName }}
                 </p>
                 <p
-                  class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
+                  class="text-sm font-medium text-gray-900 truncate"
                   role="none"
                 >
                   {{ authStore.user.email }}
@@ -267,7 +253,7 @@
                 <li>
                   <a
                     href="#"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem"
                     >Dashboard</a
                   >
@@ -275,7 +261,7 @@
                 <li>
                   <a
                     href="#"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem"
                     >Settings</a
                   >
@@ -283,7 +269,7 @@
                 <li>
                   <a
                     href="#"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem"
                     >Earnings</a
                   >
@@ -292,7 +278,7 @@
                   <a
                     href="#"
                     @click="signOut()"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem"
                     >Sign out</a
                   >
