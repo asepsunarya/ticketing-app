@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Project, PaginateProject } from './project.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { ProjectDocument } from './project.model';
-import { Model, PaginateModel, Types } from 'mongoose';
+import { AggregatePaginateModel, Model, Types } from 'mongoose';
 import { User } from '@/global/entity/user.entity';
 
 @Injectable()
@@ -10,13 +10,26 @@ export class ProjectService {
   constructor(
     @InjectModel('project')
     private projectModel: Model<ProjectDocument> &
-      PaginateModel<ProjectDocument>,
+      AggregatePaginateModel<ProjectDocument>,
   ) {}
 
   async paginate(query: PaginateProject) {
     const filter = {};
-    if (query.search) filter['search'] = query.search;
-    return await this.projectModel.paginate(filter, {
+    const pipeline = this.projectModel.aggregate([
+      { $match: filter },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'leader._id',
+          foreignField: '_id',
+          as: 'leader',
+        },
+      },
+      {
+        $unwind: '$leader',
+      },
+    ]);
+    return await this.projectModel.aggregatePaginate(pipeline, {
       page: query.page,
       limit: query.limit,
     });

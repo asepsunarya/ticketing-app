@@ -1,7 +1,7 @@
 <template>
   <div class="relative group">
     <ui-input
-      v-model="search"
+      v-model="filter.search"
       type="text"
       placeholder="Masukan nama atau email"
       :label="label || 'Nama atau Email'"
@@ -45,23 +45,28 @@
 
 <script setup lang="ts">
 import uiInput from "@/components/input/ui-input.vue";
-import axios from "@/libraries/axios";
-
-import { onMounted, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import type { User } from "@/views/user/services/user.struct";
+import { getUsers } from "@/views/admin/services/users.service";
 
 const timeOut = ref<number>(0);
 const suggestedUsers = ref<User[]>([]);
 const isLoadingSearchUsers = ref<boolean>(false);
-const search = ref("");
 
 const props = defineProps<{
-  excludeSelf: boolean;
+  includeSelf?: boolean;
   label?: string;
 }>();
 const emits = defineEmits<{
   (e: "select", user: User): void;
 }>();
+
+const filter = reactive({
+  page: 1,
+  limit: 5,
+  search: "",
+  includeSelf: props.includeSelf,
+});
 
 function handleSearchUsers(): void {
   clearTimeout(timeOut.value);
@@ -73,16 +78,8 @@ function handleSearchUsers(): void {
 async function searchUsers(): Promise<void> {
   try {
     isLoadingSearchUsers.value = true;
-    const users = await axios<User[]>({
-      method: "GET",
-      url: "/admin/user",
-      params: {
-        role: "admin",
-        search: search.value,
-        excludeSelf: props.excludeSelf,
-      },
-    });
-    suggestedUsers.value = users;
+    const users = await getUsers(filter);
+    suggestedUsers.value = users.docs;
   } catch (error) {
     console.log("error : ", error);
   } finally {

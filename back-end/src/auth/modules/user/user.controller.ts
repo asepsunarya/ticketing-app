@@ -1,6 +1,5 @@
 import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserDocument } from './user.model';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetUserDto } from './dto/user.dto';
 import { JwtAuthGuardAdmin } from '../auth/guards/jwt-auth-admin.guard';
@@ -14,9 +13,9 @@ export class UserController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuardAdmin)
   async get(
-    @Query() { role, search, exludeSelf }: GetUserDto,
+    @Query() { role, search, includeSelf, page, limit }: GetUserDto,
     @Req() { user },
-  ): Promise<UserDocument[]> {
+  ) {
     const filterRole = role != 'user' ? { $ne: 'user' } : 'user';
     const query = {
       role: filterRole,
@@ -25,7 +24,7 @@ export class UserController {
         { email: new RegExp(search, 'i') },
       ],
     };
-    if (exludeSelf) query['_id'] = { $ne: user._id };
-    return await this.userService.getUsers(query);
+    if (!includeSelf) query['_id'] = { $ne: user._id };
+    return await this.userService.paginate(query, { page, limit });
   }
 }

@@ -25,7 +25,7 @@
         </div>
       </div>
       <template v-else>
-        <search-member @select="handleSelectUser" :exclude-self="true" />
+        <search-member @select="handleSelectUser" />
       </template>
       <ui-select v-model="form.role" label="Role">
         <option selected disabled value="">Pilih Role Anggota</option>

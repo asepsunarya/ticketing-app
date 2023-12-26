@@ -1,15 +1,7 @@
+import { PaginationDto } from '@/global/dto/pagination.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
 
-export class PaginateTicketDto {
-  @IsNotEmpty()
-  @ApiProperty({ default: 1 })
-  page: number;
-
-  @IsNotEmpty()
-  @ApiProperty({ default: 10 })
-  limit: number;
-
+export class PaginateTicketDto extends PaginationDto {
   @ApiProperty({ default: '', required: false })
   search?: string;
 

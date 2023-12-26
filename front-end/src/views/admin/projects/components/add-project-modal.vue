@@ -35,7 +35,7 @@
         <search-member
           @select="handleSelectUser"
           label="Leader"
-          :exclude-self="false"
+          :include-self="true"
         />
       </template>
       <ui-input v-model="form.code" type="text" placeholder="MP" label="Kode" />

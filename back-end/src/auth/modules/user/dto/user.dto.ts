@@ -1,3 +1,4 @@
+import { PaginationDto } from '@/global/dto/pagination.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
@@ -22,7 +23,7 @@ export class SignupDto {
   photo?: string;
 }
 
-export class GetUserDto {
+export class GetUserDto extends PaginationDto {
   @IsNotEmpty()
   @ApiProperty({ example: 'admin' })
   role: string;
@@ -31,5 +32,5 @@ export class GetUserDto {
   search?: string;
 
   @ApiProperty({ example: false, required: false })
-  exludeSelf?: boolean;
+  includeSelf?: boolean;
 }

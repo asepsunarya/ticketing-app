@@ -46,9 +46,9 @@
 import uiButton from "@/components/button/ui-button.vue";
 import addProjectMemberModal from "@/views/admin/project-members/components/add-project-member-modal.vue";
 import cPagination from "@/components/pagination/c-pagination.vue";
-import axios from "@/libraries/axios";
 import { onMounted, reactive, ref } from "vue";
 import type { User } from "@/views/user/services/user.struct";
+import { getMembers } from "@/views/admin/project-members/services/project-members.service";
 
 const isLoadingGetMembers = ref<boolean>(false);
 const filter = reactive({
@@ -63,16 +63,7 @@ const members = ref<User[]>([]);
 async function handleGetMembers() {
   try {
     isLoadingGetMembers.value = true;
-    const memberList = await axios<{
-      docs: User[];
-      hasNextPage: boolean;
-      page: number;
-      totalPages: number;
-    }>({
-      method: "GET",
-      url: "/admin/people",
-      params: filter,
-    });
+    const memberList = await getMembers(filter);
 
     members.value = memberList.docs;
     filter.hasNextPage = memberList.hasNextPage;
