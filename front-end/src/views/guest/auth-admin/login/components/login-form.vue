@@ -58,6 +58,7 @@ async function loginAdmin() {
 
   isLoading.value = true;
   await loginAdminService({ email: form.email, password: form.password });
+  location.href = "/admin";
   isLoading.value = false;
 }
 </script>

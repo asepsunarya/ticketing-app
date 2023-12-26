@@ -8,7 +8,5 @@ export async function loginAdminService({ email, password }: LoginDto) {
     url: "/auth/login/admin",
     data: { email, password },
   });
-  console.log(user, accessToken, "response");
   authService.setAuth(user, accessToken);
-  location.href = "/admin";
 }
