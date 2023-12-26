@@ -26,6 +26,12 @@ import { UserService } from '../user/user.service';
     JwtStrategy,
     JwtAdminStrategy,
   ],
-  exports: [AuthService, LocalStrategy, JwtStrategy, JwtAdminStrategy],
+  exports: [
+    AuthService,
+    UserService,
+    LocalStrategy,
+    JwtStrategy,
+    JwtAdminStrategy,
+  ],
 })
 export class CoreAuthModule {}
