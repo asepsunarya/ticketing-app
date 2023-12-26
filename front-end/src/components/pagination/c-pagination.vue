@@ -25,8 +25,9 @@ const props = defineProps<{
   nextPage: number;
 }>();
 
-const emit = defineEmits(["change"]);
-
+const emits = defineEmits<{
+  (e: "change", page: number): void;
+}>();
 function pages(): number[] {
   const pageList = [];
 
@@ -43,7 +44,7 @@ function pages(): number[] {
 
 function changePage(page: number) {
   if (page) {
-    emit("change", page);
+    emits("change", page);
   }
 }
 </script>
