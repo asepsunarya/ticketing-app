@@ -16,7 +16,7 @@ export class UserController {
   async get(
     @Query() { role, search }: GetUserDto,
     @Req() { user },
-  ): Promise<UserDocument> {
+  ): Promise<UserDocument[]> {
     const filterRole = role != 'user' ? { $ne: 'user' } : 'user';
     const query = {
       _id: { $ne: user._id },
@@ -26,6 +26,6 @@ export class UserController {
         { email: new RegExp(search, 'i') },
       ],
     };
-    return await this.userService.getUser(query);
+    return await this.userService.getUsers(query);
   }
 }
