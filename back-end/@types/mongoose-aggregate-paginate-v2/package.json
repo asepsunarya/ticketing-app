@@ -1,0 +1,56 @@
+{
+  "_from": "@types/mongoose-aggregate-paginate-v2",
+  "_id": "@types/mongoose-aggregate-paginate-v2@1.0.3",
+  "_inBundle": false,
+  "_integrity": "sha512-FlkviSitICzBzj7sD4wLj3FK6AeOJACknCRheyBvs+yTTAx82U5XNes256bYivpF0q9cMUgr8oSuzWMVn/IlWA==",
+  "_location": "/@types/mongoose-aggregate-paginate-v2",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@types/mongoose-aggregate-paginate-v2",
+    "name": "@types/mongoose-aggregate-paginate-v2",
+    "escapedName": "@types%2fmongoose-aggregate-paginate-v2",
+    "scope": "@types",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@types/mongoose-aggregate-paginate-v2/-/mongoose-aggregate-paginate-v2-1.0.3.tgz",
+  "_shasum": "57f944224d85b603188682b8743ad1f4dd6deca8",
+  "_spec": "@types/mongoose-aggregate-paginate-v2",
+  "_where": "/home/zian/boostr-v2/functions",
+  "bugs": {
+    "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Alexandre Croteau",
+      "url": "https://github.com/acrilex1"
+    }
+  ],
+  "dependencies": {
+    "@types/mongoose": "5.10.5"
+  },
+  "deprecated": false,
+  "description": "TypeScript definitions for mongoose-aggregate-paginate-v2",
+  "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/mongoose-aggregate-paginate-v2",
+  "license": "MIT",
+  "main": "",
+  "name": "@types/mongoose-aggregate-paginate-v2",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+    "directory": "types/mongoose-aggregate-paginate-v2"
+  },
+  "scripts": {},
+  "typeScriptVersion": "3.6",
+  "types": "index.d.ts",
+  "typesPublisherContentHash": "b20cc2244de231a3f01edd85f3218a29c1247e54e70561b1b35516ea2fc52987",
+  "version": "1.0.3"
+}

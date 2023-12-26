@@ -2,20 +2,44 @@ import { Injectable } from '@nestjs/common';
 import { People, PaginatePeople } from './people.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { PeopleDocument } from './people.model';
-import { Model, PaginateModel, Types } from 'mongoose';
+import { Model, AggregatePaginateModel, Types } from 'mongoose';
 import { User } from '@/global/entity/user.entity';
 
 @Injectable()
 export class PeopleService {
   constructor(
     @InjectModel('people')
-    private peopleModel: Model<PeopleDocument> & PaginateModel<PeopleDocument>,
+    private peopleModel: Model<PeopleDocument> &
+      AggregatePaginateModel<PeopleDocument>,
   ) {}
 
   async paginate(query: PaginatePeople) {
     const filter = {};
     if (query.search) filter['search'] = query.search;
-    return await this.peopleModel.paginate(filter, {
+    const pipeline = this.peopleModel.aggregate([
+      { $match: filter },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $project: {
+          role: '$role',
+          userId: '$user._id',
+          name: '$user.name',
+          email: '$user.email',
+          photo: '$user.photo',
+        },
+      },
+    ]);
+    return await this.peopleModel.aggregatePaginate(pipeline, {
       page: query.page,
       limit: query.limit,
     });
@@ -24,6 +48,7 @@ export class PeopleService {
   async create(body: People, { _id, email }: User) {
     const people = {
       ...body,
+      userId: new Types.ObjectId(body.userId),
       createdBy: {
         _id: new Types.ObjectId(_id),
         email,

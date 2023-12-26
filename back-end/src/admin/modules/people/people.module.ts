@@ -1,4 +1,5 @@
 import * as mongoosePaginate from 'mongoose-paginate-v2';
+import * as mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2';
 
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -16,6 +17,7 @@ import { CoreAuthModule } from '@/auth/modules/auth/core.auth.module';
         useFactory: () => {
           const schema = PeopleSchema;
           schema.plugin(mongoosePaginate);
+          schema.plugin(mongooseAggregatePaginate);
           return schema;
         },
       },
