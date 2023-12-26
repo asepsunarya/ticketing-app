@@ -29,4 +29,7 @@ export class GetUserDto {
 
   @ApiProperty({ example: 'dummy@gmail.com', required: false })
   search?: string;
+
+  @ApiProperty({ example: false, required: false })
+  exludeSelf?: boolean;
 }

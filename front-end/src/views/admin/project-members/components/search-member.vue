@@ -4,7 +4,7 @@
       v-model="search"
       type="text"
       placeholder="Masukan nama atau email"
-      label="Nama atau Email"
+      :label="label || 'Nama atau Email'"
       @input="handleSearchUsers"
     />
     <div
@@ -55,6 +55,10 @@ const suggestedUsers = ref<User[]>([]);
 const isLoadingSearchUsers = ref<boolean>(false);
 const search = ref("");
 
+const props = defineProps<{
+  excludeSelf: boolean;
+  label?: string;
+}>();
 const emits = defineEmits<{
   (e: "select", user: User): void;
 }>();
@@ -72,7 +76,11 @@ async function searchUsers(): Promise<void> {
     const users = await axios<User[]>({
       method: "GET",
       url: "/admin/user",
-      params: { role: "admin", search: search.value },
+      params: {
+        role: "admin",
+        search: search.value,
+        excludeSelf: props.excludeSelf,
+      },
     });
     suggestedUsers.value = users;
   } catch (error) {

@@ -25,6 +25,10 @@ export class ProjectService {
   async create(body: Project, { _id, email }: User) {
     const project = {
       ...body,
+      leader: {
+        _id: new Types.ObjectId(body.leader._id),
+        email: body.leader.email,
+      },
       createdBy: {
         _id: new Types.ObjectId(_id),
         email,

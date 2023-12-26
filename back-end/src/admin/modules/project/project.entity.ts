@@ -1,3 +1,5 @@
+import { User } from '@/global/entity/user.entity';
+
 export class PaginateProject {
   page: number;
   limit: number;
@@ -8,6 +10,6 @@ export class Project {
   name: string;
   code: string;
   description: string;
-  picture: string;
-  leader: string;
+  leader: User;
+  picture?: string;
 }

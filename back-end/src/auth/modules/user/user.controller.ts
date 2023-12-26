@@ -14,18 +14,18 @@ export class UserController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuardAdmin)
   async get(
-    @Query() { role, search }: GetUserDto,
+    @Query() { role, search, exludeSelf }: GetUserDto,
     @Req() { user },
   ): Promise<UserDocument[]> {
     const filterRole = role != 'user' ? { $ne: 'user' } : 'user';
     const query = {
-      _id: { $ne: user._id },
       role: filterRole,
       $or: [
         { name: new RegExp(search, 'i') },
         { email: new RegExp(search, 'i') },
       ],
     };
+    if (exludeSelf) query['_id'] = { $ne: user._id };
     return await this.userService.getUsers(query);
   }
 }

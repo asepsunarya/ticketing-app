@@ -1,3 +1,4 @@
+import { UserDto } from '@/global/dto/user.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
@@ -12,9 +13,6 @@ export class PaginateProjectDto {
 
   @ApiProperty({ default: '', required: false })
   search?: string;
-
-  @ApiProperty({ default: false, required: false })
-  isAssigned?: boolean;
 }
 
 export class CreateProjectDto {
@@ -27,9 +25,9 @@ export class CreateProjectDto {
   @ApiProperty({ default: '' })
   description: string;
 
-  @ApiProperty({ default: '' })
-  picture: string;
+  @ApiProperty({ default: '', type: UserDto })
+  leader: UserDto;
 
-  @ApiProperty({ default: '' })
-  leader: string;
+  @ApiProperty({ default: '', required: false })
+  picture?: string;
 }

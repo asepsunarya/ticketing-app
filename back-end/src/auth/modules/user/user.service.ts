@@ -17,6 +17,6 @@ export class UserService {
   }
 
   async getUsers(query: object): Promise<UserDocument[]> {
-    return this.userModel.find(query);
+    return this.userModel.find(query).limit(5);
   }
 }

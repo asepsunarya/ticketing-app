@@ -2,7 +2,7 @@
   <div>
     <div class="flex justify-between">
       <div class="text-3xl font-semibold">Proyek</div>
-      <ui-button text="Buat Proyek" />
+      <ui-button text="Buat Proyek" for="add-project-modal" />
     </div>
 
     <div class="relative overflow-x-auto sm:rounded-lg">
@@ -51,14 +51,22 @@
         />
       </div>
     </div>
+    <teleport to="body">
+      <add-project-modal @need-refresh="handleRefresh" />
+    </teleport>
   </div>
 </template>
 
 <script setup lang="ts">
 import uiButton from "@/components/button/ui-button.vue";
 import cPagination from "@/components/pagination/c-pagination.vue";
+import addProjectModal from "./components/add-project-modal.vue";
 
 function handlePaginate() {
+  //
+}
+
+function handleRefresh() {
   //
 }
 </script>

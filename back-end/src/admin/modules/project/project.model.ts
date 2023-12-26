@@ -23,10 +23,7 @@ export class ProjectModel {
   description: string;
 
   @Prop()
-  picture: string;
-
-  @Prop()
-  leader: string;
+  leader: User;
 
   @Prop()
   createdBy: User;
@@ -36,6 +33,9 @@ export class ProjectModel {
 
   @Prop({ type: Date, default: now() })
   updatedAt: Date;
+
+  @Prop()
+  picture?: string;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(ProjectModel);
