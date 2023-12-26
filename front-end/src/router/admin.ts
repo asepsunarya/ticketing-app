@@ -16,19 +16,11 @@ export default [
     component: () => import("@/views/admin/projects/projects-main.vue"),
   },
   {
-    path: "/admin/bugs",
-    name: "admin-bugs",
+    path: "/admin/projects/:id/tickets",
+    name: "admin-projects-queue",
     meta: {
       requireAuth: true,
     },
-    component: () => import("@/views/admin/bugs/bugs-main.vue"),
-  },
-  {
-    path: "/admin/bugs/create",
-    name: "admin-bugs-create",
-    meta: {
-      requireAuth: true,
-    },
-    component: () => import("@/views/admin/bugs/bugs-form/bugs-form.vue"),
+    component: () => import("@/views/admin/tickets/tickets-main.vue"),
   },
 ];
