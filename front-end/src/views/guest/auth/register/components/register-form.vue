@@ -21,11 +21,7 @@
       custom-class="btn-medium"
       name="passwordConfirm"
     />
-    <c-button
-      text="Buat Akun"
-      custom-class="bg-zinc-800 text-white"
-      type="dark"
-    />
+    <ui-button text="Buat Akun" type="dark" />
     <div class="w-full flex justify-center gap-1 text-sm">
       <div class="text-neutral-900">Sudah Mempunyai Akun?</div>
       <a
@@ -39,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import CButton from "@components/button/c-button.vue";
+import uiButton from "@components/button/ui-button.vue";
 import CInput from "@components/input/c-input.vue";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";

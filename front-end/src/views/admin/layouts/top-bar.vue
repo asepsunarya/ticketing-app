@@ -210,7 +210,7 @@
             </ul>
           </div>
 
-          <c-button
+          <ui-button
             text="Buat"
             type="default"
             size="sm"
@@ -293,7 +293,7 @@
 </template>
 
 <script setup lang="ts">
-import cButton from "@/components/button/c-button.vue";
+import uiButton from "@/components/button/ui-button.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
 
