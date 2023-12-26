@@ -20,6 +20,7 @@ export default [
     name: "admin-projects-queue",
     meta: {
       requireAuth: true,
+      withSidebar: true,
     },
     component: () => import("@/views/admin/tickets/tickets-main.vue"),
   },

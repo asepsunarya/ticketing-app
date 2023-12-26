@@ -1,7 +1,7 @@
 <template>
   <aside
     id="logo-sidebar"
-    v-if="utilStore.withSidebar"
+    v-if="route.meta.withSidebar"
     class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0"
     aria-label="Sidebar"
   >
@@ -23,11 +23,10 @@
 </template>
 
 <script setup lang="ts">
-import { useUtilStore } from "@/stores/util";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
-const utilStore = useUtilStore();
+const route = useRoute();
 const menus = [
   {
     name: "dashboard",

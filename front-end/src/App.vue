@@ -2,7 +2,7 @@
   <template v-if="authStore?.user?.role === 'admin'">
     <top-bar />
     <side-bar />
-    <main class="p-4" :class="{ 'sm:ml-64': utilStore.withSidebar }">
+    <main class="p-4" :class="{ 'sm:ml-64': route.meta.withSidebar }">
       <div class="p-4 rounded-lg mt-14">
         <router-view />
       </div>
@@ -13,12 +13,11 @@
   </template>
 </template>
 <script setup lang="ts">
-import { RouterView } from "vue-router";
+import { RouterView, useRoute } from "vue-router";
 import { useAuthStore } from "./stores/auth";
 import topBar from "@/views/admin/layouts/top-bar.vue";
 import sideBar from "@/views/admin/layouts/side-bar.vue";
-import { useUtilStore } from "./stores/util";
 
+const route = useRoute();
 const authStore = useAuthStore();
-const utilStore = useUtilStore();
 </script>
