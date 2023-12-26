@@ -6,6 +6,7 @@ import { PeopleModule } from './modules/people/people.module';
 import { TeamModule } from './modules/team/team.module';
 import { TeamMemberModule } from './modules/team-member/team-member.module';
 import { ActivityModule } from './modules/activity/activity.module';
+import { UserModule } from '@/auth/modules/user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ActivityModule } from './modules/activity/activity.module';
     TeamModule,
     TeamMemberModule,
     ActivityModule,
+    UserModule,
   ],
 })
 export class AdminAppModule {}

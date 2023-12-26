@@ -21,3 +21,12 @@ export class SignupDto {
   @ApiProperty({ required: false })
   photo?: string;
 }
+
+export class GetUserDto {
+  @IsNotEmpty()
+  @ApiProperty({ example: 'admin' })
+  role: string;
+
+  @ApiProperty({ example: 'dummy@gmail.com', required: false })
+  search?: string;
+}

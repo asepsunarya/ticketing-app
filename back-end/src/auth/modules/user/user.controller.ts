@@ -1,22 +1,31 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import * as bcrypt from 'bcrypt';
-import { SignupDto } from './dto/user.dto';
 import { UserDocument } from './user.model';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { GetUserDto } from './dto/user.dto';
+import { JwtAuthGuardAdmin } from '../auth/guards/jwt-auth-admin.guard';
 
-@ApiTags('Signup')
-@Controller()
+@ApiTags('User')
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('auth/signup')
-  async createUser(@Body() body: SignupDto): Promise<UserDocument> {
-    const saltOrRounds = 10;
-    const hashedPassword = await bcrypt.hash(body.password, saltOrRounds);
-    return await this.userService.createUser({
-      ...body,
-      password: hashedPassword,
-    });
+  @Get()
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuardAdmin)
+  async get(
+    @Query() { role, search }: GetUserDto,
+    @Req() { user },
+  ): Promise<UserDocument> {
+    const filterRole = role != 'user' ? { $ne: 'user' } : 'user';
+    const query = {
+      _id: { $ne: user._id },
+      role: filterRole,
+      $or: [
+        { name: new RegExp(search, 'i') },
+        { email: new RegExp(search, 'i') },
+      ],
+    };
+    return await this.userService.getUser(query);
   }
 }
