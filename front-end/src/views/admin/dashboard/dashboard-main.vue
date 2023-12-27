@@ -4,16 +4,12 @@
     <hr class="my-6" />
     <div class="flex justify-between">
       <div class="text-xl font-semibold">Proyek Terbaru</div>
-      <div class="text-blue-400 cursor-pointer" @click="toProject">
+      <div class="text-blue-400 cursor-pointer" @click="seeAll">
         Lihat Semua Proyek
       </div>
     </div>
     <div class="flex gap-x-4 mt-4">
-      <div
-        v-for="index in 2"
-        :key="index"
-        class="flex border rounded w-80 h-56 hover:shadow-lg cursor-pointer"
-      >
+      <div class="flex border rounded w-80 h-56 hover:shadow-lg cursor-pointer">
         <div class="h-full w-8 bg-orange-400 bg-opacity-40"></div>
         <div class="w-full pr-2 py-4 flex flex-col">
           <div class="-ml-4 flex gap-x-4 items-center">
@@ -22,7 +18,9 @@
               src="https://media.licdn.com/dms/image/D560BAQHdDHdh6paD8w/company-logo_200_200/0/1683694599437/manypage_id_logo?e=2147483647&v=beta&t=AR8JGUIgIDaqYxBEHizyD1IgGVUzaf6AUxIA8qHrKGc"
             />
             <div>
-              <div class="text-lg font-semibold">Manypage.id</div>
+              <div @click="toProject" class="text-lg font-semibold">
+                Manypage.id
+              </div>
               <div class="text-sm text-zinc-600">Kelola Posting</div>
             </div>
           </div>
@@ -37,7 +35,7 @@
               <div
                 class="text-xs bg-zinc-300 bg-opacity-50 rounded-full w-[40px] h-[20px] flex items-center justify-center"
               >
-                1
+                0
               </div>
             </div>
             <div
@@ -67,7 +65,7 @@
             <div class="flex flex-col my-1">
               <div class="hover:bg-zinc-100 py-2 px-4">Semua Tiket Open</div>
               <div class="hover:bg-zinc-100 py-2 px-4">Semua Tiket Saya</div>
-              <div class="hover:bg-zinc-100 py-2 px-4">Tugas Open</div>
+              <div class="hover:bg-zinc-100 py-2 px-4">Semua Tiktet Closed</div>
             </div>
           </div>
         </div>
@@ -83,7 +81,11 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const showOption = ref(false);
 
-function toProject() {
+function seeAll() {
   router.push("/admin/projects");
+}
+
+function toProject() {
+  router.push("/admin/projects/MP/tickets");
 }
 </script>

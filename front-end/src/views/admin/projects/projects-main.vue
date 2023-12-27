@@ -19,22 +19,29 @@
           </tr>
         </thead>
         <tbody class="border-b text-black">
-          <tr class="bg-white hover:bg-gray-50">
+          <tr
+            class="bg-white hover:bg-gray-50"
+            v-for="project in projects"
+            :key="project._id"
+          >
             <th
               scope="row"
               class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
             >
-              <div class="flex gap-x-2 items-center">
+              <div
+                class="flex gap-x-2 items-center cursor-pointer"
+                @click.stop="toProject(project.code)"
+              >
                 <img
                   class="w-6 h-6 border rounded"
                   src="https://media.licdn.com/dms/image/D560BAQHdDHdh6paD8w/company-logo_200_200/0/1683694599437/manypage_id_logo?e=2147483647&v=beta&t=AR8JGUIgIDaqYxBEHizyD1IgGVUzaf6AUxIA8qHrKGc"
                 />
-                <div class="text-blue-400">Manypage.id</div>
+                <div class="text-blue-400">{{ project.name }}</div>
               </div>
             </th>
-            <td class="px-6 py-4">MANYPAGE</td>
-            <td class="px-6 py-4">Kelola Posting</td>
-            <td class="px-6 py-4">$2999</td>
+            <td class="px-6 py-4">{{ project.code }}</td>
+            <td class="px-6 py-4">{{ project.description }}</td>
+            <td class="px-6 py-4">{{ project.leader.name }}</td>
             <td class="px-6 py-4 text-right">
               <a href="#" class="font-medium text-blue-600">Edit</a>
             </td>
@@ -61,12 +68,52 @@
 import uiButton from "@/components/button/ui-button.vue";
 import cPagination from "@/components/pagination/c-pagination.vue";
 import addProjectModal from "./components/add-project-modal.vue";
+import { onMounted, reactive, ref } from "vue";
+import { getProjects } from "@/views/admin/projects/services/projects.service";
+import type { Project } from "@/views/admin/projects/services/projects.struct";
+import { useRouter } from "vue-router";
 
-function handlePaginate() {
-  //
+const router = useRouter();
+const isLoadingGetProjects = ref<boolean>(false);
+const filter = reactive({
+  page: 1,
+  limit: 10,
+  search: "",
+  hasNextPage: false,
+  totalPages: 1,
+});
+const projects = ref<Project[]>([]);
+
+async function handleGetProjects() {
+  try {
+    isLoadingGetProjects.value = true;
+    const projectList = await getProjects(filter);
+
+    projects.value = projectList.docs;
+    filter.hasNextPage = projectList.hasNextPage;
+    filter.page = projectList.page;
+    filter.totalPages = projectList.totalPages;
+  } catch (error) {
+    console.log("error : ", error);
+  } finally {
+    isLoadingGetProjects.value = false;
+  }
+}
+function handlePaginate(page: number): void {
+  filter.page = page;
+  handleGetProjects();
 }
 
 function handleRefresh() {
-  //
+  filter.page = 1;
+  handleGetProjects();
 }
+
+function toProject(code: string) {
+  router.push(`/admin/projects/${code}/tickets`);
+}
+
+onMounted(() => {
+  handleGetProjects();
+});
 </script>

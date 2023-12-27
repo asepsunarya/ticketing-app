@@ -37,13 +37,6 @@ const router = useRouter();
 const route = useRoute();
 const menus = computed<Menu[]>(() => [
   {
-    name: "dashboard",
-    title: "Dashboard",
-    icon: "bi-pie-chart",
-    redirect: "/admin",
-    active: isActive("dashboard"),
-  },
-  {
     name: "tickets",
     title: "Tiket",
     icon: "bi-ticket",
