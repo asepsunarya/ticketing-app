@@ -41,9 +41,42 @@
             </th>
             <td class="px-6 py-4">{{ project.code }}</td>
             <td class="px-6 py-4">{{ project.description }}</td>
-            <td class="px-6 py-4">{{ project.leader.name }}</td>
+            <td
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+            >
+              <div class="flex gap-x-2 items-center cursor-pointer">
+                <div
+                  class="bg-gray-200 text-gray-500 rounded-full w-7 h-7 flex items-center justify-center"
+                >
+                  <span class="uppercase ftext-sm">
+                    {{
+                      project?.leader?.name
+                        .match(/\b\p{L}/gu)
+                        ?.join("")
+                        ?.slice(0, 2)
+                    }}
+                  </span>
+                </div>
+                <div class="text-blue-400 hover:underline">
+                  {{ project.leader.name }}
+                </div>
+              </div>
+            </td>
             <td class="px-6 py-4 text-right">
-              <a href="#" class="font-medium text-blue-600">Edit</a>
+              <a
+                href="#"
+                aria-expanded="false"
+                data-dropdown-toggle="project-action"
+                class="font-medium text-blue-600 p-2 flex items-center justify-center w-8 h-8 rounded"
+                ><i class="bi bi-three-dots text-2xl"></i
+              ></a>
+              <c-dropdown
+                data-toggle="project-action"
+                :menus="actions"
+                :value="project._id"
+                @click="handleClick"
+              />
             </td>
           </tr>
         </tbody>
@@ -72,6 +105,9 @@ import { onMounted, reactive, ref } from "vue";
 import { getProjects } from "@/views/admin/projects/services/projects.service";
 import type { Project } from "@/views/admin/projects/services/projects.struct";
 import { useRouter } from "vue-router";
+import cDropdown from "@/components/dropdown/c-dropdown.vue";
+import type { DropdownMenu } from "@/components/dropdown/dropdown.struct";
+import { toast } from "vue3-toastify";
 
 const router = useRouter();
 const isLoadingGetProjects = ref<boolean>(false);
@@ -83,6 +119,10 @@ const filter = reactive({
   totalPages: 1,
 });
 const projects = ref<Project[]>([]);
+const actions = ref<DropdownMenu[]>([
+  { name: "setting", title: "Pengaturan" },
+  { name: "remove", title: "Hapus" },
+]);
 
 async function handleGetProjects() {
   try {
@@ -111,6 +151,17 @@ function handleRefresh() {
 
 function toProject(code: string) {
   router.push(`/admin/projects/${code}/tickets`);
+}
+
+function handleClick(menu: DropdownMenu, value: string) {
+  switch (menu.name) {
+    case "setting":
+      toast("setting");
+      break;
+    case "remove":
+      toast("remove");
+      break;
+  }
 }
 
 onMounted(() => {

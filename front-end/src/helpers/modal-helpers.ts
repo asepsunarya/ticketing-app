@@ -6,5 +6,5 @@ export function openModal(modalId: string): void {
 
 export function closeModal(modalId: string): void {
   const modalToggle = document.getElementById(modalId);
-  if (modalToggle) modalToggle.setAttribute("checked", "false");
+  if (modalToggle) modalToggle.click();
 }

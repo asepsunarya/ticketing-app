@@ -4,8 +4,6 @@
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-start rtl:justify-end">
           <button
-            data-drawer-target="logo-sidebar"
-            data-drawer-toggle="logo-sidebar"
             aria-controls="logo-sidebar"
             type="button"
             class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
@@ -40,7 +38,6 @@
               <li class="!text-blue">
                 <button
                   id="dropdownNavbarLink"
-                  data-dropdown-toggle="dropdownNavbar2"
                   class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
                 >
                   Kerjaanmu
@@ -240,7 +237,7 @@
             >
               <div class="px-4 py-3" role="none">
                 <p class="text-sm text-gray-900" role="none">
-                  {{ authStore.user.displayName }}
+                  {{ authStore.user.name }}
                 </p>
                 <p
                   class="text-sm font-medium text-gray-900 truncate"

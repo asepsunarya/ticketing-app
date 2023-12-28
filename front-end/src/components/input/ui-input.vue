@@ -11,6 +11,12 @@
       @keyup.enter="emits('enter')"
       class="input input-bordered !outline-none border-zinc-300 focus:border-zinc-400"
     />
+
+    <label v-if="$slots.error" class="label">
+      <div class="label-text-alt text-error">
+        <slot name="error" />
+      </div>
+    </label>
   </div>
 </template>
 
