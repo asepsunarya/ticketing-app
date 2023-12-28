@@ -84,10 +84,10 @@
       </table>
       <div class="mt-6">
         <c-pagination
-          :page="1"
-          :total-pages="1"
-          :next-page="0"
-          :prev-page="0"
+          :page="filter.page"
+          :total-pages="filter.totalPages"
+          :next-page="filter.nextPage"
+          :prev-page="filter.prevPage"
           @change="handlePaginate"
         />
       </div>
@@ -123,6 +123,8 @@ const filter = reactive({
   limit: 10,
   search: "",
   hasNextPage: false,
+  nextPage: 0,
+  prevPage: 0,
   totalPages: 1,
 });
 const projects = ref<Project[]>([]);
@@ -142,6 +144,8 @@ async function handleGetProjects() {
     filter.hasNextPage = projectList.hasNextPage;
     filter.page = projectList.page;
     filter.totalPages = projectList.totalPages;
+    filter.nextPage = projectList.nextPage;
+    filter.prevPage = projectList.prevPage;
   } catch (error) {
     console.log("error : ", error);
   } finally {
