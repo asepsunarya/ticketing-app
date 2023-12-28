@@ -5,7 +5,7 @@
       <ui-button text="Buat Proyek" for="add-project-modal" />
     </div>
 
-    <div class="relative overflow-x-auto sm:rounded-lg">
+    <div class="relative overflow-x-auto sm:rounded-lg min-h-screen">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500">
         <thead class="text-black border-b">
           <tr>
@@ -36,7 +36,9 @@
                   class="w-6 h-6 border rounded"
                   src="https://media.licdn.com/dms/image/D560BAQHdDHdh6paD8w/company-logo_200_200/0/1683694599437/manypage_id_logo?e=2147483647&v=beta&t=AR8JGUIgIDaqYxBEHizyD1IgGVUzaf6AUxIA8qHrKGc"
                 />
-                <div class="text-blue-400">{{ project.name }}</div>
+                <div class="text-primary hover:underline">
+                  {{ project.name }}
+                </div>
               </div>
             </th>
             <td class="px-6 py-4">{{ project.code }}</td>
@@ -58,7 +60,7 @@
                     }}
                   </span>
                 </div>
-                <div class="text-blue-400 hover:underline">
+                <div class="text-primary hover:underline">
                   {{ project.leader.name }}
                 </div>
               </div>
@@ -66,13 +68,12 @@
             <td class="px-6 py-4 text-right">
               <a
                 href="#"
-                aria-expanded="false"
-                :data-dropdown-toggle="`project-action-${project._id}`"
+                @click="handleShowAction(project._id)"
                 class="font-medium text-blue-600 p-2 flex items-center justify-center w-8 h-8 rounded"
                 ><i class="bi bi-three-dots text-2xl"></i
               ></a>
               <c-dropdown
-                :data-toggle="`project-action-${project._id}`"
+                :show-action="showAction"
                 :menus="actions"
                 :value="project._id"
                 @click="handleClick"
@@ -130,6 +131,7 @@ const actions = ref<DropdownMenu[]>([
   { name: "remove", title: "Hapus" },
 ]);
 const selectedProjectId = ref<string>("");
+const showAction = ref<string>("");
 
 async function handleGetProjects() {
   try {
@@ -146,6 +148,12 @@ async function handleGetProjects() {
     isLoadingGetProjects.value = false;
   }
 }
+
+function handleShowAction(projectId: string) {
+  if (showAction.value === projectId) showAction.value = "";
+  else showAction.value = projectId;
+}
+
 function handlePaginate(page: number): void {
   filter.page = page;
   handleGetProjects();

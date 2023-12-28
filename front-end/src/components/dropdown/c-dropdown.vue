@@ -1,7 +1,8 @@
 <template>
   <div
-    class="z-50 hidden text-left my-4 text-base list-none bg-white rounded shadow"
-    :id="dataToggle"
+    v-if="showAction === value"
+    class="z-50 absolute text-left my-4 text-base list-none bg-white rounded shadow"
+    :id="value"
   >
     <ul class="py-1" role="none">
       <li v-for="(menu, index) in menus" :key="index">
@@ -21,7 +22,7 @@
 import type { DropdownMenu } from "./dropdown.struct";
 
 const props = defineProps<{
-  dataToggle: string;
+  showAction: string;
   menus: DropdownMenu[];
   value: string;
 }>();

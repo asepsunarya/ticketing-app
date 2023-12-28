@@ -4,7 +4,7 @@
     <hr class="my-6" />
     <div class="flex justify-between">
       <div class="text-xl font-semibold">Proyek Terbaru</div>
-      <div class="text-blue-400 cursor-pointer" @click="seeAll">
+      <div class="text-primary cursor-pointer" @click="seeAll">
         Lihat Semua Proyek
       </div>
     </div>
