@@ -208,7 +208,7 @@
           </div>
 
           <ui-button
-            text="Buat Tiket"
+            text="Buat"
             type="default"
             size="sm"
             custom-class="!px-4 !m-0"

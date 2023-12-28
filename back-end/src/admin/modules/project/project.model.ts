@@ -16,7 +16,7 @@ export class ProjectModel {
   @Prop()
   name: string;
 
-  @Prop()
+  @Prop({ index: true, unique: true, required: true })
   code: string;
 
   @Prop()

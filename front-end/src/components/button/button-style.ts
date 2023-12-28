@@ -17,5 +17,5 @@ const buttonSize: any = {
 };
 
 export function generateButtonStyle(type: string, size: string): string {
-  return `btn ${buttonClass[type]} ${buttonSize[size]}`;
+  return `btn ${buttonClass[type]} ${buttonSize[size]} !rounded`;
 }

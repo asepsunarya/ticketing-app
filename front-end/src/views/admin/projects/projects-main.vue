@@ -52,7 +52,7 @@
                   <span class="uppercase ftext-sm">
                     {{
                       project?.leader?.name
-                        .match(/\b\p{L}/gu)
+                        ?.match(/\b\p{L}/gu)
                         ?.join("")
                         ?.slice(0, 2)
                     }}
@@ -67,12 +67,12 @@
               <a
                 href="#"
                 aria-expanded="false"
-                data-dropdown-toggle="project-action"
+                :data-dropdown-toggle="`project-action-${project._id}`"
                 class="font-medium text-blue-600 p-2 flex items-center justify-center w-8 h-8 rounded"
                 ><i class="bi bi-three-dots text-2xl"></i
               ></a>
               <c-dropdown
-                data-toggle="project-action"
+                :data-toggle="`project-action-${project._id}`"
                 :menus="actions"
                 :value="project._id"
                 @click="handleClick"
@@ -93,6 +93,10 @@
     </div>
     <teleport to="body">
       <add-project-modal @need-refresh="handleRefresh" />
+      <remove-project-modal
+        :project-id="selectedProjectId"
+        @need-refresh="handleRefresh"
+      />
     </teleport>
   </div>
 </template>
@@ -101,6 +105,7 @@
 import uiButton from "@/components/button/ui-button.vue";
 import cPagination from "@/components/pagination/c-pagination.vue";
 import addProjectModal from "./components/add-project-modal.vue";
+import removeProjectModal from "./components/remove-project-modal.vue";
 import { onMounted, reactive, ref } from "vue";
 import { getProjects } from "@/views/admin/projects/services/projects.service";
 import type { Project } from "@/views/admin/projects/services/projects.struct";
@@ -108,6 +113,7 @@ import { useRouter } from "vue-router";
 import cDropdown from "@/components/dropdown/c-dropdown.vue";
 import type { DropdownMenu } from "@/components/dropdown/dropdown.struct";
 import { toast } from "vue3-toastify";
+import { openModal } from "@/helpers/modal-helpers";
 
 const router = useRouter();
 const isLoadingGetProjects = ref<boolean>(false);
@@ -123,6 +129,7 @@ const actions = ref<DropdownMenu[]>([
   { name: "setting", title: "Pengaturan" },
   { name: "remove", title: "Hapus" },
 ]);
+const selectedProjectId = ref<string>("");
 
 async function handleGetProjects() {
   try {
@@ -159,7 +166,8 @@ function handleClick(menu: DropdownMenu, value: string) {
       toast("setting");
       break;
     case "remove":
-      toast("remove");
+      selectedProjectId.value = value;
+      openModal("remove-project-modal");
       break;
   }
 }

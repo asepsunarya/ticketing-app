@@ -19,3 +19,11 @@ export type Project = {
   leader: User;
   picture?: string;
 };
+
+export type CreateProjectDto = {
+  name: string;
+  code: string;
+  description: string;
+  leader: User;
+  picture?: string;
+};

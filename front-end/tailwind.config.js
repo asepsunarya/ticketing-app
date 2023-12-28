@@ -13,6 +13,7 @@ module.exports = {
           ...require("daisyui/src/theming/themes")["light"],
           primary: "rgb(37 99 235)",
           secondary: "teal",
+          error: "#ba000d",
         },
       },
     ], // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]

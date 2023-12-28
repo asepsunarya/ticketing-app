@@ -10,7 +10,25 @@
     class="modal bg-zinc-700 bg-opacity-80 items-start overflow-scroll pt-10 px-2 scrollbar-none !overflow-y-visible !overflow-x-visible"
     role="dialog"
   >
-    <div class="modal-box !max-h-full">
+    <div
+      class="modal-box !max-h-full !rounded"
+      :class="[
+        { 'w-[250px]': size === 'xxs' },
+        { 'lg:w-3/12 w-full': size === '2xs' },
+        { 'lg:w-2/6 w-full': size === 'xs' },
+        { 'lg:w-3/6 w-full': size === 'sm' },
+        { 'lg:w-4/6 w-full': size === 'md' },
+        { 'lg:w-5/6 w-full': size === 'lg' },
+        {
+          '!max-h-full lg:!max-h-max !h-full lg:!h-max !rounded-none lg:!rounded-lg':
+            size === 'mobile-full',
+        },
+        {
+          '!max-h-full !w-full !h-full !rounded-none': size === 'absolute-full',
+        },
+        { 'w-auto': size === 'auto' },
+      ]"
+    >
       <slot />
     </div>
     <label class="modal-backdrop" :for="props.preventClose ? '' : props.id" />

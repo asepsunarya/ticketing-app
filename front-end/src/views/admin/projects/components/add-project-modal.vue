@@ -79,13 +79,13 @@ import uiButton from "@/components/button/ui-button.vue";
 import uiModal from "@/components/modal/ui-modal.vue";
 import uiInput from "@/components/input/ui-input.vue";
 import searchMember from "@/views/admin/project-members/components/search-member.vue";
-import axios from "@/libraries/axios";
 import { ref, reactive } from "vue";
 import type { User } from "@/views/user/services/user.struct";
 import { toast } from "vue3-toastify";
 import { closeModal } from "@/helpers/modal-helpers";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import { createProjects } from "@/views/admin/projects/services/projects.service";
 
 const emits = defineEmits<{
   (e: "need-refresh"): void;
@@ -145,11 +145,7 @@ async function handleSubmitForm(): Promise<void> {
       },
     };
 
-    await axios<void>({
-      method: "POST",
-      url: "/admin/project",
-      data: newProject,
-    });
+    await createProjects(newProject);
     emits("need-refresh");
     closeModal("add-project-modal");
     toast("Berhasil menambahkan proyek", { type: "success" });
