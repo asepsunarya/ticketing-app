@@ -1,8 +1,8 @@
 <template>
   <div
-    v-if="showAction === value"
+    v-if="showAction === id"
     class="z-50 absolute text-left my-4 text-base list-none bg-white rounded shadow"
-    :id="value"
+    :id="id"
   >
     <ul class="py-1" role="none">
       <li v-for="(menu, index) in menus" :key="index">
@@ -24,14 +24,15 @@ import type { DropdownMenu } from "./dropdown.struct";
 const props = defineProps<{
   showAction: string;
   menus: DropdownMenu[];
-  value: string;
+  id: string;
+  code?: string;
 }>();
 
 const emits = defineEmits<{
-  (e: "click", menu: DropdownMenu, value: string): void;
+  (e: "click", value: any): void;
 }>();
 
 function handleClick(menu: DropdownMenu) {
-  emits("click", menu, props.value);
+  emits("click", { menu, id: props.id, code: props.code || "" });
 }
 </script>

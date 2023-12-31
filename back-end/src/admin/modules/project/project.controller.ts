@@ -21,6 +21,13 @@ import { ParamIdDto } from '@/global/dto/param-id.dto';
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
+  @Get(':id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuardAdmin)
+  async get(@Param() { id }: ParamIdDto) {
+    return await this.projectService.find({ code: id });
+  }
+
   @Get()
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuardAdmin)

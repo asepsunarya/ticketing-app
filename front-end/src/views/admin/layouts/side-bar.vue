@@ -32,6 +32,7 @@ import sideBarMenu from "@/views/admin/layouts/components/side-bar-menu.vue";
 import ticketMenu from "@/views/admin/layouts/components/ticket-menu.vue";
 import settingMenu from "@/views/admin/layouts/components/setting-menu.vue";
 import type { Menu } from "@/views/admin/layouts/structs/menu.struct";
+import { delay } from "@/helpers/time";
 
 const router = useRouter();
 const route = useRoute();
@@ -40,20 +41,20 @@ const menus = computed<Menu[]>(() => [
     name: "tickets",
     title: "Tiket",
     icon: "bi-ticket",
-    active: isActive("admin-projects-queue"),
+    active: isActive("tickets"),
   },
   {
     name: "settings",
     title: "Pengaturan",
     icon: "bi-gear-wide",
-    active: isActive("admin-settings"),
+    active: isActive("settings"),
   },
 ]);
 
-const displayMenu = ref("");
+const displayMenu = ref(route.meta.menu);
 
 function isActive(routeName: string) {
-  return routeName === route.name;
+  return routeName === route.meta.menu;
 }
 
 function handleClick(menu: Menu) {

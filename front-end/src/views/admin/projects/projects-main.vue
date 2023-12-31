@@ -51,7 +51,7 @@
                 <div
                   class="bg-gray-200 text-gray-500 rounded-full w-7 h-7 flex items-center justify-center"
                 >
-                  <span class="uppercase ftext-sm">
+                  <span class="uppercase text-sm">
                     {{
                       project?.leader?.name
                         ?.match(/\b\p{L}/gu)
@@ -75,7 +75,8 @@
               <c-dropdown
                 :show-action="showAction"
                 :menus="actions"
-                :value="project._id"
+                :id="project._id"
+                :code="project.code"
                 @click="handleClick"
               />
             </td>
@@ -113,7 +114,6 @@ import type { Project } from "@/views/admin/projects/services/projects.struct";
 import { useRouter } from "vue-router";
 import cDropdown from "@/components/dropdown/c-dropdown.vue";
 import type { DropdownMenu } from "@/components/dropdown/dropdown.struct";
-import { toast } from "vue3-toastify";
 import { openModal } from "@/helpers/modal-helpers";
 
 const router = useRouter();
@@ -144,8 +144,8 @@ async function handleGetProjects() {
     filter.hasNextPage = projectList.hasNextPage;
     filter.page = projectList.page;
     filter.totalPages = projectList.totalPages;
-    filter.nextPage = projectList.nextPage;
-    filter.prevPage = projectList.prevPage;
+    filter.nextPage = projectList.nextPage || 0;
+    filter.prevPage = projectList.prevPage || 0;
   } catch (error) {
     console.log("error : ", error);
   } finally {
@@ -172,10 +172,10 @@ function toProject(code: string) {
   router.push(`/admin/projects/${code}/tickets`);
 }
 
-function handleClick(menu: DropdownMenu, value: string) {
+function handleClick({ menu, value, code }: any) {
   switch (menu.name) {
     case "setting":
-      toast("setting");
+      router.push(`/admin/projects/${code}/settings/details`);
       break;
     case "remove":
       selectedProjectId.value = value;

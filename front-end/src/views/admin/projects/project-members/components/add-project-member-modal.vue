@@ -60,7 +60,7 @@
 import uiButton from "@/components/button/ui-button.vue";
 import uiModal from "@/components/modal/ui-modal.vue";
 import uiSelect from "@/components/select/ui-select.vue";
-import searchMember from "@/views/admin/project-members/components/search-member.vue";
+import searchMember from "@/views/admin/projects/project-members/components/search-member.vue";
 import axios from "@/libraries/axios";
 import { ref, reactive } from "vue";
 // import { closeModal } from "@/helpers/modal-helpers.ts";

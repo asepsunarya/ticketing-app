@@ -13,6 +13,24 @@ export class ProjectService {
       AggregatePaginateModel<ProjectDocument>,
   ) {}
 
+  async find(query: any) {
+    const results = await this.projectModel.aggregate([
+      { $match: query },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'leader._id',
+          foreignField: '_id',
+          as: 'leader',
+        },
+      },
+      {
+        $unwind: '$leader',
+      },
+    ]);
+    return results[0] || {};
+  }
+
   async paginate(query: PaginateProject) {
     const filter = {};
     const pipeline = this.projectModel.aggregate([
@@ -53,7 +71,15 @@ export class ProjectService {
   async update(body: Project, id: string) {
     return await this.projectModel.updateOne(
       { _id: new Types.ObjectId(id) },
-      { $set: body },
+      {
+        $set: {
+          ...body,
+          leader: {
+            _id: new Types.ObjectId(body.leader._id),
+            email: body.leader.email,
+          },
+        },
+      },
     );
   }
 
