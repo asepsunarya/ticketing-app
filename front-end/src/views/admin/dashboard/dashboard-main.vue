@@ -155,7 +155,7 @@ async function getDominantColor(project: Project) {
     image = document.getElementById(`image-${project._id}`);
   }
   const color = colorThief.getColor(image);
-  return `rgb(${color.join()})`;
+  return `rgba(${color.join()},0.2)`;
 }
 
 onMounted(() => {
