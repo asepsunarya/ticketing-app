@@ -15,7 +15,8 @@
         class="flex border rounded w-80 h-56 hover:shadow-lg cursor-pointer"
       >
         <div
-          class="h-full w-8 bg-opacity-40"
+          class="h-full w-8 bg-opacity-40 bg-base-300 !-z-3"
+          :class="{ 'animate-pulse': !projectColors[index] }"
           :style="`background-color: ${projectColors[index]}`"
         ></div>
         <div class="w-full pr-2 py-4 flex flex-col">
