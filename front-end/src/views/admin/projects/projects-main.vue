@@ -32,10 +32,7 @@
                 class="flex gap-x-2 items-center cursor-pointer"
                 @click.stop="toProject(project.code)"
               >
-                <img
-                  class="w-6 h-6 border rounded"
-                  src="https://media.licdn.com/dms/image/D560BAQHdDHdh6paD8w/company-logo_200_200/0/1683694599437/manypage_id_logo?e=2147483647&v=beta&t=AR8JGUIgIDaqYxBEHizyD1IgGVUzaf6AUxIA8qHrKGc"
-                />
+                <img class="w-6 h-6 border rounded" :src="project.picture" />
                 <div class="text-primary hover:underline">
                   {{ project.name }}
                 </div>

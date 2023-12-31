@@ -9,19 +9,31 @@
       </div>
     </div>
     <div class="flex gap-x-4 mt-4">
-      <div class="flex border rounded w-80 h-56 hover:shadow-lg cursor-pointer">
-        <div class="h-full w-8 bg-orange-400 bg-opacity-40"></div>
+      <div
+        v-for="(project, index) in projects"
+        :key="project._id"
+        class="flex border rounded w-80 h-56 hover:shadow-lg cursor-pointer"
+      >
+        <div
+          class="h-full w-8 bg-opacity-40"
+          :style="`background-color: ${projectColors[index]}`"
+        ></div>
         <div class="w-full pr-2 py-4 flex flex-col">
           <div class="-ml-4 flex gap-x-4 items-center">
+            <img class="w-8 h-8 border rounded" :src="project.picture" />
             <img
-              class="w-8 h-8 border rounded"
-              src="https://media.licdn.com/dms/image/D560BAQHdDHdh6paD8w/company-logo_200_200/0/1683694599437/manypage_id_logo?e=2147483647&v=beta&t=AR8JGUIgIDaqYxBEHizyD1IgGVUzaf6AUxIA8qHrKGc"
+              :id="`image-${project._id}`"
+              crossorigin="anonymous"
+              class="w-8 h-8 border rounded hidden"
+              :src="project.picture"
             />
             <div>
               <div @click="toProject" class="text-lg font-semibold">
-                Manypage.id
+                {{ project.name }}
               </div>
-              <div class="text-sm text-zinc-600">Kelola Posting</div>
+              <div class="text-sm text-zinc-600 line-clamp-1">
+                {{ project.description }}
+              </div>
             </div>
           </div>
           <div class="ml-7">
@@ -75,11 +87,29 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
+import type { Project } from "../projects/services/projects.struct";
+import { getProjects } from "../projects/services/projects.service";
+// @ts-ignore
+import ColorThief from "colorthief";
+import { delay } from "@/helpers/time";
 
 const router = useRouter();
 const showOption = ref(false);
+
+const isLoadingGetProjects = ref<boolean>(false);
+const filter = reactive({
+  page: 1,
+  limit: 5,
+  search: "",
+  hasNextPage: false,
+  nextPage: 0,
+  prevPage: 0,
+  totalPages: 1,
+});
+const projects = ref<Project[]>([]);
+const projectColors = ref<string[]>([]);
 
 function seeAll() {
   router.push("/admin/projects");
@@ -88,4 +118,46 @@ function seeAll() {
 function toProject() {
   router.push("/admin/projects/MP/tickets");
 }
+
+async function computeProjectColors() {
+  for (const project of projects.value) {
+    const color = await getDominantColor(project);
+    projectColors.value.push(color);
+  }
+}
+
+async function handleGetProjects() {
+  try {
+    isLoadingGetProjects.value = true;
+    const projectList = await getProjects(filter);
+
+    projects.value = projectList.docs;
+    await computeProjectColors();
+    filter.hasNextPage = projectList.hasNextPage;
+    filter.page = projectList.page;
+    filter.totalPages = projectList.totalPages;
+    filter.nextPage = projectList.nextPage || 0;
+    filter.prevPage = projectList.prevPage || 0;
+  } catch (error) {
+    console.log("error : ", error);
+  } finally {
+    isLoadingGetProjects.value = false;
+  }
+}
+
+async function getDominantColor(project: Project) {
+  const colorThief = new ColorThief();
+  let image = document.getElementById(`image-${project._id}`);
+
+  if (!image) {
+    await delay(100);
+    image = document.getElementById(`image-${project._id}`);
+  }
+  const color = colorThief.getColor(image);
+  return `rgb(${color.join()})`;
+}
+
+onMounted(() => {
+  handleGetProjects();
+});
 </script>
