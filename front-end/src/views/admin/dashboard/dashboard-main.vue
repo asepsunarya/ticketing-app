@@ -10,7 +10,7 @@
     </div>
     <div class="flex gap-x-4 mt-4">
       <div
-        v-for="(project, index) in projects"
+        v-for="(project, index) in projectStore.newest.docs"
         :key="project._id"
         class="flex border rounded w-80 h-56 hover:shadow-lg cursor-pointer"
       >
@@ -29,7 +29,10 @@
               :src="project.picture"
             />
             <div>
-              <div @click="toProject" class="text-lg font-semibold">
+              <div
+                @click="toProject(project.code)"
+                class="text-lg font-semibold"
+              >
                 {{ project.name }}
               </div>
               <div class="text-sm text-zinc-600 line-clamp-1">
@@ -65,17 +68,21 @@
           <hr class="mt-4" />
           <div
             class="text-xs ml-7 mt-1.5 py-1 px-1 w-max rounded hover:bg-zinc-200"
-            :class="{ 'bg-blue-400 bg-opacity-10 text-blue-400': showOption }"
-            data-dropdown-toggle="dropdownOption"
-            @click="showOption = !showOption"
+            :class="{
+              'bg-blue-400 bg-opacity-10 text-blue-400':
+                showAction === project._id,
+            }"
+            id="dropdown-action"
+            :data-dropdown-toggle="`action-${project._id}`"
           >
             Semua Antrian <i class="bi bi-chevron-down text-xs"></i>
           </div>
+
           <div
-            v-show="showOption"
-            class="ml-7 mt-2 w-max z-10 font-normal text-xs bg-white rounded shadow"
+            :id="`action-${project._id}`"
+            class="ml-7 mt-2 hidden w-max z-10 font-normal text-xs bg-white rounded shadow"
           >
-            <div class="flex flex-col my-1">
+            <div class="flex flex-col my-1" aria-labelledby="dropdown-action">
               <div class="hover:bg-zinc-100 py-2 px-4">Semua Tiket Open</div>
               <div class="hover:bg-zinc-100 py-2 px-4">Semua Tiket Saya</div>
               <div class="hover:bg-zinc-100 py-2 px-4">Semua Tiktet Closed</div>
@@ -88,61 +95,31 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import type { Project } from "../projects/services/projects.struct";
-import { getProjects } from "../projects/services/projects.service";
 // @ts-ignore
 import ColorThief from "colorthief";
 import { delay } from "@/helpers/time";
+import { useProjectStore } from "@/stores/project";
 
 const router = useRouter();
-const showOption = ref(false);
-
-const isLoadingGetProjects = ref<boolean>(false);
-const filter = reactive({
-  page: 1,
-  limit: 5,
-  search: "",
-  hasNextPage: false,
-  nextPage: 0,
-  prevPage: 0,
-  totalPages: 1,
-});
-const projects = ref<Project[]>([]);
+const showAction = ref<string>("");
+const projectStore = useProjectStore();
 const projectColors = ref<string[]>([]);
 
 function seeAll() {
   router.push("/admin/projects");
 }
 
-function toProject() {
-  router.push("/admin/projects/MP/tickets");
+function toProject(code: string) {
+  router.push(`/admin/projects/${code}/tickets`);
 }
 
 async function computeProjectColors() {
-  for (const project of projects.value) {
+  for (const project of projectStore.newest.docs) {
     const color = await getDominantColor(project);
     projectColors.value.push(color);
-  }
-}
-
-async function handleGetProjects() {
-  try {
-    isLoadingGetProjects.value = true;
-    const projectList = await getProjects(filter);
-
-    projects.value = projectList.docs;
-    await computeProjectColors();
-    filter.hasNextPage = projectList.hasNextPage;
-    filter.page = projectList.page;
-    filter.totalPages = projectList.totalPages;
-    filter.nextPage = projectList.nextPage || 0;
-    filter.prevPage = projectList.prevPage || 0;
-  } catch (error) {
-    console.log("error : ", error);
-  } finally {
-    isLoadingGetProjects.value = false;
   }
 }
 
@@ -158,7 +135,8 @@ async function getDominantColor(project: Project) {
   return `rgba(${color.join()},0.2)`;
 }
 
-onMounted(() => {
-  handleGetProjects();
-});
+watch(
+  () => projectStore.newest.docs,
+  () => computeProjectColors()
+);
 </script>

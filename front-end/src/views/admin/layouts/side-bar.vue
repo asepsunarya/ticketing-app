@@ -6,9 +6,9 @@
     aria-label="Sidebar"
   >
     <side-bar-title
-      image="https://media.licdn.com/dms/image/D560BAQHdDHdh6paD8w/company-logo_200_200/0/1683694599437/manypage_id_logo?e=2147483647&v=beta&t=AR8JGUIgIDaqYxBEHizyD1IgGVUzaf6AUxIA8qHrKGc"
-      title="Manypage.id"
-      text="Kelola Postingan"
+      :image="projectStore.selected?.picture"
+      :title="projectStore.selected?.name || ''"
+      :text="projectStore.selected?.description || ''"
     />
     <div class="h-full mt-4 px-3 pb-4 overflow-y-auto bg-white">
       <side-bar-menu v-if="!displayMenu" @click="handleClick" :menus="menus" />
@@ -26,16 +26,18 @@
 
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import sideBarTitle from "@/views/admin/layouts/components/side-bar-title.vue";
 import sideBarMenu from "@/views/admin/layouts/components/side-bar-menu.vue";
 import ticketMenu from "@/views/admin/layouts/components/ticket-menu.vue";
 import settingMenu from "@/views/admin/layouts/components/setting-menu.vue";
 import type { Menu } from "@/views/admin/layouts/structs/menu.struct";
-import { delay } from "@/helpers/time";
+import { useProjectStore } from "@/stores/project";
+import { getProject } from "../projects/project-details/services/project-details.service";
 
 const router = useRouter();
 const route = useRoute();
+const projectStore = useProjectStore();
 const menus = computed<Menu[]>(() => [
   {
     name: "tickets",
@@ -61,4 +63,20 @@ function handleClick(menu: Menu) {
   if (menu.redirect) router.push(menu.redirect);
   else displayMenu.value = menu.name;
 }
+
+async function handleGetProject(code: string | string[]) {
+  try {
+    const resultProject = await getProject(code);
+    projectStore.selected = resultProject;
+  } catch (error) {
+    console.log("error : ", error);
+  }
+}
+
+watch(
+  () => route.params.code,
+  async (newCode, oldCode) => {
+    await handleGetProject(newCode);
+  }
+);
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <ui-modal id="add-project-modal">
+  <ui-modal :id="id">
     <div class="font-semibold text-xl mb-7">Tambah Proyek</div>
     <div class="mb-10 flex flex-col gap-3">
       <ui-input
@@ -62,7 +62,7 @@
       </ui-input>
     </div>
     <div class="flex justify-end items-center gap-3">
-      <ui-button text="Batal" size="sm" type="ghost" for="add-project-modal" />
+      <ui-button text="Batal" size="sm" type="ghost" :for="id" />
       <ui-button
         :is-loading="isLoadingSubmit"
         text="Tambah"
@@ -87,6 +87,7 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { createProjects } from "@/views/admin/projects/services/projects.service";
 
+const props = defineProps<{ id: string }>();
 const emits = defineEmits<{
   (e: "need-refresh"): void;
 }>();
@@ -147,7 +148,7 @@ async function handleSubmitForm(): Promise<void> {
 
     await createProjects(newProject);
     emits("need-refresh");
-    closeModal("add-project-modal");
+    closeModal(props.id);
     toast("Berhasil menambahkan proyek", { type: "success" });
   } catch (error) {
     toast("Gagal menambahkan proyek", { type: "error" });

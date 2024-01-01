@@ -81,58 +81,7 @@
                     />
                   </svg>
                 </button>
-                <div
-                  id="dropdownNavbar"
-                  class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-64"
-                >
-                  <div class="pt-2">
-                    <div class="py-2 px-4 text-sm font-bold">Terbaru</div>
-                    <div class="text-sm text-gray-700">
-                      <div
-                        class="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                      >
-                        <img
-                          src="https://media.licdn.com/dms/image/D560BAQHdDHdh6paD8w/company-logo_200_200/0/1683694599437/manypage_id_logo?e=2147483647&v=beta&t=AR8JGUIgIDaqYxBEHizyD1IgGVUzaf6AUxIA8qHrKGc"
-                          class="w-8 h-8 rounded"
-                        />
-                        <div class="flex flex-col px-4">
-                          <a href="#" class="block hover:bg-gray-100"
-                            >Manypage.id</a
-                          >
-                          <span class="text-zinc-400 text-xs"
-                            >Kelola Posting</span
-                          >
-                        </div>
-                      </div>
-                      <div
-                        class="flex items-center px-4 hover:bg-gray-100 cursor-pointer"
-                      >
-                        <img
-                          src="https://media.licdn.com/dms/image/D560BAQHdDHdh6paD8w/company-logo_200_200/0/1683694599437/manypage_id_logo?e=2147483647&v=beta&t=AR8JGUIgIDaqYxBEHizyD1IgGVUzaf6AUxIA8qHrKGc"
-                          class="w-8 h-8 rounded"
-                        />
-                        <div class="flex flex-col px-4 py-2">
-                          <a href="#" class="block hover:bg-gray-100"
-                            >Manychat.id</a
-                          >
-                          <span class="text-zinc-400 text-xs">Kelola Chat</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="py-1">
-                    <a
-                      href="#"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >Lihat Semua</a
-                    >
-                    <a
-                      href="#"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >Buat Aplikasi</a
-                    >
-                  </div>
-                </div>
+                <top-bar-project />
               </li>
               <li>
                 <button
@@ -157,52 +106,7 @@
                     />
                   </svg>
                 </button>
-                <div
-                  id="dropdownTeam"
-                  class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-64"
-                >
-                  <div class="pt-2">
-                    <div class="py-2 px-4 text-sm font-bold">Tim</div>
-                    <div class="text-sm text-gray-700">
-                      <div
-                        class="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                      >
-                        <img
-                          src="https://media.licdn.com/dms/image/D560BAQHdDHdh6paD8w/company-logo_200_200/0/1683694599437/manypage_id_logo?e=2147483647&v=beta&t=AR8JGUIgIDaqYxBEHizyD1IgGVUzaf6AUxIA8qHrKGc"
-                          class="w-8 h-8 rounded"
-                        />
-                        <div class="flex flex-col px-4">
-                          <a href="#" class="block hover:bg-gray-100">Tim A</a>
-                          <span class="text-zinc-400 text-xs">Manychat.id</span>
-                        </div>
-                      </div>
-                      <div
-                        class="flex items-center px-4 hover:bg-gray-100 cursor-pointer"
-                      >
-                        <img
-                          src="https://media.licdn.com/dms/image/D560BAQHdDHdh6paD8w/company-logo_200_200/0/1683694599437/manypage_id_logo?e=2147483647&v=beta&t=AR8JGUIgIDaqYxBEHizyD1IgGVUzaf6AUxIA8qHrKGc"
-                          class="w-8 h-8 rounded"
-                        />
-                        <div class="flex flex-col px-4 py-2">
-                          <a href="#" class="block hover:bg-gray-100">Tim B</a>
-                          <span class="text-zinc-400 text-xs">Manypage.id</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="py-1">
-                    <a
-                      href="#"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >Lihat Semua</a
-                    >
-                    <a
-                      href="#"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >Buat Tim</a
-                    >
-                  </div>
-                </div>
+                <top-bar-team />
               </li>
             </ul>
           </div>
@@ -293,6 +197,8 @@
 import uiButton from "@/components/button/ui-button.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
+import topBarProject from "@/views/admin/layouts/components/top-bar-project.vue";
+import topBarTeam from "@/views/admin/layouts/components/top-bar-team.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();

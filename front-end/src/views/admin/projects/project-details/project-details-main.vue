@@ -121,7 +121,6 @@ import searchMember from "@/views/admin/projects/project-members/components/sear
 import uploadIconModal from "./components/upload-icon-modal.vue";
 import { toast } from "vue3-toastify";
 import { updateProject } from "@/views/admin/projects/project-details/services/project-details.service";
-import type { Project } from "../services/projects.struct";
 
 const route = useRoute();
 const projectStore = useProjectStore();

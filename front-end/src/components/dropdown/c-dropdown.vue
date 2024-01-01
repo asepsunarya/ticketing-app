@@ -6,13 +6,13 @@
   >
     <ul class="py-1" role="none">
       <li v-for="(menu, index) in menus" :key="index">
-        <a
-          href="#"
+        <div
           @click="handleClick(menu)"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
           role="menuitem"
-          >{{ menu.title }}</a
         >
+          {{ menu.title }}
+        </div>
       </li>
     </ul>
   </div>

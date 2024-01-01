@@ -91,7 +91,7 @@
       </div>
     </div>
     <teleport to="body">
-      <add-project-modal @need-refresh="handleRefresh" />
+      <add-project-modal id="add-project-modal" @need-refresh="handleRefresh" />
       <remove-project-modal
         :project-id="selectedProjectId"
         @need-refresh="handleRefresh"
@@ -114,7 +114,6 @@ import type { DropdownMenu } from "@/components/dropdown/dropdown.struct";
 import { openModal } from "@/helpers/modal-helpers";
 
 const router = useRouter();
-const isLoadingGetProjects = ref<boolean>(false);
 const filter = reactive({
   page: 1,
   limit: 10,
@@ -134,7 +133,6 @@ const showAction = ref<string>("");
 
 async function handleGetProjects() {
   try {
-    isLoadingGetProjects.value = true;
     const projectList = await getProjects(filter);
 
     projects.value = projectList.docs;
@@ -145,8 +143,6 @@ async function handleGetProjects() {
     filter.prevPage = projectList.prevPage || 0;
   } catch (error) {
     console.log("error : ", error);
-  } finally {
-    isLoadingGetProjects.value = false;
   }
 }
 
