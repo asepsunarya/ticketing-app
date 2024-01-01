@@ -36,13 +36,13 @@ const menus = computed<Menu[]>(() => [
   {
     name: "detail",
     title: "Detail",
-    redirect: "/admin/projects/SC/settings/details",
+    redirect: `/admin/projects/${route.params.code}/settings/details`,
     active: isActive("admin-projects-details"),
   },
   {
     name: "members",
     title: "Anggota",
-    redirect: "/admin/projects/MANYPAGE/settings/members",
+    redirect: `/admin/projects/${route.params.code}/settings/members`,
     active: isActive("admin-project-members"),
   },
 ]);

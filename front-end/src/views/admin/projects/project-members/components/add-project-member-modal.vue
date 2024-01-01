@@ -65,6 +65,7 @@ import axios from "@/libraries/axios";
 import { ref, reactive } from "vue";
 // import { closeModal } from "@/helpers/modal-helpers.ts";
 import type { User } from "@/views/user/services/user.struct";
+import { useProjectStore } from "@/stores/project";
 
 const emits = defineEmits<{
   (e: "need-refresh"): void;
@@ -75,6 +76,7 @@ const roleOptions = ref([
   { value: "admin", name: "Admin" },
   { value: "programmer", name: "Programmer" },
 ]);
+const projectStore = useProjectStore();
 
 const form = reactive({
   selectedUser: {
@@ -101,7 +103,7 @@ async function handleSubmitForm(): Promise<void> {
   try {
     isLoadingSubmit.value = true;
     const newMember = {
-      projectId: "manypage",
+      projectId: projectStore.selected?._id,
       userId: form.selectedUser.id,
       role: form.role,
     };

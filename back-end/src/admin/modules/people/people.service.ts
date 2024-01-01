@@ -49,6 +49,7 @@ export class PeopleService {
     const people = {
       ...body,
       userId: new Types.ObjectId(body.userId),
+      projectId: new Types.ObjectId(body.projectId),
       createdBy: {
         _id: new Types.ObjectId(_id),
         email,
