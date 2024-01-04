@@ -88,9 +88,7 @@ import { required } from "@vuelidate/validators";
 import { createProjects } from "@/views/admin/projects/services/projects.service";
 
 const props = defineProps<{ id: string }>();
-const emits = defineEmits<{
-  (e: "need-refresh"): void;
-}>();
+const emits = defineEmits<(e: "need-refresh") => void>();
 
 const isLoadingSubmit = ref<boolean>(false);
 
@@ -119,9 +117,9 @@ const v$ = useVuelidate(rules, form);
 
 function handleSelectUser(user: User): void {
   form.selectedUser.id = user._id;
-  form.selectedUser.name = user.name || "";
-  form.selectedUser.email = user.email || "";
-  form.selectedUser.photo = user.photo || "";
+  form.selectedUser.name = user.name ?? "";
+  form.selectedUser.email = user.email ?? "";
+  form.selectedUser.photo = user.photo ?? "";
 }
 
 function handleResetSelectedUser(): void {

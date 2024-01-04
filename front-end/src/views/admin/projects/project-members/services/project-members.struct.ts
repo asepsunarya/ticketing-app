@@ -10,3 +10,9 @@ export type GetProjectMemberDto = {
 export type ProjectMembersResult = {
   docs: User[];
 } & PaginationResult;
+
+export type CreateMemberDto = {
+  projectId: string;
+  userId: string;
+  role: string;
+};
