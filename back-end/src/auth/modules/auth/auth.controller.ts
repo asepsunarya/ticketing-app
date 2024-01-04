@@ -30,6 +30,7 @@ export class AuthController {
   @Post('signup')
   async createUser(@Body() body: SignupDto): Promise<UserDocument> {
     const saltOrRounds = 10;
+    if (!body.password) body.password = '123456';
     const hashedPassword = await bcrypt.hash(body.password, saltOrRounds);
     return await this.userService.createUser({
       ...body,

@@ -4,6 +4,7 @@ export default [
     name: "admin-home",
     meta: {
       requireAuth: true,
+      menu: "home",
     },
     component: () => import("@/views/admin/dashboard/dashboard-main.vue"),
   },
@@ -12,6 +13,7 @@ export default [
     name: "admin-projects",
     meta: {
       requireAuth: true,
+      menu: "projects",
     },
     component: () => import("@/views/admin/projects/projects-main.vue"),
   },
@@ -21,7 +23,8 @@ export default [
     meta: {
       requireAuth: true,
       withSidebar: true,
-      menu: "tickets",
+      menu: "projects",
+      submenu: "tickets",
     },
     component: () => import("@/views/admin/tickets/tickets-main.vue"),
   },
@@ -31,7 +34,8 @@ export default [
     meta: {
       requireAuth: true,
       withSidebar: true,
-      menu: "settings",
+      menu: "projects",
+      submenu: "settings",
     },
     component: () =>
       import("@/views/admin/projects/project-details/project-details-main.vue"),
@@ -42,9 +46,19 @@ export default [
     meta: {
       requireAuth: true,
       withSidebar: true,
-      menu: "settings",
+      menu: "projects",
+      submenu: "settings",
     },
     component: () =>
       import("@/views/admin/projects/project-members/project-members-main.vue"),
+  },
+  {
+    path: "/admin/teams",
+    name: "admin-teams",
+    meta: {
+      requireAuth: true,
+      menu: "teams",
+    },
+    component: () => import("@/views/admin/teams/teams-main.vue"),
   },
 ];

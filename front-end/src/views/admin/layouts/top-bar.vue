@@ -38,6 +38,7 @@
               <li class="!text-blue">
                 <button
                   id="dropdownNavbarLink"
+                  :class="{ 'text-primary': isRoute('home') }"
                   class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
                 >
                   Kerjaanmu
@@ -62,6 +63,7 @@
                 <button
                   id="dropdownNavbarLink"
                   data-dropdown-toggle="dropdownNavbar"
+                  :class="{ 'text-primary': isRoute('projects') }"
                   class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
                 >
                   Proyek
@@ -87,6 +89,7 @@
                 <button
                   id="dropdownNavbarLink"
                   data-dropdown-toggle="dropdownTeam"
+                  :class="{ 'text-primary': isRoute('teams') }"
                   class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
                 >
                   Tim
@@ -196,11 +199,12 @@
 <script setup lang="ts">
 import uiButton from "@/components/button/ui-button.vue";
 import { useAuthStore } from "@/stores/auth";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import topBarProject from "@/views/admin/layouts/components/top-bar-project.vue";
 import topBarTeam from "@/views/admin/layouts/components/top-bar-team.vue";
 
 const router = useRouter();
+const route = useRoute();
 const authStore = useAuthStore();
 async function signOut() {
   localStorage.removeItem("auth");
@@ -209,5 +213,9 @@ async function signOut() {
 
 function toHome() {
   router.push("/admin");
+}
+
+function isRoute(routeMenu: string) {
+  return route.meta.menu === routeMenu;
 }
 </script>

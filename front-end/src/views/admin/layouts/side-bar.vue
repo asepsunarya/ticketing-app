@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import sideBarTitle from "@/views/admin/layouts/components/side-bar-title.vue";
 import sideBarMenu from "@/views/admin/layouts/components/side-bar-menu.vue";
 import ticketMenu from "@/views/admin/layouts/components/ticket-menu.vue";
@@ -53,10 +53,10 @@ const menus = computed<Menu[]>(() => [
   },
 ]);
 
-const displayMenu = ref(route.meta.menu);
+const displayMenu = ref(route.meta.submenu);
 
 function isActive(routeName: string) {
-  return routeName === route.meta.menu;
+  return routeName === route.meta.submenu;
 }
 
 function handleClick(menu: Menu) {
