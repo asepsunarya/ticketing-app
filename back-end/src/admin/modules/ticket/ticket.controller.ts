@@ -15,6 +15,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuardAdmin } from '@/auth/modules/auth/guards/jwt-auth-admin.guard';
 import { CreateTicketDto, PaginateTicketDto } from './ticket.dto';
 import { ParamIdDto } from '@/global/dto/param-id.dto';
+import { User } from '@/global/entity/user.entity';
 
 @ApiTags('Ticket')
 @Controller('ticket')
@@ -24,8 +25,11 @@ export class TicketController {
   @Get()
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuardAdmin)
-  async paginate(@Query() query: PaginateTicketDto) {
-    return await this.ticketService.paginate(query);
+  async paginate(
+    @Query() query: PaginateTicketDto,
+    @Req() { user }: { user: User },
+  ) {
+    return await this.ticketService.paginate(query, user._id);
   }
 
   @Post()

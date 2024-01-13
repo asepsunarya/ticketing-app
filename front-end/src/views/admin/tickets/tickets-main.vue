@@ -1,5 +1,7 @@
 <template>
-  <div class="text-xl font-semibold">Semua Tiket Open</div>
+  <div class="text-xl font-semibold capitalize">
+    Semua Tiket {{ route.params.status == "me" ? "saya" : route.params.status }}
+  </div>
   <div
     v-if="tickets.length"
     class="relative overflow-x-auto sm:rounded-lg min-h-screen mt-8"
@@ -128,13 +130,14 @@ import uiInput from "@/components/input/ui-input.vue";
 import uiButton from "@/components/button/ui-button.vue";
 import type { Ticket } from "@/views/admin/tickets/services/tickets.struct";
 import { getTickets } from "@/views/admin/tickets/services/tickets.service";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import cDropdown from "@/components/dropdown/c-dropdown.vue";
 import { useProjectStore } from "@/stores/project";
 import type { DropdownMenu } from "@/components/dropdown/dropdown.struct";
 import SearchAssignee from "@/views/admin/tickets/components/search-assignee.vue";
 
 const router = useRouter();
+const route = useRoute();
 const projectStore = useProjectStore();
 
 const tickets = ref<Ticket[]>([]);
@@ -155,9 +158,11 @@ const filter = reactive({
   nextPage: 0,
   prevPage: 0,
   totalPages: 1,
+  status: "",
 });
 
-async function handleGetTickets() {
+async function handleGetTickets(status = "") {
+  filter.status = status || String(route.params.status) || "";
   filter.projectId = projectStore.selected?._id || "";
   const ticketList = await getTickets(filter);
   tickets.value = ticketList.docs;
@@ -194,6 +199,13 @@ watch(
   () => projectStore.selected,
   async () => {
     await handleGetTickets();
+  }
+);
+
+watch(
+  () => route.params.status,
+  async () => {
+    await handleGetTickets(String(route.params.status));
   }
 );
 

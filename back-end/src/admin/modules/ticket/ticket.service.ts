@@ -12,15 +12,22 @@ export class TicketService {
     private ticketModel: Model<TicketDocument> & PaginateModel<TicketDocument>,
   ) {}
 
-  async paginate(query: PaginateTicket) {
+  async paginate(query: PaginateTicket, userId: string) {
     const filter = {
       projectId: new Types.ObjectId(query.projectId),
     };
-    if (query.search)
+    if (query.status != 'me' && query.status != 'undefined') {
+      filter['status'] = query.status;
+    } else if (query.status == 'me') {
+      filter['assignedBy._id'] = new Types.ObjectId(userId);
+    }
+
+    if (query.search) {
       filter['$or'] = [
         { feature: new RegExp(query.search, 'i') },
         { description: new RegExp(query.search, 'i') },
       ];
+    }
     if (query.isAssigned) filter['assignedBy'] = { $exists: false };
     return await this.ticketModel.paginate(filter, {
       page: query.page,
@@ -46,12 +53,7 @@ export class TicketService {
       },
     };
     if (body.assignedBy?._id) {
-      ticket['assignedBy'] = {
-        _id: new Types.ObjectId(body.assignedBy._id),
-        name: body.assignedBy.name,
-        email: body.assignedBy.email,
-        photo: body.assignedBy.photo,
-      };
+      ticket['assignedBy._id'] = new Types.ObjectId(body.assignedBy._id);
     }
     return await this.ticketModel.create(ticket);
   }

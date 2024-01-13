@@ -19,6 +19,17 @@ export default [
   },
   {
     path: "/admin/projects/:code/tickets",
+    name: "all-tickets",
+    meta: {
+      requireAuth: true,
+      withSidebar: true,
+      menu: "projects",
+      submenu: "tickets",
+    },
+    component: () => import("@/views/admin/tickets/tickets-main.vue"),
+  },
+  {
+    path: "/admin/projects/:code/tickets/:status",
     name: "admin-projects-queue",
     meta: {
       requireAuth: true,

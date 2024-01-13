@@ -25,6 +25,7 @@ import { computed } from "vue";
 import sideBarMenu from "@/views/admin/layouts/components/side-bar-menu.vue";
 import type { Menu } from "../structs/menu.struct";
 import { useRoute } from "vue-router";
+import router from "@/router";
 
 const route = useRoute();
 const emits = defineEmits<{
@@ -35,38 +36,39 @@ const menus = computed<Menu[]>(() => [
   {
     name: "tickets-all",
     title: "Semua Tiket",
-    redirect: "/admin",
-    active: isActive("dashboard"),
+    redirect: `/admin/projects/${route.params.code}/tickets`,
+    active: isActive(undefined),
     count: "0",
   },
   {
     name: "tickets-open",
     title: "Tiket Open",
-    redirect: "/admin",
-    active: isActive("dashboard"),
+    redirect: `/admin/projects/${route.params.code}/tickets/open`,
+    active: isActive("open"),
     count: "0",
   },
   {
     name: "my-tickets",
     title: "Tiket Saya",
-    active: isActive("admin-projects-queue"),
+    redirect: `/admin/projects/${route.params.code}/tickets/me`,
+    active: isActive("me"),
     count: "0",
   },
   {
     name: "tickets-closed",
     title: "Tiket Ditutup",
-    redirect: "/admin",
-    active: isActive("dashboard"),
+    redirect: `/admin/projects/${route.params.code}/tickets/closed`,
+    active: isActive("closed"),
     count: "0",
   },
 ]);
 
-function isActive(routeName: string) {
-  return routeName === route.name;
+function isActive(routeName?: string) {
+  return routeName === route.params.status;
 }
 
 function handleClick(menu: Menu) {
-  //
+  menu.redirect ? router.push(menu.redirect) : "";
 }
 
 function handleBack() {

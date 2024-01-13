@@ -21,6 +21,7 @@ export type Ticket = {
 
 export type GetTicketsDto = {
   projectId: string;
+  status?: string | string[];
   page: number;
   limit: number;
   search?: string;

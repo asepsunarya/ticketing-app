@@ -8,6 +8,9 @@ export class PaginateTicketDto extends PaginationDto {
   @ApiProperty({ default: '' })
   projectId: string;
 
+  @ApiProperty({ default: '' })
+  status?: string;
+
   @ApiProperty({ default: '', required: false })
   search?: string;
 
