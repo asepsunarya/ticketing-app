@@ -6,7 +6,7 @@
     v-if="tickets.length"
     class="relative overflow-x-auto sm:rounded-lg min-h-screen mt-8"
   >
-    <div class="mb-8 w-1/3">
+    <div class="mb-8 lg:w-1/3">
       <ui-input
         v-model="filter.search"
         type="text"

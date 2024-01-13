@@ -180,7 +180,7 @@ const reporter = computed(() => {
 
 const assignee = computed(() => {
   return {
-    _id: projectMemberStore.selected?._id || "",
+    _id: projectMemberStore.selected?.userId || "",
     name: projectMemberStore.selected?.name,
     email: projectMemberStore.selected?.email,
     photo: projectMemberStore.selected?.photo,
