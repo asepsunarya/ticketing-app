@@ -6,6 +6,7 @@ import { reactive, ref } from "vue";
 
 export const useProjectStore = defineStore("project", () => {
   const selected = ref<Project>();
+  const selectedOption = ref<Project>();
   const filter = reactive({
     page: 1,
     limit: 10,
@@ -19,5 +20,29 @@ export const useProjectStore = defineStore("project", () => {
     docs: [],
     ...pagination,
   });
-  return { selected, filter, newest };
+  const project = ref<{ docs: Project[] } & PaginationResult>({
+    docs: [],
+    ...pagination,
+  });
+
+  function clearSelected() {
+    selectedOption.value = {
+      _id: "",
+      name: "",
+      code: "",
+      description: "",
+      leader: {
+        _id: "",
+      },
+      picture: "",
+    };
+  }
+  return {
+    selected,
+    selectedOption,
+    filter,
+    newest,
+    project,
+    clearSelected,
+  };
 });

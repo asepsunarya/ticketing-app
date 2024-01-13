@@ -3,12 +3,12 @@
     <ui-input
       v-model="search"
       type="text"
-      :placeholder="`Masukan ${title || 'Nama atau Email'}`"
+      :placeholder="`${'Pilih ' + title || 'Nama atau Email'}`"
       :label="title || 'Nama atau Email'"
       @input="handleSearch"
     />
     <div
-      class="absolute w-full group-focus-within:block group-active:block hidden"
+      class="z-[100] absolute w-full group-focus-within:block group-active:block hidden"
     >
       <div
         class="flex flex-col divide-y bg-white drop-shadow-lg mt-2 rounded-lg max-h-40 overflow-auto"
@@ -28,7 +28,8 @@
             <div
               class="w-7 h-7 rounded-full bg-zinc-300 flex justify-center items-center"
             >
-              <i class="bi bi-person" />
+              <img v-if="option.picture" :src="option.picture" alt="" />
+              <i v-else class="bi bi-person" />
             </div>
             <div>
               {{ option.value || option?.name }}

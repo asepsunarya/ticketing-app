@@ -1,7 +1,11 @@
 <template>
-  <ui-modal :id="id">
-    <div class="font-semibold text-xl mb-7">Buat Tiket</div>
-    <div class="mb-10 flex flex-col gap-3">
+  <ui-modal size="xl" :id="id" :with-header="true" title="Buat Tiket">
+    <div class="mb-2 flex flex-col gap-3">
+      <search-project title="Project" :include-self="true">
+        <template v-if="v$$$.$error && v$$._id.$invalid" #error>
+          <span>Project harus dipilih </span>
+        </template>
+      </search-project>
       <ui-input
         v-model="form.feature"
         type="text"
@@ -38,16 +42,17 @@
           <span>Pelapor harus dipilih </span>
         </template>
       </search-user>
-
       <search-project-member title="Assignee" />
-      <ui-select v-model="form.urgencyLevel" label="Tingkat Urgensi">
-        <option v-for="level in urgencyLevels" :key="level" :value="level">
-          {{ level }}
-        </option>
-      </ui-select>
-    </div>
 
-    <div class="flex justify-end items-center gap-3">
+      <div class="w-1/2">
+        <ui-select v-model="form.urgencyLevel" label="Tingkat Urgensi">
+          <option v-for="level in urgencyLevels" :key="level" :value="level">
+            {{ level }}
+          </option>
+        </ui-select>
+      </div>
+    </div>
+    <template #action>
       <ui-button text="Batal" size="sm" type="ghost" :for="id" />
       <ui-button
         :is-loading="isLoadingSubmit"
@@ -56,7 +61,7 @@
         type="default"
         @click="handleSubmitForm"
       />
-    </div>
+    </template>
   </ui-modal>
 </template>
 
@@ -67,7 +72,8 @@ import uiInput from "@/components/input/ui-input.vue";
 import uiSelect from "@/components/select/ui-select.vue";
 import searchUser from "@/views/admin/components/search-user.vue";
 import searchProjectMember from "@/views/admin/components/search-project-member.vue";
-import { ref, reactive, onMounted, computed } from "vue";
+import searchProject from "@/views/admin/components/search-project.vue";
+import { ref, reactive, onMounted, computed, watch } from "vue";
 import type { User } from "@/views/user/services/user.struct";
 import { toast } from "vue3-toastify";
 import { closeModal } from "@/helpers/modal-helpers";
@@ -76,12 +82,15 @@ import { required } from "@vuelidate/validators";
 import { useAuthStore } from "@/stores/auth";
 import { useUserStore } from "@/stores/user";
 import { useProjectMemberStore } from "@/stores/project-member";
+import { useProjectStore } from "@/stores/project";
+import type { Project } from "../../projects/services/projects.struct";
 
 const props = defineProps<{ id: string }>();
 const emits = defineEmits<(e: "need-refresh") => void>();
 
 const authStore = useAuthStore();
 const userStore = useUserStore();
+const projectStore = useProjectStore();
 const projectMemberStore = useProjectMemberStore();
 
 const isLoadingSubmit = ref<boolean>(false);
@@ -100,6 +109,14 @@ const form = reactive({
   description: "",
   screenshot: "",
   urgencyLevel: "",
+});
+
+const project = computed(() => {
+  return {
+    _id: projectStore.selectedOption?._id || "",
+    name: projectStore.selectedOption?.name,
+    code: projectStore.selectedOption?.code,
+  };
 });
 
 const reporter = computed(() => {
@@ -123,12 +140,13 @@ const rules = {
   code: { required },
   description: { required },
 };
-const reporterRules = {
+const requiredIdRules = {
   _id: { required },
 };
 
 const v$ = useVuelidate(rules, form);
-const v$$ = useVuelidate(reporterRules, reporter.value);
+const v$$ = useVuelidate(requiredIdRules, reporter.value);
+const v$$$ = useVuelidate(requiredIdRules, project.value);
 
 async function handleSubmitForm(): Promise<void> {
   const isValidated = await v$.value.$validate();
@@ -162,6 +180,17 @@ function handleSelectUser(user: User): void {
     photo: user.photo ?? "",
   };
 }
+
+function handleSelectProject(): void {
+  projectStore.selectedOption = projectStore.selected;
+}
+
+watch(
+  () => projectStore.selected,
+  () => {
+    handleSelectProject();
+  }
+);
 
 onMounted(async () => {
   handleSelectUser(authStore.user);

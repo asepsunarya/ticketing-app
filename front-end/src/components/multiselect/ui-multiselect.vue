@@ -8,7 +8,8 @@
         <div
           class="w-7 h-7 rounded-full bg-zinc-300 flex justify-center items-center"
         >
-          <i class="bi bi-person" />
+          <img v-if="selected.picture" :src="selected.picture" alt="" />
+          <i v-else class="bi bi-person" />
         </div>
         <div>{{ selected.value || selected?.name }}</div>
       </div>
