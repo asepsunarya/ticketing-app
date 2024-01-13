@@ -172,6 +172,7 @@ const project = computed(() => {
 const reporter = computed(() => {
   return {
     _id: userStore.selected?._id || "",
+    name: userStore.selected?.name,
     email: userStore.selected?.email,
     photo: userStore.selected?.photo,
   };
@@ -180,6 +181,7 @@ const reporter = computed(() => {
 const assignee = computed(() => {
   return {
     _id: projectMemberStore.selected?._id || "",
+    name: projectMemberStore.selected?.name,
     email: projectMemberStore.selected?.email,
     photo: projectMemberStore.selected?.photo,
   };
@@ -247,6 +249,8 @@ function restruct() {
     reportBy: {
       _id: reporter.value._id,
       email: reporter.value.email,
+      name: reporter.value.name,
+      photo: reporter.value.photo,
     },
     releaseStatus: form.releaseStatus,
     status: "open",

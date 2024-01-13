@@ -12,6 +12,7 @@ export type Ticket = {
   releaseStatus: string;
   status: string;
   solution?: string;
+  files: string[];
   note?: string;
 };
 

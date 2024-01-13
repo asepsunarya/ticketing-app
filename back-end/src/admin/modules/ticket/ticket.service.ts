@@ -22,23 +22,29 @@ export class TicketService {
     });
   }
 
-  async create(body: Ticket, { _id, email }: User) {
+  async create(body: Ticket, { _id, name, email, photo }: User) {
     const ticket = {
       ...body,
       projectId: new Types.ObjectId(body.projectId),
       reportBy: {
         _id: new Types.ObjectId(body.reportBy._id),
+        name: body.reportBy.name,
         email: body.reportBy.email,
+        photo: body.reportBy.photo,
       },
       createdBy: {
         _id: new Types.ObjectId(_id),
+        name,
         email,
+        photo,
       },
     };
     if (body.assignedBy?._id) {
       ticket['assignedBy'] = {
         _id: new Types.ObjectId(body.assignedBy._id),
+        name: body.assignedBy.name,
         email: body.assignedBy.email,
+        photo: body.assignedBy.photo,
       };
     }
     return await this.ticketModel.create(ticket);

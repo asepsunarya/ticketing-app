@@ -26,7 +26,7 @@
           <div @click="toHome" class="cursor-pointer flex ms-2 md:me-24">
             <img src="@/assets/logo.svg" class="h-8 me-3" alt="FlowBite Logo" />
             <span
-              class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap"
+              class="lg:block hidden self-center text-xl font-semibold sm:text-2xl whitespace-nowrap"
               >BoostTicket</span
             >
           </div>
