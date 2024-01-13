@@ -10,6 +10,7 @@
     <teleport to="body">
       <add-project-modal id="add-project-modal-top-bar" />
       <add-people-modal id="add-people-modal-top-bar" />
+      <add-ticket-modal id="add-ticket-modal-top-bar" />
     </teleport>
   </template>
   <template v-else>
@@ -23,6 +24,7 @@ import topBar from "@/views/admin/layouts/top-bar.vue";
 import sideBar from "@/views/admin/layouts/side-bar.vue";
 import addProjectModal from "@/views/admin/projects/components/add-project-modal.vue";
 import addPeopleModal from "@/views/admin/teams/components/people/add-people-modal.vue";
+import addTicketModal from "@/views/admin/tickets/components/add-ticket-modal.vue";
 
 const route = useRoute();
 const authStore = useAuthStore();

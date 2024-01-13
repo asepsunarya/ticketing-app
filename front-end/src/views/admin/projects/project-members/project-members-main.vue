@@ -47,8 +47,8 @@ import uiButton from "@/components/button/ui-button.vue";
 import addProjectMemberModal from "@/views/admin/projects/project-members/components/add-project-member-modal.vue";
 import cPagination from "@/components/pagination/c-pagination.vue";
 import { onMounted, reactive, ref } from "vue";
-import type { User } from "@/views/user/services/user.struct";
 import { getMembers } from "@/views/admin/projects/project-members/services/project-members.service";
+import type { ProjectMember } from "./services/project-members.struct";
 
 const isLoadingGetMembers = ref<boolean>(false);
 const filter = reactive({
@@ -58,7 +58,7 @@ const filter = reactive({
   hasNextPage: false,
   totalPages: 1,
 });
-const members = ref<User[]>([]);
+const members = ref<ProjectMember[]>([]);
 
 async function handleGetMembers() {
   try {

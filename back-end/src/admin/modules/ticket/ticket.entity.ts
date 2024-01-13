@@ -13,4 +13,7 @@ export class Ticket {
   urgencyLevel: string;
   reportBy: string;
   releaseStatus: string;
+  status: string;
+  solution?: string;
+  note?: string;
 }

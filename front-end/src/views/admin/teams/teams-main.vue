@@ -19,7 +19,6 @@
 <script setup lang="ts">
 import uiButton from "@/components/button/ui-button.vue";
 import peopleList from "@/views/admin/teams/components/people/people-list.vue";
-import teamList from "@/views/admin/teams/components/teams-list.vue";
 import addPeopleModal from "./components/people/add-people-modal.vue";
 import { getUsers } from "../services/users.service";
 import { onMounted, reactive, ref } from "vue";

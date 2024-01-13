@@ -38,46 +38,20 @@
           placeholder="Manypage.id"
           label="Nama Proyek"
         >
-          <template v-if="v$.$error" #error>
-            <span v-if="v$.name.$invalid"> Nama proyek harus diisi </span>
+          <template v-if="v$.$error && v$.name.$invalid" #error>
+            <span> Nama proyek harus diisi </span>
           </template>
         </ui-input>
 
-        <div v-if="form.selectedUser.id">
-          <div class="mb-2 mt-2 ml-1">Leader</div>
-          <div
-            class="flex justify-between items-center bg-zinc-100 rounded-lg py-2 px-3"
-          >
-            <div class="flex items-center gap-3">
-              <div
-                class="w-7 h-7 rounded-full bg-zinc-300 flex justify-center items-center"
-              >
-                <i class="bi bi-person" />
-              </div>
-              <div>{{ form.selectedUser.name }}</div>
-            </div>
-            <ui-button
-              size="sm"
-              type="ghost"
-              icon="bi bi-x-lg"
-              custom-class="btn-circle"
-              @click="handleResetSelectedUser"
-            />
-          </div>
-        </div>
-        <template v-else>
-          <search-member
-            @select="handleSelectUser"
-            label="Leader"
-            :include-self="true"
-          />
-          <div v-if="v$.$error" class="label-text-alt text-error">
-            <span v-if="v$.selectedUser.$invalid">Leader harus dipilih </span>
-          </div>
-        </template>
+        <search-user title="Anggota" :include-self="true">
+          <template v-if="v$.$error && v$.selectedUser.$invalid" #error>
+            <span>Anggota harus dipilih </span>
+          </template>
+        </search-user>
+
         <ui-input v-model="form.code" type="text" placeholder="MP" label="Kode">
-          <template v-if="v$.$error" #error>
-            <span v-if="v$.code.$invalid">Kode harus diisi </span>
+          <template v-if="v$.$error && v$.code.$invalid" #error>
+            <span>Kode harus diisi </span>
           </template>
         </ui-input>
         <ui-input
@@ -86,8 +60,8 @@
           placeholder="Aplikasi untuk kelola sosial media"
           label="Keterangan"
         >
-          <template v-if="v$.$error" #error>
-            <span v-if="v$.description.$invalid">Keterangan harus diisi </span>
+          <template v-if="v$.$error && v$.description.$invalid" #error>
+            <span>Keterangan harus diisi </span>
           </template>
         </ui-input>
       </div>
@@ -110,59 +84,45 @@
 <script setup lang="ts">
 import uiButton from "@/components/button/ui-button.vue";
 import uiInput from "@/components/input/ui-input.vue";
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { getProject } from "@/views/admin/projects/project-details/services/project-details.service";
 import { useProjectStore } from "@/stores/project";
 import { useRoute } from "vue-router";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import type { User } from "@/views/user/services/user.struct";
-import searchMember from "@/views/admin/projects/project-members/components/search-member.vue";
+import searchUser from "@/views/admin/components/search-user.vue";
 import uploadIconModal from "./components/upload-icon-modal.vue";
 import { toast } from "vue3-toastify";
 import { updateProject } from "@/views/admin/projects/project-details/services/project-details.service";
+import { useUserStore } from "@/stores/user";
 
 const route = useRoute();
+const userStore = useUserStore();
 const projectStore = useProjectStore();
 const isLoading = ref<boolean>(false);
 
 const form = reactive({
   picture: "",
-  selectedUser: {
-    id: "",
-    name: "",
-    email: "",
-    photo: "",
-  },
   name: "",
   code: "",
   description: "",
 });
 
+const selectedUser = computed(() => {
+  return {
+    _id: userStore.selected?._id || "",
+    email: userStore.selected?.email,
+    photo: userStore.selected?.photo,
+  };
+});
+
 const rules = {
-  selectedUser: {
-    id: { required },
-  },
   name: { required },
   code: { required },
   description: { required },
 };
 
 const v$ = useVuelidate(rules, form);
-
-function handleSelectUser(user: User): void {
-  form.selectedUser.id = user._id;
-  form.selectedUser.name = user.name || "";
-  form.selectedUser.email = user.email || "";
-  form.selectedUser.photo = user.photo || "";
-}
-
-function handleResetSelectedUser(): void {
-  form.selectedUser.id = "";
-  form.selectedUser.name = "";
-  form.selectedUser.email = "";
-  form.selectedUser.photo = "";
-}
 
 async function handleGetProject() {
   try {
@@ -172,10 +132,12 @@ async function handleGetProject() {
     form.code = resultProject.code;
     form.name = resultProject.name;
     form.description = resultProject.description;
-    form.selectedUser.id = resultProject.leader._id;
-    form.selectedUser.email = resultProject.leader.email;
-    form.selectedUser.name = resultProject.leader.name || "";
-    form.selectedUser.photo = resultProject.leader.photo || "";
+    userStore.selected = {
+      _id: resultProject.leader._id || "",
+      email: resultProject.leader.email || "",
+      name: resultProject.leader.name || "",
+      photo: resultProject.leader.photo || "",
+    };
   } catch (error) {
     console.log("error : ", error);
   } finally {
@@ -188,16 +150,17 @@ async function handleSubmitForm(): Promise<void> {
   if (!isValidated) return;
   try {
     isLoading.value = true;
-    const newProject: any = {
+    const newProject = {
       name: form.name,
       description: form.description,
       code: form.code,
       leader: {
-        _id: form.selectedUser.id,
-        email: form.selectedUser.email,
+        _id: selectedUser.value._id,
+        email: selectedUser.value.email,
       },
+      picture: "",
     };
-    if (form.picture) newProject["picture"] = form.picture;
+    if (form.picture) newProject.picture = form.picture;
     const id = projectStore.selected?._id || "";
     await updateProject(id, newProject);
     toast("Berhasil mengubah proyek", { type: "success" });

@@ -119,6 +119,7 @@
             type="default"
             size="sm"
             custom-class="!px-4 !m-0"
+            for="add-ticket-modal-top-bar"
           />
         </div>
         <div class="flex items-center">

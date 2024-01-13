@@ -128,7 +128,7 @@ async function getDominantColor(project: Project) {
   let image = document.getElementById(`image-${project._id}`);
 
   if (!image) {
-    await delay(100);
+    await delay(1000);
     image = document.getElementById(`image-${project._id}`);
   }
   const color = colorThief.getColor(image);

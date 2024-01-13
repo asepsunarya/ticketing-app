@@ -9,42 +9,15 @@
         label="Nama Proyek"
       >
         <template v-if="v$.$error" #error>
-          <span v-if="v$.name.$invalid"> Nama proyek harus diisi </span>
+          <span v-if="v$.name.$invalid">Nama proyek harus diisi </span>
         </template>
       </ui-input>
 
-      <div v-if="form.selectedUser.id">
-        <div class="mb-2 mt-2 ml-1">Leader</div>
-        <div
-          class="flex justify-between items-center bg-zinc-100 rounded-lg py-2 px-3"
-        >
-          <div class="flex items-center gap-3">
-            <div
-              class="w-7 h-7 rounded-full bg-zinc-300 flex justify-center items-center"
-            >
-              <i class="bi bi-person" />
-            </div>
-            <div>{{ form.selectedUser.name }}</div>
-          </div>
-          <ui-button
-            size="sm"
-            type="ghost"
-            icon="bi bi-x-lg"
-            custom-class="btn-circle"
-            @click="handleResetSelectedUser"
-          />
-        </div>
-      </div>
-      <template v-else>
-        <search-member
-          @select="handleSelectUser"
-          label="Leader"
-          :include-self="true"
-        />
-        <div v-if="v$.$error" class="label-text-alt text-error">
-          <span v-if="v$.selectedUser.$invalid">Leader harus dipilih </span>
-        </div>
-      </template>
+      <search-user title="Leader" :include-self="true">
+        <template v-if="v$$.$error && v$$._id.$invalid" #error>
+          <span>Leader harus dipilih </span>
+        </template>
+      </search-user>
       <ui-input v-model="form.code" type="text" placeholder="MP" label="Kode">
         <template v-if="v$.$error" #error>
           <span v-if="v$.code.$invalid">Kode harus diisi </span>
@@ -78,70 +51,59 @@
 import uiButton from "@/components/button/ui-button.vue";
 import uiModal from "@/components/modal/ui-modal.vue";
 import uiInput from "@/components/input/ui-input.vue";
-import searchMember from "@/views/admin/projects/project-members/components/search-member.vue";
-import { ref, reactive } from "vue";
-import type { User } from "@/views/user/services/user.struct";
+import { ref, reactive, computed } from "vue";
 import { toast } from "vue3-toastify";
+import searchUser from "@/views/admin/components/search-user.vue";
 import { closeModal } from "@/helpers/modal-helpers";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { createProjects } from "@/views/admin/projects/services/projects.service";
+import { useUserStore } from "@/stores/user";
 
 const props = defineProps<{ id: string }>();
 const emits = defineEmits<(e: "need-refresh") => void>();
 
+const userStore = useUserStore();
 const isLoadingSubmit = ref<boolean>(false);
 
 const form = reactive({
-  selectedUser: {
-    id: "",
-    name: "",
-    email: "",
-    photo: "",
-  },
   name: "",
   code: "",
   description: "",
 });
 
+const selectedUser = computed(() => {
+  return {
+    _id: userStore.selected?._id || "",
+    email: userStore.selected?.email,
+    photo: userStore.selected?.photo,
+  };
+});
+
 const rules = {
-  selectedUser: {
-    id: { required },
-  },
   name: { required },
   code: { required },
   description: { required },
 };
 
+const userRules = {
+  _id: { required },
+};
+
 const v$ = useVuelidate(rules, form);
-
-function handleSelectUser(user: User): void {
-  form.selectedUser.id = user._id;
-  form.selectedUser.name = user.name ?? "";
-  form.selectedUser.email = user.email ?? "";
-  form.selectedUser.photo = user.photo ?? "";
-}
-
-function handleResetSelectedUser(): void {
-  form.selectedUser.id = "";
-  form.selectedUser.name = "";
-  form.selectedUser.email = "";
-  form.selectedUser.photo = "";
-}
+const v$$ = useVuelidate(userRules, selectedUser.value);
 
 async function handleSubmitForm(): Promise<void> {
   const isValidated = await v$.value.$validate();
-  if (!isValidated) return;
+  const isUserValidated = await v$$.value.$validate();
+  if (!isValidated && !isUserValidated) return;
   try {
     isLoadingSubmit.value = true;
     const newProject = {
       name: form.name,
       description: form.description,
       code: form.code,
-      leader: {
-        _id: form.selectedUser.id,
-        email: form.selectedUser.email,
-      },
+      leader: selectedUser.value,
     };
 
     await createProjects(newProject);

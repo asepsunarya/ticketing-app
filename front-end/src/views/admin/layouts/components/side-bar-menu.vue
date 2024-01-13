@@ -17,7 +17,7 @@
         <span
           v-if="menu.icon"
           class="hidden group-hover:flex justify-self-end rounded-full bg-gray-600 h-4 w-4 items-center"
-          :class="{ '!bg-primary': menu.active }"
+          :class="{ '!bg-primary !flex': menu.active }"
         >
           <i class="bi bi-arrow-right-short text-white"></i>
         </span>

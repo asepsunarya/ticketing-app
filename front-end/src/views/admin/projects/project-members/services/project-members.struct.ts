@@ -1,5 +1,4 @@
 import type { PaginationResult } from "@/structs/pagination.struct";
-import type { User } from "@/views/user/services/user.struct";
 
 export type GetProjectMemberDto = {
   page: number;
@@ -8,11 +7,20 @@ export type GetProjectMemberDto = {
 };
 
 export type ProjectMembersResult = {
-  docs: User[];
+  docs: ProjectMember[];
 } & PaginationResult;
 
 export type CreateMemberDto = {
   projectId: string;
   userId: string;
   role: string;
+};
+
+export type ProjectMember = {
+  _id: string;
+  role: string;
+  userId: string;
+  name: string;
+  email: string;
+  photo?: string;
 };

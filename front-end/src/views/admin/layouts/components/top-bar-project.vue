@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onBeforeMount } from "vue";
 import { getProjects } from "../../projects/services/projects.service";
 import { useProjectStore } from "@/stores/project";
 import { useRouter } from "vue-router";
@@ -67,7 +67,7 @@ function toProject(code: string) {
   router.push(`/admin/projects/${code}/tickets`);
 }
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await handleGetProjects();
 });
 </script>

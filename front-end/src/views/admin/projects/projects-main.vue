@@ -165,19 +165,19 @@ function toProject(code: string) {
   router.push(`/admin/projects/${code}/tickets`);
 }
 
-function handleClick({ menu, value, code }: any) {
+function handleClick({ menu, id, code }: any) {
   switch (menu.name) {
     case "setting":
       router.push(`/admin/projects/${code}/settings/details`);
       break;
     case "remove":
-      selectedProjectId.value = value;
+      selectedProjectId.value = id;
       openModal("remove-project-modal");
       break;
   }
 }
 
-onMounted(() => {
-  handleGetProjects();
+onMounted(async () => {
+  await handleGetProjects();
 });
 </script>
