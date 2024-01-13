@@ -1,4 +1,5 @@
 import type { PaginationResult } from "@/structs/pagination.struct";
+import type { User } from "@/views/user/services/user.struct";
 
 export type Ticket = {
   _id: string;
@@ -23,3 +24,16 @@ export type GetTicketsDto = {
 export type TicketsResult = {
   docs: Ticket[];
 } & PaginationResult;
+
+export type CreateTicketDto = {
+  projectId: string;
+  feature: string;
+  description: string;
+  email: string;
+  urgencyLevel: string;
+  reportBy: User;
+  releaseStatus: string;
+  status: string;
+  assignedBy: User;
+  files: string[];
+};

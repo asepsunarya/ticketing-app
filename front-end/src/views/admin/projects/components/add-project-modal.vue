@@ -86,17 +86,18 @@ const rules = {
   description: { required },
 };
 
-const userRules = {
-  _id: { required },
-};
+const userRules = computed(() => {
+  return { _id: { required } };
+});
 
 const v$ = useVuelidate(rules, form);
 const v$$ = useVuelidate(userRules, selectedUser.value);
 
 async function handleSubmitForm(): Promise<void> {
+  v$.value.$reset();
   const isValidated = await v$.value.$validate();
   const isUserValidated = await v$$.value.$validate();
-  if (!isValidated && !isUserValidated) return;
+  if (!isValidated || !isUserValidated) return;
   try {
     isLoadingSubmit.value = true;
     const newProject = {

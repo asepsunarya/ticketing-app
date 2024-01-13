@@ -1,5 +1,11 @@
 <template>
-  <ui-modal size="xl" :id="id" :with-header="true" title="Buat Tiket">
+  <ui-modal
+    :prevent-close="true"
+    size="xl"
+    :id="id"
+    :with-header="true"
+    title="Buat Tiket"
+  >
     <div class="mb-2 flex flex-col gap-3">
       <search-project title="Project" :include-self="true">
         <template v-if="v$$$.$error && v$$._id.$invalid" #error>
@@ -12,17 +18,23 @@
         placeholder="e.g,. Buat postingan"
         label="Fitur"
       >
-        <template v-if="v$.$error" #error>
-          <span v-if="v$.feature.$invalid">Fitur harus diisi </span>
+        <template v-if="v$.$error && v$.feature.$invalid" #error>
+          <span>Fitur harus diisi </span>
         </template>
       </ui-input>
       <div class="form-control">
         <label for="description" class="mb-2">Penjelasan</label>
         <textarea
+          v-model="form.description"
           id="description"
           class="textarea textarea-bordered"
           placeholder="e.g,. User tidak dapat mengupload media"
         ></textarea>
+        <template v-if="v$.$error && v$.description.$invalid">
+          <span class="label-text-alt text-error mt-2"
+            >Penjelasan harus diisi
+          </span>
+        </template>
       </div>
       <ui-input
         v-model="form.email"
@@ -32,7 +44,7 @@
       />
       <div class="flex">
         <ui-input
-          v-model="form.screenshot"
+          v-model="form.file"
           @change="uploadFile"
           type="file"
           label="File Pendukung"
@@ -64,6 +76,20 @@
         <ui-select v-model="form.urgencyLevel" label="Tingkat Urgensi">
           <option v-for="level in urgencyLevels" :key="level" :value="level">
             {{ level }}
+          </option>
+        </ui-select>
+        <template v-if="v$.$error && v$.urgencyLevel.$invalid">
+          <span class="label-text-alt text-error mt-2"
+            >Tingkat Urgensi harus diisi
+          </span>
+        </template>
+        <ui-select v-model="form.releaseStatus" label="Status Rilis">
+          <option
+            v-for="status in releaseStatus"
+            :key="status.key"
+            :value="status.key"
+          >
+            {{ status.value }}
           </option>
         </ui-select>
       </div>
@@ -100,6 +126,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useUserStore } from "@/stores/user";
 import { useProjectMemberStore } from "@/stores/project-member";
 import { useProjectStore } from "@/stores/project";
+import { createTickets } from "@/views/admin/tickets/services/tickets.service";
 import {
   getDownloadURL,
   getStorage,
@@ -118,22 +145,21 @@ const projectMemberStore = useProjectMemberStore();
 const isLoadingSubmit = ref<boolean>(false);
 const uploadStatus = ref<string>("");
 const urgencyLevels = [5, 4, 3, 2, 1];
+const releaseStatus = [
+  { key: "new", value: "Baru" },
+  { key: "old", value: "Lama" },
+];
 
 const form = reactive({
-  project: {
-    id: "",
-    name: "",
-    picture: "",
-  },
   email: "",
   feature: "",
-  name: "",
-  code: "",
   description: "",
-  screenshot: "",
+  file: "",
   urgencyLevel: "",
-  files: [""],
+  releaseStatus: "",
 });
+
+const files: string[] = [];
 
 const project = computed(() => {
   return {
@@ -160,36 +186,34 @@ const assignee = computed(() => {
 });
 
 const rules = {
-  name: { required },
-  code: { required },
+  feature: { required },
   description: { required },
+  urgencyLevel: { required },
 };
-const requiredIdRules = {
-  _id: { required },
-};
+
+const requiredIdRules = computed(() => {
+  return { _id: { required } };
+});
 
 const v$ = useVuelidate(rules, form);
 const v$$ = useVuelidate(requiredIdRules, reporter.value);
 const v$$$ = useVuelidate(requiredIdRules, project.value);
 
 async function handleSubmitForm(): Promise<void> {
+  v$.value.$reset();
   const isValidated = await v$.value.$validate();
   const isReporterValidated = await v$$.value.$validate();
-  if (!isValidated && !isReporterValidated) return;
+  const isProjectValidated = await v$$$.value.$validate();
+  if (!isValidated && !isReporterValidated && !isProjectValidated) return;
   try {
     isLoadingSubmit.value = true;
-    const newProject = {
-      name: form.name,
-      description: form.description,
-      code: form.code,
-    };
-
-    // await createProjects(newProject);
+    const newTickets = restruct();
+    await createTickets(newTickets);
     emits("need-refresh");
     closeModal(props.id);
-    toast("Berhasil menambahkan proyek", { type: "success" });
+    toast("Berhasil membuat tiket", { type: "success" });
   } catch (error) {
-    toast("Gagal menambahkan proyek", { type: "error" });
+    toast("Gagal membuat tiket", { type: "error" });
     console.log("error : ", error);
   } finally {
     isLoadingSubmit.value = false;
@@ -198,18 +222,37 @@ async function handleSubmitForm(): Promise<void> {
 
 async function uploadFile(files: any[]) {
   if (files.length > 0) {
+    files = [];
     uploadStatus.value = "loading";
     const storage = getStorage();
     for (const file of files) {
       const fileRef = storageRef(storage, file.name);
       await uploadBytes(fileRef, file);
       const downloadURL = await getDownloadURL(fileRef);
-      form.files.push(downloadURL);
+      files.push(downloadURL);
     }
     uploadStatus.value = "success";
   } else {
     uploadStatus.value = "error";
   }
+}
+
+function restruct() {
+  return {
+    projectId: project.value._id,
+    feature: form.feature,
+    description: form.description,
+    email: form.email,
+    urgencyLevel: form.urgencyLevel,
+    reportBy: {
+      _id: reporter.value._id,
+      email: reporter.value.email,
+    },
+    releaseStatus: form.releaseStatus,
+    status: "open",
+    assignedBy: assignee.value,
+    files,
+  };
 }
 
 function handleSelectUser(user: User): void {

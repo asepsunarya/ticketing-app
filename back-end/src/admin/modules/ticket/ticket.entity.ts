@@ -1,3 +1,5 @@
+import { User } from '@/global/entity/user.entity';
+
 export class PaginateTicket {
   page: number;
   limit: number;
@@ -6,14 +8,16 @@ export class PaginateTicket {
 }
 
 export class Ticket {
-  product: string;
+  projectId: string;
+  feature: string;
   description: string;
   email: string;
-  screenshot: string[];
   urgencyLevel: string;
-  reportBy: string;
+  reportBy: User;
   releaseStatus: string;
   status: string;
+  files?: string[];
+  assignedBy?: User;
   solution?: string;
   note?: string;
 }

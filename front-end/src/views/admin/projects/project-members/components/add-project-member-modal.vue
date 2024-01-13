@@ -94,7 +94,7 @@ const v$$ = useVuelidate(userRules, selectedUser.value);
 async function handleSubmitForm(): Promise<void> {
   const isValidated = await v$.value.$validate();
   const isUserValidated = await v$$.value.$validate();
-  if (!isValidated && !isUserValidated) return;
+  if (!isValidated || !isUserValidated) return;
   try {
     isLoadingSubmit.value = true;
     const newMember: CreateMemberDto = {

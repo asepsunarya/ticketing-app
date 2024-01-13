@@ -132,6 +132,7 @@ async function handleGetProject() {
     form.code = resultProject.code;
     form.name = resultProject.name;
     form.description = resultProject.description;
+    form.picture = resultProject.picture || "";
     userStore.selected = {
       _id: resultProject.leader._id || "",
       email: resultProject.leader.email || "",
@@ -158,9 +159,8 @@ async function handleSubmitForm(): Promise<void> {
         _id: selectedUser.value._id,
         email: selectedUser.value.email,
       },
-      picture: "",
+      picture: form.picture ?? "",
     };
-    if (form.picture) newProject.picture = form.picture;
     const id = projectStore.selected?._id || "";
     await updateProject(id, newProject);
     toast("Berhasil mengubah proyek", { type: "success" });

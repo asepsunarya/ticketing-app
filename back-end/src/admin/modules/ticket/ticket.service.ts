@@ -25,11 +25,22 @@ export class TicketService {
   async create(body: Ticket, { _id, email }: User) {
     const ticket = {
       ...body,
+      projectId: new Types.ObjectId(body.projectId),
+      reportBy: {
+        _id: new Types.ObjectId(body.reportBy._id),
+        email: body.reportBy.email,
+      },
       createdBy: {
         _id: new Types.ObjectId(_id),
         email,
       },
     };
+    if (body.assignedBy?._id) {
+      ticket['assignedBy'] = {
+        _id: new Types.ObjectId(body.assignedBy._id),
+        email: body.assignedBy.email,
+      };
+    }
     return await this.ticketModel.create(ticket);
   }
 

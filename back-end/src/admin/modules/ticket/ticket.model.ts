@@ -14,7 +14,10 @@ class User {
 @Schema()
 export class TicketModel {
   @Prop()
-  product: string;
+  projectId: Types.ObjectId;
+
+  @Prop()
+  feature: string;
 
   @Prop()
   description: string;
@@ -23,13 +26,10 @@ export class TicketModel {
   email: string;
 
   @Prop()
-  screenshot: string[];
-
-  @Prop()
   urgencyLevel: string;
 
   @Prop()
-  reportBy: string;
+  reportBy: User;
 
   @Prop()
   releaseStatus: string;
@@ -47,7 +47,10 @@ export class TicketModel {
   updatedAt: Date;
 
   @Prop()
-  assignedBy?: User[];
+  files: string[];
+
+  @Prop()
+  assignedBy?: User;
 
   @Prop()
   lastUpdatedBy?: User;
