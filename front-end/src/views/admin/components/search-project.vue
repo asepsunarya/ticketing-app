@@ -39,7 +39,7 @@ const filter = reactive({
 function handleSearchProjects(search: string): void {
   filter.search = search;
   clearTimeout(timeOut.value);
-  timeOut.value = setTimeout(() => {
+  setTimeout(() => {
     handleGetProjects();
   }, 500);
 }

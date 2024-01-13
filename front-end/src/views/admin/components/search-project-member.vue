@@ -39,7 +39,7 @@ const filter = reactive({
 function handleSearchMembers(search: string): void {
   filter.search = search;
   clearTimeout(timeOut.value);
-  timeOut.value = setTimeout(() => {
+  setTimeout(() => {
     handleGetMembers();
   }, 500);
 }

@@ -41,7 +41,7 @@ const filter = reactive({
 function handleSearchUsers(search: string): void {
   filter.search = search;
   clearTimeout(timeOut.value);
-  timeOut.value = setTimeout(() => {
+  setTimeout(() => {
     handleGetUsers();
   }, 500);
 }

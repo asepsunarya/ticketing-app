@@ -33,6 +33,7 @@ export class ProjectService {
 
   async paginate(query: PaginateProject) {
     const filter = {};
+    if (query.search) filter['name'] = new RegExp(query.search, 'i');
     const pipeline = this.projectModel.aggregate([
       { $match: filter },
       {
