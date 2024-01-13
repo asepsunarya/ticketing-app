@@ -28,14 +28,30 @@
         v-model="form.email"
         type="text"
         placeholder="e.g,. aseps@manypage.id"
-        label="Email"
+        label="Email Pendukung"
       />
-      <!-- <ui-input
-        v-model="form.screenshot"
-        type="file"
-        placeholder="Skrinsut"
-        label="Screenshot"
-      /> -->
+      <div class="flex">
+        <ui-input
+          v-model="form.screenshot"
+          @change="uploadFile"
+          type="file"
+          label="File Pendukung"
+          :multiple="true"
+          custom-class="!file-input !file-input-bordered !file-input-ghost !file-input-sm !max-w-sm p-0"
+        />
+        <span
+          v-if="uploadStatus === 'loading'"
+          class="mt-8 ml-4 loading loading-spinner text-zinc-400"
+        />
+        <i
+          v-else-if="uploadStatus === 'success'"
+          class="self-end mb-1 text-xl ml-2 bi bi-check-lg text-success"
+        />
+        <i
+          v-else-if="uploadStatus === 'error'"
+          class="self-end mb-1 ml-2 bi bi-x text-xl text-error"
+        />
+      </div>
 
       <search-user title="Pelapor" :include-self="true">
         <template v-if="v$$.$error && v$$._id.$invalid" #error>
@@ -56,6 +72,7 @@
       <ui-button text="Batal" size="sm" type="ghost" :for="id" />
       <ui-button
         :is-loading="isLoadingSubmit"
+        :custom-class="`${uploadStatus === 'loading' ? 'btn-disabled' : ''}`"
         text="Tambah"
         size="sm"
         type="default"
@@ -83,7 +100,12 @@ import { useAuthStore } from "@/stores/auth";
 import { useUserStore } from "@/stores/user";
 import { useProjectMemberStore } from "@/stores/project-member";
 import { useProjectStore } from "@/stores/project";
-import type { Project } from "../../projects/services/projects.struct";
+import {
+  getDownloadURL,
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+} from "firebase/storage";
 
 const props = defineProps<{ id: string }>();
 const emits = defineEmits<(e: "need-refresh") => void>();
@@ -94,6 +116,7 @@ const projectStore = useProjectStore();
 const projectMemberStore = useProjectMemberStore();
 
 const isLoadingSubmit = ref<boolean>(false);
+const uploadStatus = ref<string>("");
 const urgencyLevels = [5, 4, 3, 2, 1];
 
 const form = reactive({
@@ -109,6 +132,7 @@ const form = reactive({
   description: "",
   screenshot: "",
   urgencyLevel: "",
+  files: [""],
 });
 
 const project = computed(() => {
@@ -169,6 +193,22 @@ async function handleSubmitForm(): Promise<void> {
     console.log("error : ", error);
   } finally {
     isLoadingSubmit.value = false;
+  }
+}
+
+async function uploadFile(files: any[]) {
+  if (files.length > 0) {
+    uploadStatus.value = "loading";
+    const storage = getStorage();
+    for (const file of files) {
+      const fileRef = storageRef(storage, file.name);
+      await uploadBytes(fileRef, file);
+      const downloadURL = await getDownloadURL(fileRef);
+      form.files.push(downloadURL);
+    }
+    uploadStatus.value = "success";
+  } else {
+    uploadStatus.value = "error";
   }
 }
 

@@ -6,10 +6,13 @@
       :type="type"
       :name="name"
       :id="id"
+      :multiple="multiple || false"
       :placeholder="placeholder || ''"
       @input="emits('input')"
+      @change="handleChange"
       @keyup.enter="emits('enter')"
       class="input input-bordered !outline-none border-zinc-300 focus:border-zinc-400"
+      :class="customClass || ''"
     />
 
     <label v-if="$slots.error" class="label">
@@ -27,6 +30,7 @@ const emits = defineEmits<{
   (e: "update:modelValue", value: string): void;
   (e: "enter"): void;
   (e: "input"): void;
+  (e: "change", value: any): void;
 }>();
 
 const props = defineProps<{
@@ -38,10 +42,15 @@ const props = defineProps<{
   hint?: string;
   name?: string;
   id?: string;
+  multiple?: boolean;
 }>();
 
 const modelValue = computed({
   get: () => props.modelValue,
   set: (value) => emits("update:modelValue", value),
 });
+
+function handleChange(e: any) {
+  emits("change", e.target.files);
+}
 </script>
