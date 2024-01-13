@@ -13,8 +13,14 @@ export class TicketService {
   ) {}
 
   async paginate(query: PaginateTicket) {
-    const filter = {};
-    if (query.search) filter['search'] = query.search;
+    const filter = {
+      projectId: new Types.ObjectId(query.projectId),
+    };
+    if (query.search)
+      filter['$or'] = [
+        { feature: new RegExp(query.search, 'i') },
+        { description: new RegExp(query.search, 'i') },
+      ];
     if (query.isAssigned) filter['assignedBy'] = { $exists: false };
     return await this.ticketModel.paginate(filter, {
       page: query.page,

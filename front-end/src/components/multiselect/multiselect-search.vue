@@ -3,8 +3,8 @@
     <ui-input
       v-model="search"
       type="text"
-      :placeholder="`${'Pilih ' + title || 'Nama atau Email'}`"
-      :label="title || 'Nama atau Email'"
+      :placeholder="`${title ? 'Pilih ' + title : ''}`"
+      :label="title"
       @input="handleSearch"
     />
     <div
@@ -51,7 +51,7 @@ import { ref } from "vue";
 const timeOut = ref<number>(0);
 
 defineProps<{
-  title: string;
+  title?: string;
   isLoading: boolean;
   options: any[];
 }>();
@@ -65,7 +65,7 @@ const search = ref<string>("");
 
 function handleSearch(): void {
   clearTimeout(timeOut.value);
-  timeOut.value = setTimeout(() => {
+  setTimeout(() => {
     emits("search", search.value);
   }, 500);
 }

@@ -25,7 +25,7 @@
     <ui-button
       :is-loading="isLoading"
       @click="loginAdmin()"
-      type="dark"
+      type="default"
       text="Masuk"
     />
   </div>

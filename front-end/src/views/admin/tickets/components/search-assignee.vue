@@ -4,9 +4,9 @@
     @select="handleSelectMember"
     @unselect="handleUnselectMember"
     :options="projectMemberStore.member.docs"
-    :title="title"
+    :id="id"
     :is-loading="isLoading"
-    :selected="projectMemberStore.selected"
+    :selected="selected"
   >
     <template v-if="$slots.error" #error>
       <slot name="error" />
@@ -17,9 +17,10 @@
 <script setup lang="ts">
 import uiMultiselect from "@/components/multiselect/ui-multiselect.vue";
 import { onMounted, reactive, ref } from "vue";
-import { getMembers } from "../projects/project-members/services/project-members.service";
+import { getMembers } from "@/views/admin/projects/project-members/services/project-members.service";
 import { useProjectMemberStore } from "@/stores/project-member";
-import type { ProjectMember } from "../projects/project-members/services/project-members.struct";
+import type { ProjectMember } from "@/views/admin/projects/project-members/services/project-members.struct";
+import type { User } from "@/views/user/services/user.struct";
 
 const timeOut = ref<number>(0);
 const isLoading = ref<boolean>(false);
@@ -27,7 +28,8 @@ const isLoading = ref<boolean>(false);
 const projectMemberStore = useProjectMemberStore();
 
 defineProps<{
-  title?: string;
+  id: string;
+  selected?: User;
 }>();
 
 const filter = reactive({

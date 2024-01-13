@@ -1,9 +1,13 @@
 import { PaginationDto } from '@/global/dto/pagination.dto';
 import { UserDto } from '@/global/dto/user.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, MinLength } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class PaginateTicketDto extends PaginationDto {
+  @IsNotEmpty()
+  @ApiProperty({ default: '' })
+  projectId: string;
+
   @ApiProperty({ default: '', required: false })
   search?: string;
 

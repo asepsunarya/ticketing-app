@@ -1,6 +1,6 @@
 <template>
   <div v-if="selected?._id">
-    <div class="mb-2 mt-2 ml-1">{{ title }}</div>
+    <div v-if="title" class="mb-2 mt-2 ml-1">{{ title }}</div>
     <div
       class="flex justify-between items-center bg-zinc-100 rounded-lg py-2 px-3"
     >
@@ -8,7 +8,12 @@
         <div
           class="w-7 h-7 rounded-full bg-zinc-300 flex justify-center items-center"
         >
-          <img v-if="selected.picture" :src="selected.picture" alt="" />
+          <img
+            class="w-7 h-7 rounded-full"
+            v-if="selected.photo"
+            :src="selected.photo"
+            alt=""
+          />
           <i v-else class="bi bi-person" />
         </div>
         <div>{{ selected.value || selected?.name }}</div>
@@ -42,8 +47,8 @@ import multiselectSearch from "./multiselect-search.vue";
 import uiButton from "../button/ui-button.vue";
 
 defineProps<{
-  title: string;
   options: any[];
+  title?: string;
   isLoading: boolean;
   selected?: Selected;
 }>();

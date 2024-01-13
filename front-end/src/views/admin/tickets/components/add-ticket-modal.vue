@@ -159,7 +159,7 @@ const form = reactive({
   releaseStatus: "",
 });
 
-const files: string[] = [];
+const selectedFiles: string[] = [];
 
 const project = computed(() => {
   return {
@@ -224,14 +224,13 @@ async function handleSubmitForm(): Promise<void> {
 
 async function uploadFile(files: any[]) {
   if (files.length > 0) {
-    files = [];
     uploadStatus.value = "loading";
     const storage = getStorage();
     for (const file of files) {
       const fileRef = storageRef(storage, file.name);
       await uploadBytes(fileRef, file);
       const downloadURL = await getDownloadURL(fileRef);
-      files.push(downloadURL);
+      selectedFiles.push(downloadURL);
     }
     uploadStatus.value = "success";
   } else {
@@ -255,7 +254,7 @@ function restruct() {
     releaseStatus: form.releaseStatus,
     status: "open",
     assignedBy: assignee.value,
-    files,
+    files: selectedFiles,
   };
 }
 

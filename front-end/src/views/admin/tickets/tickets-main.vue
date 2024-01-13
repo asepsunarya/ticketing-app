@@ -4,6 +4,14 @@
     v-if="tickets.length"
     class="relative overflow-x-auto sm:rounded-lg min-h-screen mt-8"
   >
+    <div class="mb-8 w-1/3">
+      <ui-input
+        v-model="filter.search"
+        type="text"
+        placeholder="Cari Tiket"
+        @enter="handleGetTickets"
+      />
+    </div>
     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
       <thead class="text-black border-b">
         <tr>
@@ -12,7 +20,7 @@
           <th scope="col" class="px-6 py-3 font-semibold">Reporter</th>
           <th scope="col" class="px-6 py-3 font-semibold">Assignee</th>
           <th scope="col" class="px-6 py-3 font-semibold">Status</th>
-          <th scope="col" class="px-6 py-3 font-semibold">Dibuat Pada</th>
+          <th scope="col" class="px-6 py-3 font-semibold"></th>
         </tr>
       </thead>
       <tbody class="border-b text-black">
@@ -25,17 +33,30 @@
             scope="row"
             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
           >
-            tes
+            {{ ticket.feature }}
           </th>
-          <td class="px-6 py-4">tes</td>
+          <td class="px-6 py-4 text-primary hover:underline cursor-pointer">
+            {{ ticket.description }}
+          </td>
           <td class="px-6 py-4">
-            <div
-              class="flex gap-x-2 items-center cursor-pointer"
-              @click.stop="toDetail(ticket._id)"
-            >
-              <img class="w-6 h-6 border rounded" :src="ticket.files[0]" />
-              <div class="text-primary hover:underline">
-                {{ ticket.description }}
+            <div class="flex gap-x-2 items-center cursor-pointer">
+              <div
+                v-if="ticket.reportBy.photo"
+                class="w-12 h-12 rounded-full flex items-center"
+              >
+                <img
+                  class="!w-7 h-7 rounded-full"
+                  :src="ticket.reportBy.photo"
+                />
+              </div>
+              <div
+                v-else
+                class="w-7 h-7 rounded-full bg-zinc-300 flex justify-center items-center"
+              >
+                <i class="bi bi-person" />
+              </div>
+              <div class="line-clamp-1">
+                {{ ticket.reportBy.name }}
               </div>
             </div>
           </td>
@@ -43,7 +64,36 @@
             scope="row"
             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
           >
-            tes
+            <search-assignee
+              :id="ticket._id"
+              :selected="ticket.assignedBy"
+            ></search-assignee>
+          </td>
+          <td
+            scope="row"
+            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer"
+          >
+            <div
+              @click="handleShowAction(ticket._id)"
+              :class="{ ring: showAction === ticket._id }"
+              class="w-16 bg-zinc-300 font-medium text-zinc-600 p-1 flex gap-x-1 items-center justify-center rounded"
+            >
+              {{ ticket.status }}
+              <i class="bi bi-chevron-down"></i>
+            </div>
+            <c-dropdown
+              :show-action="showAction"
+              :menus="statusOptions"
+              :id="ticket._id"
+              :code="projectStore.selected?.code"
+              @click="handleClick"
+            />
+          </td>
+          <td
+            scope="row"
+            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+          >
+            {{ new Date(ticket.createdAt).toLocaleDateString("id") }}
           </td>
         </tr>
       </tbody>
@@ -73,19 +123,34 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
+import uiInput from "@/components/input/ui-input.vue";
 import uiButton from "@/components/button/ui-button.vue";
 import type { Ticket } from "@/views/admin/tickets/services/tickets.struct";
 import { getTickets } from "@/views/admin/tickets/services/tickets.service";
 import { useRouter } from "vue-router";
+import cDropdown from "@/components/dropdown/c-dropdown.vue";
+import { useProjectStore } from "@/stores/project";
+import type { DropdownMenu } from "@/components/dropdown/dropdown.struct";
+import SearchAssignee from "@/views/admin/tickets/components/search-assignee.vue";
 
 const router = useRouter();
+const projectStore = useProjectStore();
+
 const tickets = ref<Ticket[]>([]);
+const showAction = ref<string>("");
+
+const statusOptions = ref<DropdownMenu[]>([
+  { name: "pending", title: "Pending" },
+  { name: "inprogress", title: "Kerjakan sekarang" },
+  { name: "done", title: "Tandai sebagai selesai" },
+]);
 
 const filter = reactive({
   page: 1,
   limit: 10,
   search: "",
+  projectId: "",
   hasNextPage: false,
   nextPage: 0,
   prevPage: 0,
@@ -93,6 +158,7 @@ const filter = reactive({
 });
 
 async function handleGetTickets() {
+  filter.projectId = projectStore.selected?._id || "";
   const ticketList = await getTickets(filter);
   tickets.value = ticketList.docs;
 
@@ -103,11 +169,37 @@ async function handleGetTickets() {
   filter.prevPage = ticketList.prevPage || 0;
 }
 
+function handleShowAction(ticketId: string) {
+  if (showAction.value === ticketId) showAction.value = "";
+  else showAction.value = ticketId;
+}
+
+function handleClick({ menu, id, code }: any) {
+  switch (menu.name) {
+    case "pending":
+      router.push(`/admin/projects/${code}/settings/details`);
+      break;
+    case "inproggress":
+      break;
+    case "done":
+      break;
+  }
+}
+
 function toDetail(id: string) {
   router.push(`/admin/tickets/${id}/detail`);
 }
 
+watch(
+  () => projectStore.selected,
+  async () => {
+    await handleGetTickets();
+  }
+);
+
 onMounted(async () => {
-  await handleGetTickets();
+  if (projectStore.selected?._id) {
+    await handleGetTickets();
+  }
 });
 </script>
