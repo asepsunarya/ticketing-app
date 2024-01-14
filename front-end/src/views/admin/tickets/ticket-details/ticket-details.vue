@@ -73,7 +73,7 @@
           @update-status="handleUpdateStatus"
         />
         <div class="flex justify-end">
-          <div class="btn btn-sm btn-outline btn-error">
+          <div @click="handleRemove" class="btn btn-sm btn-outline btn-error">
             <i class="bi bi-trash" />
           </div>
         </div>
@@ -82,7 +82,10 @@
         <div class="font-semibold border-b p-4">Detail Issue</div>
         <div class="px-4 pb-2 flex items-center text-sm">
           <div class="w-2/5 font-bold text-zinc-500">Assignee</div>
-          <div class="w-3/5 flex gap-x-2 items-center">
+          <div
+            v-if="ticketStore.selected.assignedBy"
+            class="w-3/5 flex gap-x-2 items-center"
+          >
             <img
               v-if="ticketStore.selected.assignedBy.photo"
               class="w-8 h-8 rounded-full"
@@ -184,6 +187,10 @@
   <teleport to="body">
     <set-pending-ticket-modal @update-status="handleUpdateStatus" />
     <set-close-ticket-modal @update-status="handleUpdateStatus" />
+    <remove-ticket-modal
+      :ticket-id="ticketStore.selected._id"
+      @need-refresh="handleRefresh"
+    />
   </teleport>
 </template>
 
@@ -195,14 +202,17 @@ import {
 } from "@/views/admin/tickets/services/tickets.service";
 import setPendingTicketModal from "@/views/admin/tickets/components/set-pending-ticket-modal.vue";
 import setCloseTicketModal from "@/views/admin/tickets/components/set-close-ticket-modal.vue";
+import removeTicketModal from "./components/remove-ticket-modal.vue";
 import changeTicketStatus from "@/views/admin/tickets/components/change-ticket-status.vue";
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { checkMediaType, getFilename } from "@/helpers/media";
 import { formatDateString } from "@/helpers/date-helpers";
 import type { Ticket } from "../services/tickets.struct";
 import { toast } from "vue3-toastify";
+import { openModal } from "@/helpers/modal-helpers";
 
+const router = useRouter();
 const route = useRoute();
 const ticketStore = useTicketStore();
 const fetchStatus = ref<string>("");
@@ -230,6 +240,14 @@ async function handleUpdateStatus(
     console.log("error : ", error);
     toast(`Gagal mengubah status menjadi ${status}`, { type: "error" });
   }
+}
+
+function handleRemove() {
+  openModal("remove-ticket-modal");
+}
+
+function handleRefresh() {
+  router.push(`/admin/projects/${route.params.code}/tickets`);
 }
 
 function toFile(url: string) {
