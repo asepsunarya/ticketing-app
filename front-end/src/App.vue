@@ -1,5 +1,5 @@
 <template>
-  <template v-if="authStore?.user?.role === 'admin'">
+  <template v-if="adminRoles.includes(authStore?.user?.role)">
     <top-bar />
     <side-bar />
     <main class="p-4" :class="{ 'sm:ml-64': route.meta.withSidebar }">
@@ -28,4 +28,6 @@ import addTicketModal from "@/views/admin/tickets/components/add-ticket-modal.vu
 
 const route = useRoute();
 const authStore = useAuthStore();
+
+const adminRoles = ["admin", "programmer", "customer-service", "product-owner"];
 </script>

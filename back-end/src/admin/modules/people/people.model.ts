@@ -16,7 +16,7 @@ export class PeopleModel {
   @Prop()
   projectId: Types.ObjectId;
 
-  @Prop()
+  @Prop({ unique: true })
   userId: Types.ObjectId;
 
   @Prop()

@@ -18,7 +18,7 @@ export class AuthService {
   async validateUser(
     email: string,
     password: string,
-    role?: string,
+    role?: string | string[],
   ): Promise<any> {
     const query = { email };
     if (role) query['role'] = role;
@@ -49,9 +49,14 @@ export class AuthService {
   }
 
   async loginAdmin(email: string, password: string) {
-    const user = await this.validateUser(email, password, 'admin');
+    const roles = ['admin', 'programmer', 'customer-service', 'product-owner'];
+    const user = await this.validateUser(email, password, roles);
     if (user) {
-      const payload = { userId: user._id, email: user.email, role: user.role };
+      const payload = {
+        userId: user._id,
+        email: user.email,
+        role: user.role,
+      };
       return {
         user,
         accessToken: this.jwtService.sign(payload, {

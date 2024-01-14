@@ -4,7 +4,11 @@
       <div class="text-3xl font-semibold">Tim</div>
       <div class="flex gap-2">
         <!-- <ui-button type="light" text="Buat Tim" for="add-team-modal" /> -->
-        <ui-button text="Tambah Tim" for="add-people-modal" />
+        <ui-button
+          v-if="authStore.user.role === 'admin'"
+          text="Tambah Tim"
+          for="add-people-modal"
+        />
       </div>
     </div>
     <people-list :people="people" />
@@ -25,6 +29,9 @@ import { onMounted, reactive, ref } from "vue";
 import type { User } from "@/views/user/services/user.struct";
 import { getTeams } from "@/views/admin/teams/services/teams.service";
 import type { Team } from "./services/teams.struct";
+import { useAuthStore } from "@/stores/auth";
+
+const authStore = useAuthStore();
 
 const filter = reactive({
   page: 1,

@@ -3,7 +3,7 @@
     <div class="font-semibold text-xl mb-7">Tambah Anggota</div>
     <div class="mb-10 flex flex-col gap-3">
       <search-user title="Anggota" :include-self="false">
-        <template v-if="v$.$error && v$.selectedUser.$invalid" #error>
+        <template v-if="v$$.$error && v$$._id.$invalid" #error>
           <span>Anggota harus dipilih </span>
         </template>
       </search-user>
@@ -74,7 +74,7 @@ const form = reactive({
 
 const selectedUser = computed(() => {
   return {
-    _id: userStore.selected?._id || "",
+    _id: userStore.selected?._id,
     email: userStore.selected?.email,
     photo: userStore.selected?.photo,
   };
@@ -108,6 +108,8 @@ async function handleSubmitForm(): Promise<void> {
     emits("need-refresh");
     toast("Berhasil menambahkan anggota", { type: "success" });
     closeModal("add-project-member-modal");
+    userStore.clearSelected();
+    form.role = "";
   } catch (error) {
     toast("Gagal menambahkan anggota", { type: "error" });
     console.log("error : ", error);

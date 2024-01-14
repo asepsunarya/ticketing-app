@@ -7,7 +7,7 @@
       label="Email"
       custom-class="btn-medium"
     >
-      <template v-if="v$.email.$invalid" #error>
+      <template v-if="v$.$error && v$.email.$invalid" #error>
         {{ v$.email.$errors[0]?.$message }}
       </template></c-input
     >
@@ -18,7 +18,7 @@
       label="Password"
       custom-class="btn-medium"
     >
-      <template v-if="v$.password.$invalid" #error>
+      <template v-if="v$.$error && v$.password.$invalid" #error>
         {{ v$.password.$errors[0]?.$message }}
       </template>
     </c-input>

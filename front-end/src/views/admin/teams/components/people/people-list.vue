@@ -3,6 +3,7 @@
     <div class="text-xl mb-4 font-semibold">Rekan Tim</div>
     <div class="flex gap-x-4">
       <div
+        v-if="authStore.user.role === 'admin'"
         class="rounded border shadow-sm py-8 px-4 flex flex-col items-center gap-y-3 w-52"
       >
         <div
@@ -44,8 +45,10 @@
 
 <script setup lang="ts">
 import uiButton from "@/components/button/ui-button.vue";
+import { useAuthStore } from "@/stores/auth";
 import type { User } from "@/views/user/services/user.struct";
 
+const authStore = useAuthStore();
 defineProps<{
   people: User[];
 }>();
