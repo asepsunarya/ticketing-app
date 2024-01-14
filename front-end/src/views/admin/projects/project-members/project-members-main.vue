@@ -21,7 +21,12 @@
             <td class="px-6 py-3">{{ member.email }}</td>
             <td class="px-6 py-3 capitalize">{{ member.role }}</td>
             <td class="px-6 py-3">
-              <ui-button text="Hapus" type="error" size="sm" />
+              <ui-button
+                @click="handleRemove(member._id)"
+                text="Hapus"
+                type="error"
+                size="sm"
+              />
             </td>
           </tr>
         </tbody>
@@ -38,6 +43,10 @@
     </div>
     <teleport to="body">
       <add-project-member-modal @need-refresh="handleRefresh" />
+      <remove-project-member-modal
+        :project-member-id="selectedProjectMemberId"
+        @need-refresh="handleRefresh"
+      />
     </teleport>
   </div>
 </template>
@@ -45,10 +54,12 @@
 <script setup lang="ts">
 import uiButton from "@/components/button/ui-button.vue";
 import addProjectMemberModal from "@/views/admin/projects/project-members/components/add-project-member-modal.vue";
+import removeProjectMemberModal from "@/views/admin/projects/project-members/components/remove-project-member-modal.vue";
 import cPagination from "@/components/pagination/c-pagination.vue";
 import { onMounted, reactive, ref } from "vue";
 import { getMembers } from "@/views/admin/projects/project-members/services/project-members.service";
 import type { ProjectMember } from "./services/project-members.struct";
+import { openModal } from "@/helpers/modal-helpers";
 
 const isLoadingGetMembers = ref<boolean>(false);
 const filter = reactive({
@@ -59,6 +70,7 @@ const filter = reactive({
   totalPages: 1,
 });
 const members = ref<ProjectMember[]>([]);
+const selectedProjectMemberId = ref<string>("");
 
 async function handleGetMembers() {
   try {
@@ -75,9 +87,15 @@ async function handleGetMembers() {
     isLoadingGetMembers.value = false;
   }
 }
+
 function handlePaginate(page: number): void {
   filter.page = page;
   handleGetMembers();
+}
+
+function handleRemove(id: string) {
+  selectedProjectMemberId.value = id;
+  openModal("remove-project-member-modal");
 }
 
 function handleRefresh() {

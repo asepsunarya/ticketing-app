@@ -20,3 +20,10 @@ export async function createMembers(newMember: CreateMemberDto) {
     data: newMember,
   });
 }
+
+export async function removeMembers(id: string) {
+  return await axios<void>({
+    method: "DELETE",
+    url: `/admin/people/${id}`,
+  });
+}
