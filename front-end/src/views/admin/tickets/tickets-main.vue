@@ -69,6 +69,7 @@
             <search-assignee
               :id="ticket._id"
               :selected="ticket.assignedBy"
+              @update:selected="handleSelected"
             ></search-assignee>
           </td>
           <td
@@ -135,6 +136,7 @@ import cDropdown from "@/components/dropdown/c-dropdown.vue";
 import { useProjectStore } from "@/stores/project";
 import type { DropdownMenu } from "@/components/dropdown/dropdown.struct";
 import SearchAssignee from "@/views/admin/tickets/components/search-assignee.vue";
+import type { ProjectMember } from "../projects/project-members/services/project-members.struct";
 
 const router = useRouter();
 const route = useRoute();
@@ -177,6 +179,20 @@ async function handleGetTickets(status = "") {
 function handleShowAction(ticketId: string) {
   if (showAction.value === ticketId) showAction.value = "";
   else showAction.value = ticketId;
+}
+
+function handleSelected(id: string, member?: ProjectMember) {
+  const ticketIndex = tickets.value.findIndex((ticket) => ticket._id == id);
+  if (!member) {
+    delete tickets.value[ticketIndex].assignedBy;
+    return;
+  }
+  tickets.value[ticketIndex].assignedBy = {
+    _id: String(member?._id),
+    email: member?.email,
+    name: member?.name,
+    photo: member?.photo,
+  };
 }
 
 function handleClick({ menu, id, code }: any) {

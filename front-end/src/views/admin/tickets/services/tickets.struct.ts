@@ -43,3 +43,16 @@ export type CreateTicketDto = {
   assignedBy: User;
   files: string[];
 };
+
+export type UpdateTicketDto = {
+  projectId?: string;
+  feature?: string;
+  description?: string;
+  email?: string;
+  urgencyLevel?: string;
+  reportBy?: User;
+  releaseStatus?: string;
+  status?: string;
+  assignedBy?: User | object;
+  files?: string[];
+};

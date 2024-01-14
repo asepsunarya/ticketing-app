@@ -29,7 +29,7 @@ export class TicketController {
     @Query() query: PaginateTicketDto,
     @Req() { user }: { user: User },
   ) {
-    return await this.ticketService.paginate(query, user._id);
+    return await this.ticketService.paginate(query, String(user._id));
   }
 
   @Post()

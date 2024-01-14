@@ -18,6 +18,7 @@
 import uiMultiselect from "@/components/multiselect/ui-multiselect.vue";
 import { onMounted, reactive, ref } from "vue";
 import { getMembers } from "@/views/admin/projects/project-members/services/project-members.service";
+import { updateTickets } from "@/views/admin/tickets/services/tickets.service";
 import { useProjectMemberStore } from "@/stores/project-member";
 import type { ProjectMember } from "@/views/admin/projects/project-members/services/project-members.struct";
 import type { User } from "@/views/user/services/user.struct";
@@ -27,9 +28,13 @@ const isLoading = ref<boolean>(false);
 
 const projectMemberStore = useProjectMemberStore();
 
-defineProps<{
+const props = defineProps<{
   id: string;
   selected?: User;
+}>();
+
+const emits = defineEmits<{
+  (e: "update:selected", id: string, member?: ProjectMember): void;
 }>();
 
 const filter = reactive({
@@ -58,16 +63,37 @@ async function handleGetMembers(): Promise<void> {
   }
 }
 
+async function handleUpdateAssignee(member?: ProjectMember): Promise<void> {
+  try {
+    const assignedBy = {};
+    if (member) {
+      Object.assign(assignedBy, {
+        _id: String(member?.userId),
+        name: member?.name,
+        email: member?.email,
+        photo: member?.photo,
+      });
+    }
+    const newTickets = { assignedBy };
+    await updateTickets(props.id, newTickets);
+  } catch (error) {
+    console.log("error : ", error);
+  } finally {
+    //
+  }
+}
+
 function handleSelectMember(member: ProjectMember): void {
-  projectMemberStore.selected = member;
+  handleUpdateAssignee(member);
+  emits("update:selected", props.id, member);
 }
 
 function handleUnselectMember(): void {
-  projectMemberStore.clearSelected();
+  handleUpdateAssignee();
+  emits("update:selected", props.id);
 }
 
 onMounted(async () => {
-  handleUnselectMember();
   await handleGetMembers();
 });
 </script>
