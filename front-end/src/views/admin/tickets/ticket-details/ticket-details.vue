@@ -65,18 +65,18 @@
         </div>
       </div>
     </div>
-    <div class="lg:w-2/5 lg:relative right-0 mt-8 space-y-4">
-      <div class="flex justify-end">
-        <div class="btn btn-sm btn-outline btn-error">
-          <i class="bi bi-trash" />
-        </div>
-      </div>
-      <div class="w-32 mt-8">
+    <div class="lg:w-2/5 lg:relative right-0 space-y-8">
+      <div class="mt-8 flex justify-between w-full">
         <change-ticket-status
           :ticket="ticketStore.selected"
           :is-primary="true"
           @update-status="handleUpdateStatus"
         />
+        <div class="flex justify-end">
+          <div class="btn btn-sm btn-outline btn-error">
+            <i class="bi bi-trash" />
+          </div>
+        </div>
       </div>
       <div class="border rounded space-y-4">
         <div class="font-semibold border-b p-4">Details</div>

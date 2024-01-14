@@ -11,6 +11,7 @@
     <i class="bi bi-chevron-down"></i>
   </div>
   <c-dropdown
+    :custom-class="isPrimary ? 'mt-10' : ''"
     :show-action="showAction"
     :menus="statusOptions.filter((option) => option.name !== ticket.status)"
     :id="ticket._id"

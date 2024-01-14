@@ -1,6 +1,7 @@
 <template>
   <div
     v-if="showAction === id"
+    :class="customClass"
     class="z-50 absolute text-left my-4 text-base list-none bg-white rounded shadow"
     :id="id"
   >
@@ -26,6 +27,7 @@ const props = defineProps<{
   menus: DropdownMenu[];
   id: string;
   code?: string;
+  customClass?: string;
 }>();
 
 const emits = defineEmits<{
