@@ -48,7 +48,13 @@
                 <div
                   class="bg-gray-200 text-gray-500 rounded-full w-7 h-7 flex items-center justify-center"
                 >
-                  <span class="uppercase text-sm">
+                  <img
+                    class="w-7 h-7 rounded-full"
+                    v-if="project.leader.photo"
+                    :src="project.leader.photo"
+                    alt=""
+                  />
+                  <span v-else class="uppercase text-sm">
                     {{
                       project?.leader?.name
                         ?.match(/\b\p{L}/gu)

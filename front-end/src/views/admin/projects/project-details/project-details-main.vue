@@ -43,9 +43,9 @@
           </template>
         </ui-input>
 
-        <search-user title="Anggota" :include-self="true">
+        <search-user title="Leader" :include-self="true">
           <template v-if="v$.$error && v$.selectedUser.$invalid" #error>
-            <span>Anggota harus dipilih </span>
+            <span>Leader harus dipilih </span>
           </template>
         </search-user>
 

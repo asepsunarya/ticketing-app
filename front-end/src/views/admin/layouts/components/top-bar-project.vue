@@ -14,7 +14,7 @@
         >
           <img :src="project.picture" class="w-8 h-8 rounded" />
           <div class="flex flex-col px-4">
-            <a href="#" class="block hover:bg-gray-100">{{ project.name }}</a>
+            <div class="block hover:bg-gray-100">{{ project.name }}</div>
             <span class="text-zinc-400 text-xs">{{ project.description }}</span>
           </div>
         </div>
