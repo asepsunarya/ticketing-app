@@ -22,12 +22,9 @@
 <script setup lang="ts">
 import cDropdown from "@/components/dropdown/c-dropdown.vue";
 import type { DropdownMenu } from "@/components/dropdown/dropdown.struct";
-import { useTicketStore } from "@/stores/ticket";
 import { ref } from "vue";
 import { openModal } from "@/helpers/modal-helpers";
 import type { Ticket } from "../services/tickets.struct";
-
-const ticketStore = useTicketStore();
 
 defineProps<{
   ticket: Ticket;
@@ -43,7 +40,7 @@ const statusOptions = ref<DropdownMenu[]>([
   { name: "open", title: "Open" },
   { name: "pending", title: "Pending" },
   { name: "inprogress", title: "Kerjakan sekarang" },
-  { name: "close", title: "Tandai sebagai selesai" },
+  { name: "closed", title: "Tandai sebagai selesai" },
 ]);
 
 function handleClick({ menu }: any) {

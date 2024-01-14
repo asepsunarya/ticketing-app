@@ -62,8 +62,16 @@ export class TicketService {
     return await this.ticketModel.create(ticket);
   }
 
-  async update(body: Ticket, id: string) {
-    const ticket = { ...body };
+  async update(body: Ticket, id: string, user: User) {
+    const ticket = {
+      ...body,
+      lastUpdatedBy: {
+        _id: new Types.ObjectId(user?._id),
+        name: user?.name,
+        email: user?.email,
+        photo: user?.photo,
+      },
+    };
     if (body.assignedBy?._id) {
       ticket['assignedBy'] = {
         _id: new Types.ObjectId(body.assignedBy?._id),

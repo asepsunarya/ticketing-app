@@ -49,8 +49,12 @@ export class TicketController {
   @Put(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuardAdmin)
-  async update(@Body() body: CreateTicketDto, @Param() { id }: ParamIdDto) {
-    return await this.ticketService.update(body, id);
+  async update(
+    @Body() body: CreateTicketDto,
+    @Param() { id }: ParamIdDto,
+    @Req() { user },
+  ) {
+    return await this.ticketService.update(body, id, user);
   }
 
   @Delete(':id')

@@ -79,10 +79,10 @@
         </div>
       </div>
       <div class="border rounded space-y-4">
-        <div class="font-semibold border-b p-4">Details</div>
-        <div class="px-4 pb-2 flex items-center text-sm font-bold">
-          <div class="w-1/4">Assignee</div>
-          <div class="w-3/4 flex gap-x-2 items-center">
+        <div class="font-semibold border-b p-4">Detail Issue</div>
+        <div class="px-4 pb-2 flex items-center text-sm">
+          <div class="w-2/5 font-bold text-zinc-500">Assignee</div>
+          <div class="w-3/5 flex gap-x-2 items-center">
             <img
               v-if="ticketStore.selected.assignedBy.photo"
               class="w-8 h-8 rounded-full"
@@ -98,9 +98,9 @@
             <span>{{ ticketStore.selected.assignedBy.name }}</span>
           </div>
         </div>
-        <div class="px-4 pb-2 flex items-center text-sm font-bold">
-          <div class="w-1/4">Reporter</div>
-          <div class="w-3/4 flex gap-x-2 items-center">
+        <div class="px-4 pb-2 flex items-center text-sm">
+          <div class="w-2/5 font-bold text-zinc-500">Reporter</div>
+          <div class="w-3/5 flex gap-x-2 items-center">
             <img
               v-if="ticketStore.selected.reportBy.photo"
               class="w-8 h-8 rounded-full"
@@ -116,16 +116,65 @@
             <span>{{ ticketStore.selected.reportBy.name }}</span>
           </div>
         </div>
-        <div class="px-4 pb-2 flex items-center text-sm font-bold">
-          <div class="w-1/4">Fitur Terkait</div>
-          <div class="w-3/4 flex gap-x-2 items-center">
+        <div class="px-4 pb-2 flex items-center text-sm">
+          <div class="w-2/5 font-bold text-zinc-500">Fitur Terkait</div>
+          <div class="w-3/5 flex gap-x-2 items-center text-zinc-500">
             {{ ticketStore.selected.feature }}
           </div>
         </div>
-        <div class="px-4 pb-2 flex items-center text-sm font-bold">
-          <div class="w-1/4">Prioritas</div>
-          <div class="w-3/4 flex gap-x-2 items-center">
+        <div class="px-4 pb-2 flex items-center text-sm">
+          <div class="w-2/5 font-bold text-zinc-500">Email User</div>
+          <div class="w-3/5 flex gap-x-2 items-center text-zinc-500">
+            {{ ticketStore.selected.email }}
+          </div>
+        </div>
+        <div class="px-4 pb-2 flex items-center text-sm">
+          <div class="w-2/5 font-bold text-zinc-500">Prioritas</div>
+          <div class="w-3/5 flex gap-x-2 items-center text-zinc-500">
             {{ ticketStore.selected.urgencyLevel }}
+          </div>
+        </div>
+        <div class="px-4 pb-2 flex items-center text-sm">
+          <div class="w-2/5 font-bold text-zinc-500">Status Rilis Fitur</div>
+          <div class="w-3/5 flex gap-x-2 items-center text-zinc-500">
+            {{ ticketStore.selected.releaseStatus == "old" ? "Lama" : "Baru" }}
+          </div>
+        </div>
+      </div>
+
+      <div class="border rounded space-y-4">
+        <div class="font-semibold border-b p-4">Keterangan</div>
+        <div class="px-4 pb-2 flex items-center text-sm">
+          <div class="w-2/5 font-bold text-zinc-500">Terakhir Diubah</div>
+          <div
+            v-if="ticketStore.selected.lastUpdatedBy"
+            class="w-3/5 flex gap-x-2 items-center text-zinc-500"
+          >
+            <img
+              v-if="ticketStore.selected.lastUpdatedBy?.photo"
+              class="w-8 h-8 rounded-full"
+              :src="ticketStore.selected.lastUpdatedBy.photo"
+              alt=""
+            />
+            <div
+              v-else
+              class="w-8 h-8 rounded-full bg-zinc-300 flex items-center justify-center"
+            >
+              <i class="bi bi-person text-lg" />
+            </div>
+            <span>{{ ticketStore.selected.lastUpdatedBy?.name }}</span>
+          </div>
+        </div>
+        <div class="px-4 pb-2 flex items-center text-sm">
+          <div class="w-2/5 font-bold text-zinc-500">Solusi</div>
+          <div class="w-3/5 flex gap-x-2 items-center text-zinc-500">
+            {{ ticketStore.selected.solution }}
+          </div>
+        </div>
+        <div class="px-4 pb-2 flex items-center text-sm">
+          <div class="w-2/5 font-bold text-zinc-500">Catatan</div>
+          <div class="w-3/5 flex gap-x-2 items-center text-zinc-500">
+            {{ ticketStore.selected.note }}
           </div>
         </div>
       </div>
