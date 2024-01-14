@@ -2,18 +2,18 @@
   <div class="text-xl font-semibold capitalize">
     Semua Tiket {{ route.params.status == "me" ? "saya" : route.params.status }}
   </div>
+  <div class="mb-8 mt-4 lg:w-1/3">
+    <ui-input
+      v-model="ticketStore.filter.search"
+      type="text"
+      placeholder="Cari Tiket"
+      @enter="handleGetTickets"
+    />
+  </div>
   <div
     v-if="ticketStore.ticket.docs.length"
     class="relative overflow-x-auto sm:rounded-lg min-h-screen mt-8"
   >
-    <div class="mb-8 lg:w-1/3">
-      <ui-input
-        v-model="ticketStore.filter.search"
-        type="text"
-        placeholder="Cari Tiket"
-        @enter="handleGetTickets"
-      />
-    </div>
     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
       <thead class="text-black border-b">
         <tr>

@@ -30,8 +30,8 @@
             >
               <img
                 class="w-7 h-7 rounded-full"
-                v-if="option.photo"
-                :src="option.photo"
+                v-if="option.photo || option.picture"
+                :src="option.photo || option.picture"
                 alt=""
               />
               <i v-else class="bi bi-person" />

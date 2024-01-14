@@ -3,4 +3,5 @@ export type Selected = {
   value?: string;
   name?: string;
   photo?: string;
+  picture?: string;
 };

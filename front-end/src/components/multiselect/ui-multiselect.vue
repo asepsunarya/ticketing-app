@@ -10,8 +10,8 @@
         >
           <img
             class="w-7 h-7 rounded-full"
-            v-if="selected.photo"
-            :src="selected.photo"
+            v-if="selected.photo || selected.picture"
+            :src="selected.photo || selected.picture"
             alt=""
           />
           <i v-else class="bi bi-person" />

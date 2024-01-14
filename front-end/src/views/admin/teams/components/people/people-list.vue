@@ -5,11 +5,11 @@
       <div
         class="rounded border shadow-sm py-8 px-4 flex flex-col items-center gap-y-3 w-52"
       >
-        <img
-          src="https://avatar.oxro.io/avatar.svg?name=Eddie"
-          alt=""
-          class="rounded-full h-20 w-20"
-        />
+        <div
+          class="rounded-full bg-zinc-300 h-20 w-20 border flex items-center justify-center"
+        >
+          <i class="bi bi-person-add text-4xl" />
+        </div>
         <div class="text-lg">Rekan Tim</div>
         <ui-button
           size="sm"
@@ -24,10 +24,17 @@
         class="rounded border shadow-sm py-8 px-4 flex flex-col items-center gap-y-3 w-52"
       >
         <img
-          :src="`https://avatar.oxro.io/avatar.svg?name=${person.name}`"
+          v-if="person.photo"
+          :src="person.photo"
           alt=""
           class="rounded-full h-20 w-20"
         />
+        <div
+          class="rounded-full bg-zinc-300 h-20 w-20 border flex items-center justify-center"
+          v-else
+        >
+          <i class="bi bi-person text-4xl" />
+        </div>
         <div class="text-lg text-center">{{ person.name }}</div>
         <div class="text-zinc-500 text-center">{{ person.role }}</div>
       </div>

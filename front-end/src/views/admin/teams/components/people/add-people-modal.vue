@@ -36,6 +36,29 @@
       <div v-if="v$.$error" class="label-text-alt text-error">
         <span v-if="v$.role.$invalid">Role harus dipilih</span>
       </div>
+
+      <div class="flex">
+        <ui-input
+          v-model="form.file"
+          @change="uploadFile"
+          type="file"
+          label="Foto"
+          :multiple="true"
+          custom-class="!file-input !file-input-bordered !file-input-ghost !file-input-sm !max-w-sm p-0"
+        />
+        <span
+          v-if="uploadStatus === 'loading'"
+          class="mt-8 ml-4 loading loading-spinner text-zinc-400"
+        />
+        <i
+          v-else-if="uploadStatus === 'success'"
+          class="self-end mb-1 text-xl ml-2 bi bi-check-lg text-success"
+        />
+        <i
+          v-else-if="uploadStatus === 'error'"
+          class="self-end mb-1 ml-2 bi bi-x text-xl text-error"
+        />
+      </div>
     </div>
     <div class="flex justify-end items-center gap-3">
       <ui-button text="Batal" size="sm" type="ghost" :for="id" />
@@ -61,11 +84,19 @@ import { closeModal } from "@/helpers/modal-helpers";
 import useVuelidate from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
 import { createPeople } from "@/views/admin/teams/components/people/services/people.service";
+import {
+  getDownloadURL,
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+} from "firebase/storage";
+import type { CreatePeopleDto } from "./services/people.struct";
 
 const props = defineProps<{ id: string }>();
 const emits = defineEmits<(e: "need-refresh") => void>();
 
 const isLoadingSubmit = ref<boolean>(false);
+const uploadStatus = ref<string>("");
 
 const roleOptions = ref([
   { value: "product-owner", name: "Product Owner" },
@@ -78,6 +109,8 @@ const form = reactive({
   name: "",
   email: "",
   role: "",
+  photo: "",
+  file: "",
 });
 
 const rules = {
@@ -93,11 +126,12 @@ async function handleSubmitForm(): Promise<void> {
   if (!isValidated) return;
   try {
     isLoadingSubmit.value = true;
-    const newPeople = {
+    const newPeople: CreatePeopleDto = {
       name: form.name,
       role: form.role,
       email: form.email,
     };
+    if (form.photo) newPeople.photo = form.photo;
 
     await createPeople(newPeople);
     emits("need-refresh");
@@ -108,6 +142,21 @@ async function handleSubmitForm(): Promise<void> {
     console.log("error : ", error);
   } finally {
     isLoadingSubmit.value = false;
+  }
+}
+
+async function uploadFile(files: any[]) {
+  if (files.length > 0) {
+    uploadStatus.value = "loading";
+    const storage = getStorage();
+    const fileRef = storageRef(storage, files[0].name);
+    await uploadBytes(fileRef, files[0]);
+    const downloadURL = await getDownloadURL(fileRef);
+    console.log(downloadURL, "url");
+    form.photo = downloadURL;
+    uploadStatus.value = "success";
+  } else {
+    uploadStatus.value = "error";
   }
 }
 </script>
