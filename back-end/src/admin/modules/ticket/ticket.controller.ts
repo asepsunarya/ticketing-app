@@ -32,6 +32,13 @@ export class TicketController {
     return await this.ticketService.paginate(query, String(user._id));
   }
 
+  @Get(':id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuardAdmin)
+  async detail(@Param() { id }: ParamIdDto) {
+    return await this.ticketService.findOne(id);
+  }
+
   @Post()
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuardAdmin)

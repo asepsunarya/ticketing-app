@@ -2,6 +2,7 @@ import axios from "@/libraries/axios";
 import type {
   CreateTicketDto,
   GetTicketsDto,
+  Ticket,
   TicketsResult,
   UpdateTicketDto,
 } from "./tickets.struct";
@@ -11,6 +12,13 @@ export async function getTickets(filter: GetTicketsDto) {
     method: "GET",
     url: "/admin/ticket",
     params: filter,
+  });
+}
+
+export async function getTicketDetail(id: string) {
+  return await axios<Ticket>({
+    method: "GET",
+    url: `/admin/ticket/${id}`,
   });
 }
 

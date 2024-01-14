@@ -35,6 +35,10 @@ export class TicketService {
     });
   }
 
+  async findOne(id: string) {
+    return await this.ticketModel.findOne({ _id: new Types.ObjectId(id) });
+  }
+
   async create(body: Ticket, { _id, name, email, photo }: User) {
     const ticket = {
       ...body,

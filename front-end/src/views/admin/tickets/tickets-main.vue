@@ -37,7 +37,10 @@
           >
             {{ ticket.feature }}
           </th>
-          <td class="px-6 py-4 text-primary hover:underline cursor-pointer">
+          <td
+            @click="toDetail(ticket)"
+            class="px-6 py-4 text-primary hover:underline cursor-pointer"
+          >
             {{ ticket.description }}
           </td>
           <td class="px-6 py-4">
@@ -71,21 +74,9 @@
             scope="row"
             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer"
           >
-            <div
-              @click="handleShowAction(ticket._id)"
-              :class="{ ring: showAction === ticket._id }"
-              class="bg-zinc-300 font-medium text-zinc-600 py-1 px-2 flex gap-x-1 items-center justify-center rounded"
-            >
-              {{ ticket.status }}
-              <i class="bi bi-chevron-down"></i>
-            </div>
-            <c-dropdown
-              :show-action="showAction"
-              :menus="
-                statusOptions.filter((option) => option.name !== ticket.status)
-              "
-              :id="ticket._id"
-              @click="handleClick"
+            <change-ticket-status
+              :ticket="ticket"
+              @update-status="handleUpdateStatus"
             />
           </td>
           <td
@@ -136,7 +127,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, watch } from "vue";
 import uiInput from "@/components/input/ui-input.vue";
 import uiButton from "@/components/button/ui-button.vue";
 import {
@@ -144,32 +135,21 @@ import {
   updateTickets,
 } from "@/views/admin/tickets/services/tickets.service";
 import { useRoute, useRouter } from "vue-router";
-import cDropdown from "@/components/dropdown/c-dropdown.vue";
 import { useProjectStore } from "@/stores/project";
-import type { DropdownMenu } from "@/components/dropdown/dropdown.struct";
 import SearchAssignee from "@/views/admin/tickets/components/search-assignee.vue";
 import type { ProjectMember } from "../projects/project-members/services/project-members.struct";
-import { openModal } from "@/helpers/modal-helpers";
 import setPendingTicketModal from "@/views/admin/tickets/components/set-pending-ticket-modal.vue";
 import setCloseTicketModal from "@/views/admin/tickets/components/set-close-ticket-modal.vue";
 import cPagination from "@/components/pagination/c-pagination.vue";
 import { useTicketStore } from "@/stores/ticket";
 import { toast } from "vue3-toastify";
 import type { Ticket } from "./services/tickets.struct";
+import changeTicketStatus from "./components/change-ticket-status.vue";
 
 const router = useRouter();
 const route = useRoute();
 const ticketStore = useTicketStore();
 const projectStore = useProjectStore();
-
-const showAction = ref<string>("");
-
-const statusOptions = ref<DropdownMenu[]>([
-  { name: "open", title: "Open" },
-  { name: "pending", title: "Pending" },
-  { name: "inprogress", title: "Kerjakan sekarang" },
-  { name: "close", title: "Tandai sebagai selesai" },
-]);
 
 async function handleGetTickets(status = "") {
   ticketStore.filter.status = status || String(route.params.status) || "";
@@ -187,11 +167,6 @@ async function handleGetTickets(status = "") {
 function handlePaginate(page: number): void {
   ticketStore.filter.page = page;
   handleGetTickets();
-}
-
-function handleShowAction(ticketId: string) {
-  if (showAction.value === ticketId) showAction.value = "";
-  else showAction.value = ticketId;
 }
 
 function handleSelected(id: string, member?: ProjectMember) {
@@ -224,35 +199,14 @@ async function handleUpdateStatus(
   } catch (error) {
     console.log("error : ", error);
     toast(`Gagal mengubah status menjadi ${status}`, { type: "error" });
-  } finally {
-    //
   }
 }
 
-function handleClick({ menu, id }: any) {
-  ticketStore.selected = {
-    _id: id,
-    status: menu.name,
-  };
-  switch (menu.name) {
-    case "pending":
-      openModal("set-pending-ticket-modal");
-      break;
-    case "close":
-      openModal("set-close-ticket-modal");
-      break;
-    default:
-      handleUpdateStatus(menu.name, {
-        status: menu.name,
-        note: "",
-        reason: "",
-      });
-      break;
-  }
-}
-
-function toDetail(id: string) {
-  router.push(`/admin/tickets/${id}/detail`);
+function toDetail(ticket: Ticket) {
+  ticketStore.selected = ticket;
+  router.push(
+    `/admin/projects/${route.params.code}/tickets/${ticket._id}/detail`
+  );
 }
 
 watch(

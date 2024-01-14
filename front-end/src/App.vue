@@ -3,7 +3,10 @@
     <top-bar />
     <side-bar />
     <main class="p-4" :class="{ 'sm:ml-64': route.meta.withSidebar }">
-      <div class="p-4 rounded-lg mt-14">
+      <div
+        class="p-4 rounded-lg mt-14"
+        :class="{ 'mt-6': route.meta.menu === 'project-details' }"
+      >
         <router-view />
       </div>
     </main>

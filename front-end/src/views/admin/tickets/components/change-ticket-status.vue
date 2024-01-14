@@ -1,0 +1,70 @@
+<template>
+  <div
+    @click="handleShowAction(ticket._id)"
+    :class="{
+      ring: showAction === ticket._id,
+      '!bg-primary !text-white': isPrimary,
+    }"
+    class="bg-zinc-300 font-medium text-zinc-600 py-1 px-2 flex gap-x-1 items-center justify-center rounded cursor-pointer"
+  >
+    {{ ticket.status }}
+    <i class="bi bi-chevron-down"></i>
+  </div>
+  <c-dropdown
+    :show-action="showAction"
+    :menus="statusOptions.filter((option) => option.name !== ticket.status)"
+    :id="ticket._id"
+    @click="handleClick"
+  />
+</template>
+
+<script setup lang="ts">
+import cDropdown from "@/components/dropdown/c-dropdown.vue";
+import type { DropdownMenu } from "@/components/dropdown/dropdown.struct";
+import { useTicketStore } from "@/stores/ticket";
+import { ref } from "vue";
+import { openModal } from "@/helpers/modal-helpers";
+import type { Ticket } from "../services/tickets.struct";
+
+const ticketStore = useTicketStore();
+
+defineProps<{
+  ticket: Ticket;
+  isPrimary?: boolean;
+}>();
+
+const emits = defineEmits<{
+  (e: "update-status", status: string, data: any): void;
+}>();
+
+const showAction = ref<string>("");
+const statusOptions = ref<DropdownMenu[]>([
+  { name: "open", title: "Open" },
+  { name: "pending", title: "Pending" },
+  { name: "inprogress", title: "Kerjakan sekarang" },
+  { name: "close", title: "Tandai sebagai selesai" },
+]);
+
+function handleClick({ menu }: any) {
+  switch (menu.name) {
+    case "pending":
+      openModal("set-pending-ticket-modal");
+      break;
+    case "close":
+      openModal("set-close-ticket-modal");
+      break;
+    default:
+      emits("update-status", menu.name, {
+        status: menu.name,
+        note: "",
+        reason: "",
+        solution: "",
+      });
+      break;
+  }
+}
+function handleShowAction(ticketId: string) {
+  if (showAction.value === ticketId) showAction.value = "";
+  else showAction.value = ticketId;
+}
+</script>

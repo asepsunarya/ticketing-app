@@ -28,7 +28,7 @@
       />
       <ui-button
         :is-loading="isLoadingSubmit"
-        text="Pending"
+        text="Selesai"
         size="sm"
         type="default"
         @click="handleUpdateStatus"

@@ -40,6 +40,18 @@ export default [
     component: () => import("@/views/admin/tickets/tickets-main.vue"),
   },
   {
+    path: "/admin/projects/:code/tickets/:ticketId/detail",
+    name: "admin-tickets-detail",
+    meta: {
+      requireAuth: true,
+      withSidebar: true,
+      menu: "project-details",
+      submenu: "tickets",
+    },
+    component: () =>
+      import("@/views/admin/tickets/ticket-details/ticket-details.vue"),
+  },
+  {
     path: "/admin/projects/:code/settings/details",
     name: "admin-projects-details",
     meta: {

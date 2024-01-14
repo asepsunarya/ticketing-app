@@ -7,7 +7,7 @@ import type {
 } from "@/views/admin/tickets/services/tickets.struct";
 
 export const useTicketStore = defineStore("ticket", () => {
-  const selected = ref<Ticket | any>();
+  const selected = ref<Ticket | any>({});
   const filter = reactive({
     page: 1,
     limit: 10,
