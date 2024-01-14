@@ -41,6 +41,13 @@ const menus = computed<Menu[]>(() => [
     count: "0",
   },
   {
+    name: "my-tickets",
+    title: "Tiket Saya",
+    redirect: `/admin/projects/${route.params.code}/tickets/me`,
+    active: isActive("me"),
+    count: "0",
+  },
+  {
     name: "tickets-open",
     title: "Tiket Open",
     redirect: `/admin/projects/${route.params.code}/tickets/open`,
@@ -48,10 +55,10 @@ const menus = computed<Menu[]>(() => [
     count: "0",
   },
   {
-    name: "my-tickets",
-    title: "Tiket Saya",
-    redirect: `/admin/projects/${route.params.code}/tickets/me`,
-    active: isActive("me"),
+    name: "tickets-pending",
+    title: "Tiket Pending",
+    redirect: `/admin/projects/${route.params.code}/tickets/pending`,
+    active: isActive("pending"),
     count: "0",
   },
   {

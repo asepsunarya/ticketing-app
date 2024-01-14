@@ -3,12 +3,12 @@
     Semua Tiket {{ route.params.status == "me" ? "saya" : route.params.status }}
   </div>
   <div
-    v-if="tickets.length"
+    v-if="ticketStore.ticket.docs.length"
     class="relative overflow-x-auto sm:rounded-lg min-h-screen mt-8"
   >
     <div class="mb-8 lg:w-1/3">
       <ui-input
-        v-model="filter.search"
+        v-model="ticketStore.filter.search"
         type="text"
         placeholder="Cari Tiket"
         @enter="handleGetTickets"
@@ -28,7 +28,7 @@
       <tbody class="border-b text-black">
         <tr
           class="bg-white hover:bg-gray-50"
-          v-for="ticket in tickets"
+          v-for="ticket in ticketStore.ticket.docs"
           :key="ticket._id"
         >
           <th
@@ -46,9 +46,9 @@
                 class="w-7 h-7 rounded-full bg-zinc-300 flex justify-center items-center"
               >
                 <img
-                  v-if="ticket.reportBy.photo"
+                  v-if="ticket.reportBy?.photo"
                   class="w-7 h-7 rounded-full"
-                  :src="ticket.reportBy.photo"
+                  :src="ticket.reportBy?.photo"
                 />
                 <i v-else class="bi bi-person" />
               </div>
@@ -74,7 +74,7 @@
             <div
               @click="handleShowAction(ticket._id)"
               :class="{ ring: showAction === ticket._id }"
-              class="w-16 bg-zinc-300 font-medium text-zinc-600 p-1 flex gap-x-1 items-center justify-center rounded"
+              class="bg-zinc-300 font-medium text-zinc-600 py-1 px-2 flex gap-x-1 items-center justify-center rounded"
             >
               {{ ticket.status }}
               <i class="bi bi-chevron-down"></i>
@@ -85,7 +85,6 @@
                 statusOptions.filter((option) => option.name !== ticket.status)
               "
               :id="ticket._id"
-              :code="projectStore.selected?.code"
               @click="handleClick"
             />
           </td>
@@ -98,6 +97,15 @@
         </tr>
       </tbody>
     </table>
+    <div class="mt-6">
+      <c-pagination
+        :page="ticketStore.filter.page"
+        :total-pages="ticketStore.filter.totalPages"
+        :next-page="ticketStore.filter.nextPage"
+        :prev-page="ticketStore.filter.prevPage"
+        @change="handlePaginate"
+      />
+    </div>
   </div>
   <template v-else>
     <div
@@ -120,58 +128,65 @@
       />
     </div>
   </template>
+
+  <teleport to="body">
+    <set-pending-ticket-modal @update-status="handleUpdateStatus" />
+    <set-close-ticket-modal @update-status="handleUpdateStatus" />
+  </teleport>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import uiInput from "@/components/input/ui-input.vue";
 import uiButton from "@/components/button/ui-button.vue";
-import type { Ticket } from "@/views/admin/tickets/services/tickets.struct";
-import { getTickets } from "@/views/admin/tickets/services/tickets.service";
+import {
+  getTickets,
+  updateTickets,
+} from "@/views/admin/tickets/services/tickets.service";
 import { useRoute, useRouter } from "vue-router";
 import cDropdown from "@/components/dropdown/c-dropdown.vue";
 import { useProjectStore } from "@/stores/project";
 import type { DropdownMenu } from "@/components/dropdown/dropdown.struct";
 import SearchAssignee from "@/views/admin/tickets/components/search-assignee.vue";
 import type { ProjectMember } from "../projects/project-members/services/project-members.struct";
+import { openModal } from "@/helpers/modal-helpers";
+import setPendingTicketModal from "@/views/admin/tickets/components/set-pending-ticket-modal.vue";
+import setCloseTicketModal from "@/views/admin/tickets/components/set-close-ticket-modal.vue";
+import cPagination from "@/components/pagination/c-pagination.vue";
+import { useTicketStore } from "@/stores/ticket";
+import { toast } from "vue3-toastify";
+import type { Ticket } from "./services/tickets.struct";
 
 const router = useRouter();
 const route = useRoute();
+const ticketStore = useTicketStore();
 const projectStore = useProjectStore();
 
-const tickets = ref<Ticket[]>([]);
 const showAction = ref<string>("");
 
 const statusOptions = ref<DropdownMenu[]>([
   { name: "open", title: "Open" },
   { name: "pending", title: "Pending" },
   { name: "inprogress", title: "Kerjakan sekarang" },
-  { name: "done", title: "Tandai sebagai selesai" },
+  { name: "close", title: "Tandai sebagai selesai" },
 ]);
 
-const filter = reactive({
-  page: 1,
-  limit: 10,
-  search: "",
-  projectId: "",
-  hasNextPage: false,
-  nextPage: 0,
-  prevPage: 0,
-  totalPages: 1,
-  status: "",
-});
-
 async function handleGetTickets(status = "") {
-  filter.status = status || String(route.params.status) || "";
-  filter.projectId = projectStore.selected?._id || "";
-  const ticketList = await getTickets(filter);
-  tickets.value = ticketList.docs;
+  ticketStore.filter.status = status || String(route.params.status) || "";
+  ticketStore.filter.projectId = projectStore.selected?._id || "";
+  const ticketList = await getTickets(ticketStore.filter);
+  ticketStore.ticket.docs = ticketList.docs;
 
-  filter.hasNextPage = ticketList.hasNextPage;
-  filter.page = ticketList.page;
-  filter.totalPages = ticketList.totalPages;
-  filter.nextPage = ticketList.nextPage || 0;
-  filter.prevPage = ticketList.prevPage || 0;
+  ticketStore.filter.hasNextPage = ticketList.hasNextPage;
+  ticketStore.filter.page = ticketList.page;
+  ticketStore.filter.totalPages = ticketList.totalPages;
+  ticketStore.filter.nextPage = ticketList.nextPage || 0;
+  ticketStore.filter.prevPage = ticketList.prevPage || 0;
+}
+
+function handlePaginate(page: number): void {
+  ticketStore.filter.page = page;
+  handleGetTickets();
 }
 
 function handleShowAction(ticketId: string) {
@@ -180,12 +195,14 @@ function handleShowAction(ticketId: string) {
 }
 
 function handleSelected(id: string, member?: ProjectMember) {
-  const ticketIndex = tickets.value.findIndex((ticket) => ticket._id == id);
+  const ticketIndex = ticketStore.ticket.docs.findIndex(
+    (ticket) => ticket._id == id
+  );
   if (!member) {
-    delete tickets.value[ticketIndex].assignedBy;
+    delete ticketStore.ticket.docs[ticketIndex].assignedBy;
     return;
   }
-  tickets.value[ticketIndex].assignedBy = {
+  ticketStore.ticket.docs[ticketIndex].assignedBy = {
     _id: String(member?._id),
     email: member?.email,
     name: member?.name,
@@ -193,14 +210,43 @@ function handleSelected(id: string, member?: ProjectMember) {
   };
 }
 
-function handleClick({ menu, id, code }: any) {
+async function handleUpdateStatus(
+  status: string,
+  newTickets: Ticket | any
+): Promise<void> {
+  try {
+    await updateTickets(ticketStore.selected?._id, newTickets);
+    const ticketIndex = ticketStore.ticket.docs.findIndex(
+      (ticket) => ticket._id == ticketStore.selected?._id
+    );
+    ticketStore.ticket.docs[ticketIndex].status = status;
+    toast(`Berhasil mengubah status menjadi ${status}`, { type: "success" });
+  } catch (error) {
+    console.log("error : ", error);
+    toast(`Gagal mengubah status menjadi ${status}`, { type: "error" });
+  } finally {
+    //
+  }
+}
+
+function handleClick({ menu, id }: any) {
+  ticketStore.selected = {
+    _id: id,
+    status: menu.name,
+  };
   switch (menu.name) {
     case "pending":
-      router.push(`/admin/projects/${code}/settings/details`);
+      openModal("set-pending-ticket-modal");
       break;
-    case "inproggress":
+    case "close":
+      openModal("set-close-ticket-modal");
       break;
-    case "done":
+    default:
+      handleUpdateStatus(menu.name, {
+        status: menu.name,
+        note: "",
+        reason: "",
+      });
       break;
   }
 }

@@ -59,6 +59,9 @@ export class TicketModel {
   solution?: string;
 
   @Prop()
+  reason?: string;
+
+  @Prop()
   note?: string;
 }
 

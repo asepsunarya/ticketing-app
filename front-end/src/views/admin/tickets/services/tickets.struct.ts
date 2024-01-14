@@ -12,10 +12,11 @@ export type Ticket = {
   reportBy: User;
   releaseStatus: string;
   status: string;
-  createdAt: Date;
+  createdAt: Date | string;
   assignedBy?: User;
   solution?: string;
   files: string[];
+  reason?: string;
   note?: string;
 };
 
@@ -55,4 +56,6 @@ export type UpdateTicketDto = {
   status?: string;
   assignedBy?: User | object;
   files?: string[];
+  reason?: string;
+  note?: string;
 };
