@@ -28,7 +28,12 @@
             <div
               class="w-7 h-7 rounded-full bg-zinc-300 flex justify-center items-center"
             >
-              <img v-if="option.picture" :src="option.picture" alt="" />
+              <img
+                class="w-7 h-7 rounded-full"
+                v-if="option.photo"
+                :src="option.photo"
+                alt=""
+              />
               <i v-else class="bi bi-person" />
             </div>
             <div>

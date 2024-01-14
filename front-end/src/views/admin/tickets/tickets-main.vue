@@ -86,7 +86,9 @@
             </div>
             <c-dropdown
               :show-action="showAction"
-              :menus="statusOptions"
+              :menus="
+                statusOptions.filter((option) => option.name !== ticket.status)
+              "
               :id="ticket._id"
               :code="projectStore.selected?.code"
               @click="handleClick"
@@ -146,6 +148,7 @@ const tickets = ref<Ticket[]>([]);
 const showAction = ref<string>("");
 
 const statusOptions = ref<DropdownMenu[]>([
+  { name: "open", title: "Open" },
   { name: "pending", title: "Pending" },
   { name: "inprogress", title: "Kerjakan sekarang" },
   { name: "done", title: "Tandai sebagai selesai" },
