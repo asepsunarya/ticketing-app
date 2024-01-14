@@ -43,22 +43,17 @@
           <td class="px-6 py-4">
             <div class="flex gap-x-2 items-center cursor-pointer">
               <div
-                v-if="ticket.reportBy.photo"
-                class="w-12 h-12 rounded-full flex items-center"
-              >
-                <img
-                  class="!w-7 h-7 rounded-full"
-                  :src="ticket.reportBy.photo"
-                />
-              </div>
-              <div
-                v-else
                 class="w-7 h-7 rounded-full bg-zinc-300 flex justify-center items-center"
               >
-                <i class="bi bi-person" />
+                <img
+                  v-if="ticket.reportBy.photo"
+                  class="w-7 h-7 rounded-full"
+                  :src="ticket.reportBy.photo"
+                />
+                <i v-else class="bi bi-person" />
               </div>
               <div class="line-clamp-1">
-                {{ ticket.reportBy.name }}
+                {{ ticket.reportBy.name?.slice(0, 13) }}
               </div>
             </div>
           </td>
