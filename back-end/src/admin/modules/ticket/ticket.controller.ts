@@ -43,7 +43,6 @@ export class TicketController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuardAdmin)
   async countTicket(@Param() { id }: ParamIdDto, @Req() { user }) {
-    console.log(id, 'id');
     return await this.ticketService.count(id, user);
   }
 

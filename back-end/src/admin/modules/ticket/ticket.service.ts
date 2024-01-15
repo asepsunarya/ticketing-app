@@ -107,11 +107,9 @@ export class TicketService {
     status?: string,
     userId?: string | Types.ObjectId,
   ) {
-    console.log(projectId, 'projectId');
     const query = { projectId: new Types.ObjectId(projectId) };
     if (status != 'all') query['status'] = status;
     if (userId) query['assignedBy._id'] = new Types.ObjectId(userId);
-    console.log(query, 'query');
     return this.ticketModel.countDocuments(query);
   }
 }
