@@ -25,8 +25,10 @@ import type { DropdownMenu } from "@/components/dropdown/dropdown.struct";
 import { ref } from "vue";
 import { openModal } from "@/helpers/modal-helpers";
 import type { Ticket } from "../services/tickets.struct";
+import { useTicketStore } from "@/stores/ticket";
 
-defineProps<{
+const ticketStore = useTicketStore();
+const props = defineProps<{
   ticket: Ticket;
   isPrimary?: boolean;
 }>();
@@ -44,6 +46,7 @@ const statusOptions = ref<DropdownMenu[]>([
 ]);
 
 function handleClick({ menu }: any) {
+  ticketStore.selectedId = props.ticket._id;
   switch (menu.name) {
     case "pending":
       openModal("set-pending-ticket-modal");

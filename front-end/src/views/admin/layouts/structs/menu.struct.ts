@@ -4,5 +4,5 @@ export type Menu = {
   active: boolean;
   icon?: string;
   redirect?: string;
-  count?: string;
+  count?: number | any;
 };

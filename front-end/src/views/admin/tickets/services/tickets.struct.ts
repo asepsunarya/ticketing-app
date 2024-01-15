@@ -32,6 +32,15 @@ export type TicketsResult = {
   docs: Ticket[];
 } & PaginationResult;
 
+export type TicketCountResult = {
+  all: number;
+  me: number;
+  open: number;
+  inprogress: number;
+  pending: number;
+  closed: number;
+};
+
 export type CreateTicketDto = {
   projectId: string;
   feature: string;

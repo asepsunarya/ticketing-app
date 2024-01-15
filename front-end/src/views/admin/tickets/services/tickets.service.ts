@@ -3,6 +3,7 @@ import type {
   CreateTicketDto,
   GetTicketsDto,
   Ticket,
+  TicketCountResult,
   TicketsResult,
   UpdateTicketDto,
 } from "./tickets.struct";
@@ -19,6 +20,13 @@ export async function getTicketDetail(id: string) {
   return await axios<Ticket>({
     method: "GET",
     url: `/admin/ticket/${id}`,
+  });
+}
+
+export async function countTickets(projectId: string) {
+  return await axios<TicketCountResult>({
+    method: "GET",
+    url: `/admin/ticket/count/${projectId}`,
   });
 }
 

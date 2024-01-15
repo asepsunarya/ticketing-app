@@ -190,9 +190,9 @@ async function handleUpdateStatus(
   newTickets: Ticket | any
 ): Promise<void> {
   try {
-    await updateTickets(ticketStore.selected?._id, newTickets);
+    await updateTickets(ticketStore.selectedId, newTickets);
     const ticketIndex = ticketStore.ticket.docs.findIndex(
-      (ticket) => ticket._id == ticketStore.selected?._id
+      (ticket) => ticket._id == ticketStore.selectedId
     );
     ticketStore.ticket.docs[ticketIndex].status = status;
     toast(`Berhasil mengubah status menjadi ${status}`, { type: "success" });

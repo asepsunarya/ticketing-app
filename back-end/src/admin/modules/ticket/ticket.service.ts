@@ -39,6 +39,18 @@ export class TicketService {
     return await this.ticketModel.findOne({ _id: new Types.ObjectId(id) });
   }
 
+  async count(projectId: string, user: User) {
+    const [all, me, open, inprogress, closed, pending] = await Promise.all([
+      this.generateCount(projectId, 'all'),
+      this.generateCount(projectId, 'all', user._id),
+      this.generateCount(projectId, 'open'),
+      this.generateCount(projectId, 'inprogress'),
+      this.generateCount(projectId, 'closed'),
+      this.generateCount(projectId, 'pending'),
+    ]);
+    return { all, me, open, inprogress, closed, pending };
+  }
+
   async create(body: Ticket, { _id, name, email, photo }: User) {
     const ticket = {
       ...body,
@@ -88,5 +100,18 @@ export class TicketService {
 
   async delete(id: string) {
     return await this.ticketModel.deleteOne({ _id: new Types.ObjectId(id) });
+  }
+
+  async generateCount(
+    projectId: string,
+    status?: string,
+    userId?: string | Types.ObjectId,
+  ) {
+    console.log(projectId, 'projectId');
+    const query = { projectId: new Types.ObjectId(projectId) };
+    if (status != 'all') query['status'] = status;
+    if (userId) query['assignedBy._id'] = new Types.ObjectId(userId);
+    console.log(query, 'query');
+    return this.ticketModel.countDocuments(query);
   }
 }

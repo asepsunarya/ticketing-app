@@ -8,6 +8,7 @@ import type {
 
 export const useTicketStore = defineStore("ticket", () => {
   const selected = ref<Ticket | any>({});
+  const selectedId = ref<string>("");
   const filter = reactive({
     page: 1,
     limit: 10,
@@ -35,5 +36,5 @@ export const useTicketStore = defineStore("ticket", () => {
     selected.value = {};
   }
 
-  return { selected, filter, ticket, form, clearSelected };
+  return { selected, selectedId, filter, ticket, form, clearSelected };
 });
