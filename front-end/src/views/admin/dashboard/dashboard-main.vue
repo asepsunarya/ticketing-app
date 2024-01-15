@@ -45,6 +45,7 @@
               Antrian Terakhir
             </div>
             <div
+              @click="toTicket(project.code, 'open')"
               class="flex justify-between items-center mt-2 px-1 py-1 rounded hover:bg-zinc-200"
             >
               <div class="text-xs">Tiket Open</div>
@@ -55,6 +56,7 @@
               </div>
             </div>
             <div
+              @click="toTicket(project.code, 'me')"
               class="flex justify-between items-center px-1 py-1 rounded hover:bg-zinc-200"
             >
               <div class="text-xs">Tiket Saya</div>
