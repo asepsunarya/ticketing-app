@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ProjectDocument } from './project.model';
 import { AggregatePaginateModel, Model, Types } from 'mongoose';
 import { User } from '@/global/entity/user.entity';
+import { PeopleService } from '../people/people.service';
 
 @Injectable()
 export class ProjectService {
@@ -11,6 +12,8 @@ export class ProjectService {
     @InjectModel('project')
     private projectModel: Model<ProjectDocument> &
       AggregatePaginateModel<ProjectDocument>,
+
+    private peopleService: PeopleService,
   ) {}
 
   async find(query: any) {
@@ -66,7 +69,15 @@ export class ProjectService {
         email,
       },
     };
-    return await this.projectModel.create(project);
+
+    const result = await this.projectModel.create(project);
+    const people = {
+      projectId: result._id,
+      userId: _id,
+      role: 'admin',
+    };
+    await this.peopleService.create(people, { _id, email });
+    return result;
   }
 
   async update(body: Project, id: string) {

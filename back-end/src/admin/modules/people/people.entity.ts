@@ -1,3 +1,5 @@
+import { Types } from 'mongoose';
+
 export class PaginatePeople {
   page: number;
   limit: number;
@@ -7,6 +9,6 @@ export class PaginatePeople {
 
 export class People {
   projectId: string;
-  userId: string;
+  userId: string | Types.ObjectId;
   role: string;
 }

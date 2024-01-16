@@ -25,5 +25,6 @@ import { CoreAuthModule } from '@/auth/modules/auth/core.auth.module';
   ],
   providers: [PeopleService],
   controllers: [PeopleController],
+  exports: [PeopleService],
 })
 export class PeopleModule {}
