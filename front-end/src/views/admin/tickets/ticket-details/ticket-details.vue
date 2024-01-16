@@ -70,7 +70,7 @@
         <change-ticket-status
           :ticket="ticketStore.selected"
           :is-primary="true"
-          @update-status="handleUpdateStatus"
+          @change="handleChange"
         />
         <div class="flex justify-end">
           <div @click="handleRemove" class="btn btn-sm btn-outline btn-error">
@@ -239,6 +239,24 @@ async function handleUpdateStatus(
   } catch (error) {
     console.log("error : ", error);
     toast(`Gagal mengubah status menjadi ${status}`, { type: "error" });
+  }
+}
+function handleChange(menu: any) {
+  switch (menu.name) {
+    case "pending":
+      openModal("set-pending-ticket-modal");
+      break;
+    case "closed":
+      openModal("set-close-ticket-modal");
+      break;
+    default:
+      handleUpdateStatus(menu.name, {
+        status: menu.name,
+        note: "",
+        reason: "",
+        solution: "",
+      });
+      break;
   }
 }
 

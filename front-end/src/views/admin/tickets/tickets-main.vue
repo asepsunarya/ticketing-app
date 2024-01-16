@@ -74,10 +74,7 @@
             scope="row"
             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer"
           >
-            <change-ticket-status
-              :ticket="ticket"
-              @update-status="handleUpdateStatus"
-            />
+            <change-ticket-status :ticket="ticket" @change="handleChange" />
           </td>
           <td
             scope="row"
@@ -145,6 +142,7 @@ import { useTicketStore } from "@/stores/ticket";
 import { toast } from "vue3-toastify";
 import type { Ticket } from "./services/tickets.struct";
 import changeTicketStatus from "./components/change-ticket-status.vue";
+import { openModal } from "@/helpers/modal-helpers";
 
 const router = useRouter();
 const route = useRoute();
@@ -199,6 +197,25 @@ async function handleUpdateStatus(
   } catch (error) {
     console.log("error : ", error);
     toast(`Gagal mengubah status menjadi ${status}`, { type: "error" });
+  }
+}
+
+function handleChange(menu: any) {
+  switch (menu.name) {
+    case "pending":
+      openModal("set-pending-ticket-modal");
+      break;
+    case "closed":
+      openModal("set-close-ticket-modal");
+      break;
+    default:
+      handleUpdateStatus(menu.name, {
+        status: menu.name,
+        note: "",
+        reason: "",
+        solution: "",
+      });
+      break;
   }
 }
 

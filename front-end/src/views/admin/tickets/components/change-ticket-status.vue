@@ -23,7 +23,6 @@
 import cDropdown from "@/components/dropdown/c-dropdown.vue";
 import type { DropdownMenu } from "@/components/dropdown/dropdown.struct";
 import { ref } from "vue";
-import { openModal } from "@/helpers/modal-helpers";
 import type { Ticket } from "../services/tickets.struct";
 import { useTicketStore } from "@/stores/ticket";
 
@@ -34,7 +33,7 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits<{
-  (e: "update-status", status: string, data: any): void;
+  (e: "change", menu: any): void;
 }>();
 
 const showAction = ref<string>("");
@@ -47,22 +46,7 @@ const statusOptions = ref<DropdownMenu[]>([
 
 function handleClick({ menu }: any) {
   ticketStore.selectedId = props.ticket._id;
-  switch (menu.name) {
-    case "pending":
-      openModal("set-pending-ticket-modal");
-      break;
-    case "close":
-      openModal("set-close-ticket-modal");
-      break;
-    default:
-      emits("update-status", menu.name, {
-        status: menu.name,
-        note: "",
-        reason: "",
-        solution: "",
-      });
-      break;
-  }
+  emits("change", menu);
 }
 function handleShowAction(ticketId: string) {
   if (showAction.value === ticketId) showAction.value = "";

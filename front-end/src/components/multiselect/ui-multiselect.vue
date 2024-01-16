@@ -9,7 +9,7 @@
           class="w-7 h-7 rounded-full bg-zinc-300 flex justify-center items-center"
         >
           <img
-            class="w-7 h-7 rounded-full"
+            class="w-7 h-7 rounded-full object-cover"
             v-if="selected.photo || selected.picture"
             :src="selected.photo || selected.picture"
             alt=""

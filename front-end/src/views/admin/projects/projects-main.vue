@@ -49,7 +49,7 @@
                   class="bg-gray-200 text-gray-500 rounded-full w-7 h-7 flex items-center justify-center"
                 >
                   <img
-                    class="w-7 h-7 rounded-full"
+                    class="w-7 h-7 rounded-full object-cover"
                     v-if="project.leader.photo"
                     :src="project.leader.photo"
                     alt=""
