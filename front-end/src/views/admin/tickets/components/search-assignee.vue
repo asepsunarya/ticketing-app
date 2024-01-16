@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import uiMultiselect from "@/components/multiselect/ui-multiselect.vue";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { getMembers } from "@/views/admin/projects/project-members/services/project-members.service";
 import { updateTickets } from "@/views/admin/tickets/services/tickets.service";
 import { useProjectMemberStore } from "@/stores/project-member";
@@ -97,7 +97,16 @@ function handleUnselectMember(): void {
   emits("update:selected", props.id);
 }
 
+watch(
+  () => projectStore.selected,
+  async () => {
+    await handleGetMembers();
+  }
+);
+
 onMounted(async () => {
-  await handleGetMembers();
+  if (projectStore.selected?._id) {
+    await handleGetMembers();
+  }
 });
 </script>
