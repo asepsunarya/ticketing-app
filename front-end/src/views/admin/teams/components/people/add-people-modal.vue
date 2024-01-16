@@ -64,6 +64,7 @@
       <ui-button text="Batal" size="sm" type="ghost" :for="id" />
       <ui-button
         :is-loading="isLoadingSubmit"
+        :custom-class="`${uploadStatus === 'loading' ? 'btn-disabled' : ''}`"
         text="Tambah"
         size="sm"
         type="default"
@@ -99,10 +100,8 @@ const isLoadingSubmit = ref<boolean>(false);
 const uploadStatus = ref<string>("");
 
 const roleOptions = ref([
-  { value: "product-owner", name: "Product Owner" },
-  { value: "tech-lead", name: "Tech Lead" },
+  { value: "admin", name: "Admin" },
   { value: "programmer", name: "Programmer" },
-  { value: "cs", name: "Customer Service" },
 ]);
 
 const form = reactive({
@@ -137,12 +136,23 @@ async function handleSubmitForm(): Promise<void> {
     emits("need-refresh");
     closeModal(props.id);
     toast("Berhasil menambahkan tim", { type: "success" });
+    clear();
   } catch (error) {
     toast("Gagal menambahkan tim", { type: "error" });
     console.log("error : ", error);
   } finally {
     isLoadingSubmit.value = false;
   }
+}
+
+function clear() {
+  form.name = "";
+  form.email = "";
+  form.role = "";
+  form.photo = "";
+  form.file = "";
+  uploadStatus.value = "";
+  v$.value.$reset();
 }
 
 async function uploadFile(files: any[]) {

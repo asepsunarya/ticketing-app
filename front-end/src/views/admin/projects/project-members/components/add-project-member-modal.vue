@@ -61,10 +61,7 @@ import { toast } from "vue3-toastify";
 const emits = defineEmits<(e: "need-refresh") => void>();
 
 const isLoadingSubmit = ref<boolean>(false);
-const roleOptions = ref([
-  { value: "admin", name: "Admin" },
-  { value: "programmer", name: "Programmer" },
-]);
+const roleOptions = ref([{ value: "admin", name: "Admin" }]);
 const projectStore = useProjectStore();
 const userStore = useUserStore();
 

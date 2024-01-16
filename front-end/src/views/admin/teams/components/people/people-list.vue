@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-xl mb-4 font-semibold">Rekan Tim</div>
-    <div class="flex gap-x-4">
+    <div class="grid lg:grid-cols-6 gap-4">
       <div
         v-if="authStore.user.role === 'admin'"
         class="rounded border shadow-sm py-8 px-4 flex flex-col items-center gap-y-3 w-52"
