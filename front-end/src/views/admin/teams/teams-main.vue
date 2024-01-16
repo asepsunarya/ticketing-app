@@ -51,7 +51,7 @@ const teams = ref<Team[]>([]);
 
 async function handleGetPeople() {
   const results = await getUsers(filter);
-  people.value = results.docs;
+  people.value = results.docs.filter((user) => user.role !== "user-dummy");
 }
 
 async function handleGetTeams() {
