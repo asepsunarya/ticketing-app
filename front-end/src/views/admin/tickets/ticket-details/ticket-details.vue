@@ -9,7 +9,7 @@
       <div class="flex items-center gap-x-2 border rounded px-6 py-4">
         <img
           v-if="ticketStore.selected.createdBy.photo"
-          class="w-8 h-8 rounded-full"
+          class="w-8 h-8 rounded-full object-cover"
           :src="ticketStore.selected.createdBy.photo"
           alt=""
         />
@@ -88,7 +88,7 @@
           >
             <img
               v-if="ticketStore.selected.assignedBy.photo"
-              class="w-8 h-8 rounded-full"
+              class="w-8 h-8 rounded-full object-cover"
               :src="ticketStore.selected.assignedBy.photo"
               alt=""
             />
@@ -106,7 +106,7 @@
           <div class="w-3/5 flex gap-x-2 items-center">
             <img
               v-if="ticketStore.selected.reportBy.photo"
-              class="w-8 h-8 rounded-full"
+              class="w-8 h-8 rounded-full object-cover"
               :src="ticketStore.selected.reportBy.photo"
               alt=""
             />
@@ -155,7 +155,7 @@
           >
             <img
               v-if="ticketStore.selected.lastUpdatedBy?.photo"
-              class="w-8 h-8 rounded-full"
+              class="w-8 h-8 rounded-full object-cover"
               :src="ticketStore.selected.lastUpdatedBy.photo"
               alt=""
             />

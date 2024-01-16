@@ -28,7 +28,7 @@
           v-if="person.photo"
           :src="person.photo"
           alt=""
-          class="rounded-full h-20 w-20"
+          class="rounded-full h-20 w-20 object-cover"
         />
         <div
           class="rounded-full bg-zinc-300 h-20 w-20 border flex items-center justify-center"

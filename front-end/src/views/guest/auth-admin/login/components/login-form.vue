@@ -8,7 +8,7 @@
       custom-class="btn-medium"
     >
       <template v-if="v$.$error && v$.email.$invalid" #error>
-        {{ v$.email.$errors[0]?.$message }}
+        Email harus valid
       </template></c-input
     >
     <c-input
@@ -19,7 +19,7 @@
       custom-class="btn-medium"
     >
       <template v-if="v$.$error && v$.password.$invalid" #error>
-        {{ v$.password.$errors[0]?.$message }}
+        Password harus diisi
       </template>
     </c-input>
     <ui-button

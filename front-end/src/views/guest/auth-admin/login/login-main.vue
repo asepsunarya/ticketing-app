@@ -4,7 +4,7 @@
       <header-layout />
       <auth-card title="Selamat Datang">
         <div class="text-sm-medium my-4">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit
+          Masukan email dan password untuk masuk ke aplikasi
         </div>
         <login-form />
       </auth-card>

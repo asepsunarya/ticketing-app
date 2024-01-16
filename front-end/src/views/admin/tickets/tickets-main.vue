@@ -50,7 +50,7 @@
               >
                 <img
                   v-if="ticket.reportBy?.photo"
-                  class="w-7 h-7 rounded-full"
+                  class="w-7 h-7 rounded-full object-cover"
                   :src="ticket.reportBy?.photo"
                 />
                 <i v-else class="bi bi-person" />

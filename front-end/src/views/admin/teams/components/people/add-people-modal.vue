@@ -5,7 +5,7 @@
       <ui-input
         v-model="form.name"
         type="text"
-        placeholder="e.g., Avisa"
+        placeholder="e.g., Asep"
         label="Nama"
       >
         <template v-if="v$.$error && v$.name.$invalid" #error>
@@ -16,7 +16,7 @@
       <ui-input
         v-model="form.email"
         type="text"
-        placeholder="kamu@manypage.id"
+        placeholder="kamu@ticketing.com"
         label="Email"
       >
         <template v-if="v$.$error && v$.email.$invalid" #error>
