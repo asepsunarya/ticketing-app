@@ -59,6 +59,7 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { createProjects } from "@/views/admin/projects/services/projects.service";
 import { useUserStore } from "@/stores/user";
+import { projectIcons } from "../constants/project-icons.const";
 
 const props = defineProps<{ id: string }>();
 const emits = defineEmits<(e: "need-refresh") => void>();
@@ -100,11 +101,13 @@ async function handleSubmitForm(): Promise<void> {
   if (!isValidated || !isUserValidated) return;
   try {
     isLoadingSubmit.value = true;
+    const randomIndex = Math.floor(Math.random() * projectIcons.length);
     const newProject = {
       name: form.name,
       description: form.description,
       code: form.code,
       leader: selectedUser.value,
+      picture: projectIcons[randomIndex],
     };
 
     await createProjects(newProject);

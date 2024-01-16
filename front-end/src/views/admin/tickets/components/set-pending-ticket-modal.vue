@@ -67,5 +67,6 @@ async function handleUpdateStatus(): Promise<void> {
   };
   emits("update-status", "pending", newTickets);
   closeModal("set-pending-ticket-modal");
+  ticketStore.clear();
 }
 </script>

@@ -22,10 +22,12 @@ import { updateTickets } from "@/views/admin/tickets/services/tickets.service";
 import { useProjectMemberStore } from "@/stores/project-member";
 import type { ProjectMember } from "@/views/admin/projects/project-members/services/project-members.struct";
 import type { User } from "@/views/user/services/user.struct";
+import { useProjectStore } from "@/stores/project";
 
 const timeOut = ref<number>(0);
 const isLoading = ref<boolean>(false);
 
+const projectStore = useProjectStore();
 const projectMemberStore = useProjectMemberStore();
 
 const props = defineProps<{
@@ -41,6 +43,7 @@ const filter = reactive({
   page: 1,
   limit: 5,
   search: "",
+  projectId: "",
 });
 
 function handleSearchMembers(search: string): void {
@@ -54,6 +57,7 @@ function handleSearchMembers(search: string): void {
 async function handleGetMembers(): Promise<void> {
   try {
     isLoading.value = true;
+    filter.projectId = String(projectStore.selected?._id);
     const member = await getMembers(filter);
     projectMemberStore.member = member;
   } catch (error) {

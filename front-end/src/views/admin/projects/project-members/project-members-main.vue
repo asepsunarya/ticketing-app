@@ -78,9 +78,7 @@ const selectedProjectMemberId = ref<string>("");
 async function handleGetMembers() {
   try {
     isLoadingGetMembers.value = true;
-    console.log(projectStore.selected?._id, "heheheh");
     filter.projectId = String(projectStore.selected?._id);
-    console.log("YO", filter);
     const memberList = await getMembers(filter);
 
     members.value = memberList.docs;

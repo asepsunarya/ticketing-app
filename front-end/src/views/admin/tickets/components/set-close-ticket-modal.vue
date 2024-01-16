@@ -60,5 +60,6 @@ async function handleUpdateStatus(): Promise<void> {
   };
   emits("update-status", "closed", newTickets);
   closeModal("set-close-ticket-modal");
+  ticketStore.clear();
 }
 </script>

@@ -36,5 +36,11 @@ export const useTicketStore = defineStore("ticket", () => {
     selected.value = {};
   }
 
-  return { selected, selectedId, filter, ticket, form, clearSelected };
+  function clear() {
+    form.solution = "";
+    form.reason = "";
+    form.note = "";
+  }
+
+  return { selected, selectedId, filter, ticket, form, clearSelected, clear };
 });
