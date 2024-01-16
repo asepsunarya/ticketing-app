@@ -1,5 +1,13 @@
 export default [
   {
+    path: "",
+    name: "login-admin",
+    meta: {
+      requireAuth: false,
+    },
+    component: () => import("@/views/guest/auth-admin/login/login-main.vue"),
+  },
+  {
     path: "/login",
     name: "login",
     meta: {

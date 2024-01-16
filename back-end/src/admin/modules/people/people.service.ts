@@ -14,13 +14,19 @@ export class PeopleService {
   ) {}
 
   async paginate(query: PaginatePeople) {
-    const filter = {};
+    const filter = {
+      projectId: new Types.ObjectId(query.projectId),
+    };
+    const searchFilter = {};
     if (query.search)
-      filter['$or'] = [
+      searchFilter['$or'] = [
         { name: new RegExp(query.search, 'i') },
         { email: new RegExp(query.search, 'i') },
       ];
     const pipeline = this.peopleModel.aggregate([
+      {
+        $match: filter,
+      },
       {
         $lookup: {
           from: 'users',
@@ -41,7 +47,7 @@ export class PeopleService {
           photo: '$user.photo',
         },
       },
-      { $match: filter },
+      { $match: searchFilter },
     ]);
     return await this.peopleModel.aggregatePaginate(pipeline, {
       page: query.page,

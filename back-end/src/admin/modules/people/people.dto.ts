@@ -10,6 +10,10 @@ export class PaginatePeopleDto {
   @ApiProperty({ default: 10 })
   limit: number;
 
+  @IsNotEmpty()
+  @ApiProperty()
+  projectId: string;
+
   @ApiProperty({ default: '', required: false })
   search?: string;
 }

@@ -56,11 +56,13 @@ import uiButton from "@/components/button/ui-button.vue";
 import addProjectMemberModal from "@/views/admin/projects/project-members/components/add-project-member-modal.vue";
 import removeProjectMemberModal from "@/views/admin/projects/project-members/components/remove-project-member-modal.vue";
 import cPagination from "@/components/pagination/c-pagination.vue";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { getMembers } from "@/views/admin/projects/project-members/services/project-members.service";
 import type { ProjectMember } from "./services/project-members.struct";
 import { openModal } from "@/helpers/modal-helpers";
+import { useProjectStore } from "@/stores/project";
 
+const projectStore = useProjectStore();
 const isLoadingGetMembers = ref<boolean>(false);
 const filter = reactive({
   page: 1,
@@ -68,6 +70,7 @@ const filter = reactive({
   search: "",
   hasNextPage: false,
   totalPages: 1,
+  projectId: "",
 });
 const members = ref<ProjectMember[]>([]);
 const selectedProjectMemberId = ref<string>("");
@@ -75,6 +78,9 @@ const selectedProjectMemberId = ref<string>("");
 async function handleGetMembers() {
   try {
     isLoadingGetMembers.value = true;
+    console.log(projectStore.selected?._id, "heheheh");
+    filter.projectId = String(projectStore.selected?._id);
+    console.log("YO", filter);
     const memberList = await getMembers(filter);
 
     members.value = memberList.docs;
@@ -103,7 +109,16 @@ function handleRefresh() {
   handleGetMembers();
 }
 
-onMounted(() => {
-  handleGetMembers();
+watch(
+  () => projectStore.selected,
+  async () => {
+    await handleGetMembers();
+  }
+);
+
+onMounted(async () => {
+  if (projectStore.selected?._id) {
+    await handleGetMembers();
+  }
 });
 </script>
