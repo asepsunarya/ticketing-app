@@ -1,0 +1,35 @@
+@startuml "team"
+skinparam style strictuml
+
+actor Admin
+boundary HalamanTim as View
+control TeamController as Controller
+collections Team as Collection
+
+Admin -> View ++ : Mengakses halaman team
+  View -> Controller ++: onMounted
+    Controller -> Collection ++ : get()
+    return data
+  return Menampilkan data team
+return
+
+Admin -> View ++ : Klik Tambah Tim
+  View -> Controller ++: onClick
+    Controller -> Collection ++ : add()
+    return data
+  return Menampilkan data team
+return
+
+Admin -> View ++ : Klik Hapus Tim
+  View -> Controller ++: onClick
+  return Menampilkan konfirmasi Hapus
+return
+
+Admin -> View ++ : Memilih hapus
+  View -> Controller ++: handleDelete()
+    Controller -> Collection ++: delete()
+    return deleted
+  return Menampilkan info berhasil menghapus
+return
+
+@enduml

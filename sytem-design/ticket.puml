@@ -1,0 +1,47 @@
+@startuml "tiket"
+skinparam style strictuml
+
+actor Admin
+boundary HalamanTiket as View
+control TicketController as Controller
+collections Ticket as Collection
+
+Admin -> View ++ : Mengakses halaman tiket
+  View -> Controller ++: onMounted
+    Controller -> Collection ++ : get()
+    return data
+  return Menampilkan data tiket
+return
+
+alt success
+Admin -> View ++ : Klik Tambah tiket
+  View -> Controller ++: handleAdd()
+    Controller -> Collection ++ : add()
+    return data
+  return Menampilkan info berhasil disimpan
+return
+
+
+Admin -> View ++ : Ubah Assignee
+  View -> Controller ++: handleUpdateAssignee()
+    Controller -> Collection ++: update()
+    return updated
+  return Menampilkan info berhasil diubah
+return
+
+Admin -> View ++ : Ubah status tiket
+  View -> Controller ++: handleUpdateStatus()
+    Controller -> Collection ++ : update()
+    return updated
+  return Menampilkan info berhasil diubah
+return
+
+else error
+
+Collection --> Controller : error
+Controller --> View : Menampilkan info gagal
+View --> Admin : 
+
+end
+
+@enduml

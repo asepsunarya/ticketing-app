@@ -1,0 +1,29 @@
+@startuml "ubah proyek"
+skinparam style strictuml
+
+actor Admin
+boundary HalamanProyek as View
+boundary HalamanDetailProyek as View2
+control ProjectController as Controller
+collections Project as Collection
+
+Admin -> View ++ : Mengakses halaman proyek
+  View -> Controller ++: onMounted
+    Controller -> Collection ++ : get()
+    return data
+  return Menampilkan data proyek
+return
+
+Admin -> View ++ : Klik Pengaturan
+  View -> View2 ++ : Redirect ke Halaman Detail
+  return Menampilkan Halaman Detail
+return
+
+Admin -> View2 ++ : Ubah Nama/Ikon
+  View2 -> Controller ++ : handleUpdate()
+    Controller -> Collection ++ : update()
+    return updated
+  return Menampilkan berhasil diubah
+return
+
+@enduml
