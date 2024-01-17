@@ -20,16 +20,4 @@ Admin -> View ++ : Klik Tambah Tim
   return Menampilkan data team
 return
 
-Admin -> View ++ : Klik Hapus Tim
-  View -> Controller ++: onClick
-  return Menampilkan konfirmasi Hapus
-return
-
-Admin -> View ++ : Memilih hapus
-  View -> Controller ++: handleDelete()
-    Controller -> Collection ++: delete()
-    return deleted
-  return Menampilkan info berhasil menghapus
-return
-
 @enduml
