@@ -15,6 +15,10 @@ export class TicketService {
   async paginate(query: PaginateTicket, userId: string) {
     const filter = {
       projectId: new Types.ObjectId(query.projectId),
+      createdAt: {
+        $gte: new Date(Number(query.year), 0, 1), // Start of the target year
+        $lt: new Date(Number(query.year) + 1, 0, 1), // Start of the next year
+      },
     };
     if (query.status != 'me' && query.status != 'undefined') {
       filter['status'] = query.status;

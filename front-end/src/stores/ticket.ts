@@ -19,6 +19,7 @@ export const useTicketStore = defineStore("ticket", () => {
     prevPage: 0,
     totalPages: 1,
     status: "",
+    year: "2024",
   });
 
   const ticket = ref<TicketsResult>({

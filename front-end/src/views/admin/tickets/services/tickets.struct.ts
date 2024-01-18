@@ -25,6 +25,7 @@ export type GetTicketsDto = {
   status?: string | string[];
   page: number;
   limit: number;
+  year: string;
   search?: string;
 };
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-3xl font-semibold">Kerjaanmu</div>
+    <div class="text-3xl font-semibold">Dashboard</div>
     <hr class="my-6" />
     <div class="flex justify-between">
       <div class="text-xl font-semibold">Proyek Terbaru</div>

@@ -2,13 +2,19 @@
   <div class="text-xl font-semibold capitalize">
     Semua Tiket {{ route.params.status == "me" ? "saya" : route.params.status }}
   </div>
-  <div class="mb-8 mt-4 lg:w-1/3">
+  <div class="mb-8 mt-4 flex justify-between">
     <ui-input
       v-model="ticketStore.filter.search"
       type="text"
       placeholder="Cari Tiket"
       @enter="handleGetTickets"
     />
+    <ui-select v-model="selectedYear" @change="handleGetTickets()">
+      <option selected disabled value="">Pilih Tahun</option>
+      <option v-for="year in years" :key="year" :value="year">
+        {{ year }}
+      </option>
+    </ui-select>
   </div>
   <div
     v-if="ticketStore.ticket.docs.length"
@@ -22,7 +28,7 @@
           <th scope="col" class="px-6 py-3 font-semibold">Reporter</th>
           <th scope="col" class="px-6 py-3 font-semibold">Assignee</th>
           <th scope="col" class="px-6 py-3 font-semibold">Status</th>
-          <th scope="col" class="px-6 py-3 font-semibold"></th>
+          <th scope="col" class="px-6 py-3 font-semibold">Dibuat Pada</th>
         </tr>
       </thead>
       <tbody class="border-b text-black">
@@ -124,7 +130,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import uiInput from "@/components/input/ui-input.vue";
 import uiButton from "@/components/button/ui-button.vue";
 import {
@@ -143,13 +149,17 @@ import { toast } from "vue3-toastify";
 import type { Ticket } from "./services/tickets.struct";
 import changeTicketStatus from "./components/change-ticket-status.vue";
 import { openModal } from "@/helpers/modal-helpers";
+import uiSelect from "@/components/select/ui-select.vue";
 
 const router = useRouter();
 const route = useRoute();
 const ticketStore = useTicketStore();
 const projectStore = useProjectStore();
+const years = ["2023", "2024"];
+const selectedYear = ref("2024");
 
 async function handleGetTickets(status = "") {
+  ticketStore.filter.year = selectedYear.value;
   ticketStore.filter.status = status || String(route.params.status) || "";
   ticketStore.filter.projectId = projectStore.selected?._id || "";
   const ticketList = await getTickets(ticketStore.filter);

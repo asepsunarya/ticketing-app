@@ -4,6 +4,7 @@ export class PaginateTicket {
   page: number;
   limit: number;
   projectId: string;
+  year: string;
   status?: string;
   search?: string;
   isAssigned?: boolean;
