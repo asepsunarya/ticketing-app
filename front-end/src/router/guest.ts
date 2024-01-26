@@ -1,7 +1,7 @@
 export default [
   {
     path: "",
-    name: "login-admin",
+    name: "landing-page",
     meta: {
       requireAuth: false,
     },

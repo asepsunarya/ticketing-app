@@ -20,11 +20,13 @@ import { onMounted, reactive, ref } from "vue";
 import { getMembers } from "../projects/project-members/services/project-members.service";
 import { useProjectMemberStore } from "@/stores/project-member";
 import type { ProjectMember } from "../projects/project-members/services/project-members.struct";
+import { useProjectStore } from "@/stores/project";
 
 const timeOut = ref<number>(0);
 const isLoading = ref<boolean>(false);
 
 const projectMemberStore = useProjectMemberStore();
+const projectStore = useProjectStore();
 
 defineProps<{
   title?: string;
@@ -33,6 +35,7 @@ defineProps<{
 const filter = reactive({
   page: 1,
   limit: 5,
+  projectId: "",
   search: "",
 });
 
@@ -47,6 +50,7 @@ function handleSearchMembers(search: string): void {
 async function handleGetMembers(): Promise<void> {
   try {
     isLoading.value = true;
+    filter.projectId = projectStore.selected?._id || "";
     const member = await getMembers(filter);
     projectMemberStore.member = member;
   } catch (error) {

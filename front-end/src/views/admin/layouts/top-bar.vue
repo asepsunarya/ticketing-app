@@ -97,7 +97,7 @@
                 </button>
                 <top-bar-team />
               </li>
-              <li>
+              <!-- <li>
                 <button
                   id="dropdownNavbarLink"
                   @click="router.push('/admin/reports')"
@@ -107,7 +107,7 @@
                 >
                   Laporan
                 </button>
-              </li>
+              </li> -->
             </ul>
           </div>
 
