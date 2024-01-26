@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import uiMultiselect from "@/components/multiselect/ui-multiselect.vue";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { getMembers } from "../projects/project-members/services/project-members.service";
 import { useProjectMemberStore } from "@/stores/project-member";
 import type { ProjectMember } from "../projects/project-members/services/project-members.struct";
@@ -50,7 +50,7 @@ function handleSearchMembers(search: string): void {
 async function handleGetMembers(): Promise<void> {
   try {
     isLoading.value = true;
-    filter.projectId = projectStore.selected?._id || "";
+    filter.projectId = projectStore.selectedOption?._id || "";
     const member = await getMembers(filter);
     projectMemberStore.member = member;
   } catch (error) {
@@ -68,8 +68,16 @@ function handleUnselectMember(): void {
   projectMemberStore.clearSelected();
 }
 
+watch(
+  () => projectStore.selectedOption,
+  async () => {
+    if (projectStore.selectedOption?._id) await handleGetMembers();
+  },
+  { deep: true }
+);
+
 onMounted(async () => {
   handleUnselectMember();
-  await handleGetMembers();
+  if (projectStore.selectedOption?._id) await handleGetMembers();
 });
 </script>

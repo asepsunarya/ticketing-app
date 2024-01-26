@@ -271,10 +271,23 @@ function handleSelectProject(): void {
   projectStore.selectedOption = projectStore.selected;
 }
 
+function handleResetAssignee() {
+  projectMemberStore.clearSelected();
+}
+
 watch(
   () => projectStore.selected,
   () => {
     handleSelectProject();
+  }
+);
+
+watch(
+  () => projectStore.selectedOption,
+  () => {
+    if (!projectStore.selectedOption?._id) {
+      handleResetAssignee();
+    }
   }
 );
 
