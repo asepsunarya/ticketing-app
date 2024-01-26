@@ -1,0 +1,25 @@
+@startuml "proyek"
+skinparam style strictuml
+
+actor Admin
+boundary HalamanDashboard as View
+control ProjectController as Controller
+control TicketController as Controller2
+collections Project as Collection
+collections Ticket as Collection2
+
+Admin -> View ++ : Mengakses halaman dashboard
+  View -> Controller ++: onMounted
+    Controller -> Collection ++ : getProjects()
+    return projects
+      loop projects
+        Controller -> Controller2 ++ : countTickets()
+          Controller2 -> Collection2 ++ : countTickets()
+          return tickets
+        return tickets
+      end
+    return projectsWithTicketCounts
+  return Menampilkan halaman dashboard
+return
+
+@enduml

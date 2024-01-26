@@ -1,0 +1,23 @@
+@startuml "proyek"
+skinparam style strictuml
+
+actor Admin
+boundary HalamanLogin as View
+control AuthController as Controller
+collections User as Collection
+
+Admin -> View ++ : Mengakses halaman login
+  View -> Controller ++: onMounted
+    Controller -> Collection ++ : isLogin()
+    return false
+  return Menampilkan halaman login
+return
+
+Admin -> View ++ : Klik Login
+  View -> Controller ++: onClick
+    Controller -> Collection ++ : login()
+    return true
+  return Menampilkan halaman dashboard
+return
+
+@enduml

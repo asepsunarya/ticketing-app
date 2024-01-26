@@ -13,7 +13,11 @@ import {
 import { ProjectService } from './project.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuardAdmin } from '@/auth/modules/auth/guards/jwt-auth-admin.guard';
-import { CreateProjectDto, PaginateProjectDto } from './project.dto';
+import {
+  CreateProjectDto,
+  GetReportDto,
+  PaginateProjectDto,
+} from './project.dto';
 import { ParamIdDto } from '@/global/dto/param-id.dto';
 
 @ApiTags('Project')
@@ -33,6 +37,13 @@ export class ProjectController {
   @UseGuards(JwtAuthGuardAdmin)
   async paginate(@Query() query: PaginateProjectDto) {
     return await this.projectService.paginate(query);
+  }
+
+  @Get('report/:year')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuardAdmin)
+  async report(@Param() { year }: GetReportDto) {
+    return await this.projectService.report(year);
   }
 
   @Post()

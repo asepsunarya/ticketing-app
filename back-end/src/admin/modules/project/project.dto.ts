@@ -15,6 +15,11 @@ export class PaginateProjectDto {
   search?: string;
 }
 
+export class GetReportDto {
+  @ApiProperty({ default: '2024' })
+  year: string;
+}
+
 export class CreateProjectDto {
   @ApiProperty({ default: 'manypage' })
   name: string;

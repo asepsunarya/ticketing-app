@@ -10,9 +10,9 @@
         <thead class="text-black border-b">
           <tr>
             <th scope="col" class="px-6 py-3 font-semibold">Nama</th>
-            <th scope="col" class="px-6 py-3 font-semibold">ID</th>
+            <th scope="col" class="px-6 py-3 font-semibold">Kode</th>
             <th scope="col" class="px-6 py-3 font-semibold">Keterangan</th>
-            <th scope="col" class="px-6 py-3 font-semibold">Tech Lead</th>
+            <th scope="col" class="px-6 py-3 font-semibold">Leader</th>
             <th scope="col" class="px-6 py-3 font-semibold">
               <span class="sr-only">Edit</span>
             </th>

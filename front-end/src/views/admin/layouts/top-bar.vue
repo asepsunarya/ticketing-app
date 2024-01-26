@@ -97,6 +97,17 @@
                 </button>
                 <top-bar-team />
               </li>
+              <li>
+                <button
+                  id="dropdownNavbarLink"
+                  @click="router.push('/admin/reports')"
+                  data-dropdown-toggle="dropdownTeam"
+                  :class="{ 'text-primary': isRoute('reports') }"
+                  class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
+                >
+                  Laporan
+                </button>
+              </li>
             </ul>
           </div>
 

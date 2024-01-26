@@ -9,7 +9,7 @@ export const useProjectStore = defineStore("project", () => {
   const selectedOption = ref<Project>();
   const filter = reactive({
     page: 1,
-    limit: 10,
+    limit: 4,
     search: "",
     hasNextPage: false,
     nextPage: 0,

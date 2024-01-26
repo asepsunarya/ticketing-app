@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a
+    <div
       class="flex items-center p-2 text-gray-900 rounded hover:bg-gray-100 group cursor-pointer"
     >
       <span
@@ -9,7 +9,7 @@
         <i class="text-xl bi bi-arrow-left-short text-white"></i>
       </span>
       <span @click="handleBack" class="ms-3 w-full">Kembali ke proyek</span>
-    </a>
+    </div>
     <hr class="mt-2" />
     <div class="px-2 mt-4">
       <div class="font-bold">Pengaturan Proyek</div>

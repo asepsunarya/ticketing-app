@@ -57,6 +57,18 @@ export class ProjectService {
     });
   }
 
+  async report(year: string) {
+    const projects = await this.projectModel.find({});
+    for (const project of projects) {
+      const report = await this.getReport({
+        year,
+        month: '01',
+        projectId: project._id,
+      });
+      console.log(report, 'report');
+    }
+  }
+
   async create(body: Project, { _id, email }: User) {
     const project = {
       ...body,
@@ -97,5 +109,69 @@ export class ProjectService {
 
   async delete(id: string) {
     return await this.projectModel.deleteOne({ _id: new Types.ObjectId(id) });
+  }
+
+  private async getReport({ year, month, projectId }) {
+    return await this.projectModel.aggregate([
+      {
+        $match: {
+          _id: new Types.ObjectId(projectId),
+        },
+      },
+      {
+        $lookup: {
+          from: 'tickets',
+          localField: '_id',
+          foreignField: 'projectId',
+          as: 'tickets',
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          closed: {
+            $size: {
+              $filter: {
+                input: '$tickets',
+                as: 'ticket',
+                cond: { $eq: ['$$ticket.status', 'closed'] },
+              },
+            },
+          },
+          remainingTicketsCount: {
+            $size: {
+              $filter: {
+                input: '$tickets',
+                as: 'ticket',
+                cond: { $ne: ['$$ticket.status', 'closed'] },
+              },
+            },
+          },
+          totalTicketsCount: { $size: '$tickets' },
+          createdAt: 1,
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          closed: 1,
+          remainingTicketsCount: 1,
+          totalTicketsCount: 1,
+          openTicketsRate: {
+            $cond: {
+              if: { $eq: ['$totalTicketsCount', 0] },
+              then: 0,
+              else: {
+                $multiply: [
+                  { $divide: ['$remainingTicketsCount', '$totalTicketsCount'] },
+                  100,
+                ],
+              },
+            },
+          },
+          createdAt: 1,
+        },
+      },
+    ]);
   }
 }

@@ -84,4 +84,14 @@ export default [
     },
     component: () => import("@/views/admin/teams/teams-main.vue"),
   },
+  {
+    path: "/admin/reports",
+    name: "admin-reports",
+    meta: {
+      requireAuth: true,
+      menu: "reports",
+      submenu: "reports",
+    },
+    component: () => import("@/views/admin/reports/reports-main.vue"),
+  },
 ];
