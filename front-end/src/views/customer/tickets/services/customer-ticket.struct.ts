@@ -7,7 +7,7 @@ export type CustomerTicketForm = {
   feature: string;
   description: string;
   urgencyLevel: string;
-  releaseStatus: string;
+  releaseStatus?: string;
   files: string[];
 };
 

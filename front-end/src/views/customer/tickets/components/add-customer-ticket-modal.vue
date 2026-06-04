@@ -71,13 +71,6 @@
         {{ selectedFiles.length }} file berhasil dilampirkan
       </div>
 
-      <div class="w-1/2">
-        <ui-select v-model="form.releaseStatus" label="Status Rilis">
-          <option v-for="status in releaseStatus" :key="status.key" :value="status.key">
-            {{ status.value }}
-          </option>
-        </ui-select>
-      </div>
     </div>
 
     <template #action>
@@ -125,18 +118,12 @@ const isLoadingSubmit = ref(false);
 const uploadStatus = ref('');
 const selectedFiles = ref<string[]>([]);
 const selectedRawFiles = ref<File[]>([]);
-const releaseStatus = [
-  { key: 'new', value: 'Baru' },
-  { key: 'old', value: 'Lama' },
-];
-
 const form = reactive({
   projectId: '',
   feature: '',
   description: '',
   file: '',
   urgencyLevel: 'standard',
-  releaseStatus: 'old',
 });
 
 const rules = {
@@ -159,7 +146,6 @@ async function handleSubmitForm() {
       feature: form.feature,
       description: form.description,
       urgencyLevel: form.urgencyLevel,
-      releaseStatus: form.releaseStatus,
       files,
     });
 
@@ -214,7 +200,6 @@ function clearForm() {
   form.description = '';
   form.file = '';
   form.urgencyLevel = 'standard';
-  form.releaseStatus = 'old';
   selectedFiles.value = [];
   selectedRawFiles.value = [];
   uploadStatus.value = '';

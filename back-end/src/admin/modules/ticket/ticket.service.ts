@@ -127,7 +127,7 @@ export class TicketService {
       description: body.description,
       email,
       urgencyLevel: body.urgencyLevel || 'standard',
-      releaseStatus: body.releaseStatus,
+      releaseStatus: body.releaseStatus || 'old',
       status: 'open',
       reportBy: customer,
       createdBy: customer,
