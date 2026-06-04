@@ -1,20 +1,8 @@
 <template>
   <div class="min-h-screen bg-zinc-50">
-    <div class="bg-white border-b px-8 py-4 flex items-center justify-between">
-      <div>
-        <div class="font-bold text-2xl">Ticket</div>
-        <div class="text-sm text-zinc-500">Halaman tiket customer</div>
-      </div>
-      <div class="flex items-center gap-4">
-        <div class="text-right">
-          <div class="font-semibold">{{ authStore.user?.name }}</div>
-          <div class="text-xs text-zinc-500">{{ authStore.user?.email }}</div>
-        </div>
-        <ui-button text="Keluar" size="sm" type="ghost" @click="signOut" />
-      </div>
-    </div>
+    <customer-navbar />
 
-    <div class="px-8 py-8">
+    <div class="px-8 pt-24 pb-8">
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-7">
         <div>
           <div class="text-3xl font-semibold">Tiket Saya</div>
@@ -82,17 +70,16 @@ import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import uiButton from '@/components/button/ui-button.vue';
 import uiInput from '@/components/input/ui-input.vue';
-import { useAuthStore } from '@/stores/auth';
 import type { Project } from '@/views/admin/projects/services/projects.struct';
 import type { Ticket } from '@/views/admin/tickets/services/tickets.struct';
 import addCustomerTicketModal from './components/add-customer-ticket-modal.vue';
+import customerNavbar from './components/customer-navbar.vue';
 import {
   getCustomerProjects,
   getCustomerTickets,
 } from './services/customer-ticket.service';
 
 const router = useRouter();
-const authStore = useAuthStore();
 const projects = ref<Project[]>([]);
 const tickets = ref<Ticket[]>([]);
 
@@ -117,11 +104,6 @@ async function loadTickets() {
 
 function toDetail(ticketId: string) {
   router.push(`/customer/tickets/${ticketId}`);
-}
-
-function signOut() {
-  localStorage.removeItem('auth');
-  location.href = '/login';
 }
 
 onMounted(async () => {

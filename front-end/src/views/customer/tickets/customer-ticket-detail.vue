@@ -1,16 +1,12 @@
 <template>
   <div class="min-h-screen bg-zinc-50">
-    <div class="bg-white border-b px-8 py-4 flex items-center justify-between">
-      <div>
-        <button class="text-primary hover:underline mb-1" @click="router.push('/customer/tickets')">
-          ← Kembali ke Tiket Saya
-        </button>
-        <div class="font-bold text-2xl">Detail Tiket</div>
-      </div>
-      <ui-button text="Keluar" size="sm" type="ghost" @click="signOut" />
-    </div>
+    <customer-navbar />
 
-    <div class="max-w-5xl mx-auto px-6 py-8" v-if="ticket">
+    <div class="max-w-5xl mx-auto px-6 pt-24 pb-8" v-if="ticket">
+      <button class="text-primary hover:underline mb-1" @click="router.push('/customer/tickets')">
+        ← Kembali ke Tiket Saya
+      </button>
+      <div class="font-bold text-2xl mb-6">Detail Tiket</div>
       <div class="bg-white rounded-lg border p-6 mb-6">
         <div class="flex justify-between gap-4">
           <div>
@@ -106,6 +102,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
 import uiButton from '@/components/button/ui-button.vue';
 import { checkMediaType, getFilename } from '@/helpers/media';
+import customerNavbar from './components/customer-navbar.vue';
 import type { Ticket } from '@/views/admin/tickets/services/tickets.struct';
 import {
   addCustomerTicketComment,
@@ -161,11 +158,6 @@ async function submitComment() {
 
 function openFile(url: string) {
   window.open(url, '_blank');
-}
-
-function signOut() {
-  localStorage.removeItem('auth');
-  location.href = '/login';
 }
 
 onMounted(loadDetail);
