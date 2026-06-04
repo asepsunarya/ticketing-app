@@ -9,6 +9,23 @@ class User {
 
   @Prop()
   email: string;
+
+  @Prop()
+  name?: string;
+
+  @Prop()
+  photo?: string;
+}
+
+class TicketComment {
+  @Prop()
+  description: string;
+
+  @Prop()
+  createdBy: User;
+
+  @Prop({ type: Date, default: now() })
+  createdAt: Date;
 }
 
 @Schema()
@@ -63,6 +80,9 @@ export class TicketModel {
 
   @Prop()
   note?: string;
+
+  @Prop({ type: [TicketComment], default: [] })
+  comments?: TicketComment[];
 }
 
 export const TicketSchema = SchemaFactory.createForClass(TicketModel);

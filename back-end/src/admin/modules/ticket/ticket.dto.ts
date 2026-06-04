@@ -60,3 +60,32 @@ export class CreateTicketDto {
   @ApiProperty({ required: false })
   note?: string;
 }
+
+export class CreateCustomerTicketDto {
+  @IsNotEmpty()
+  @ApiProperty({ default: '658d2611d9a82ee5abff1fef' })
+  projectId: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ default: '' })
+  feature: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ default: '' })
+  description: string;
+
+  @ApiProperty({ default: 1 })
+  urgencyLevel: string;
+
+  @ApiProperty({ default: 'old' })
+  releaseStatus: string;
+
+  @ApiProperty()
+  files?: string[];
+}
+
+export class CreateTicketCommentDto {
+  @IsNotEmpty()
+  @ApiProperty({ default: '' })
+  description: string;
+}

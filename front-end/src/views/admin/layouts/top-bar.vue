@@ -100,13 +100,6 @@
             </ul>
           </div>
 
-          <ui-button
-            text="Buat"
-            type="default"
-            size="sm"
-            custom-class="!px-4 !m-0"
-            for="add-ticket-modal-top-bar"
-          />
         </div>
         <div class="flex items-center">
           <div class="flex items-center ms-3">
@@ -163,7 +156,6 @@
 </template>
 
 <script setup lang="ts">
-import uiButton from "@/components/button/ui-button.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useRoute, useRouter } from "vue-router";
 import topBarProject from "@/views/admin/layouts/components/top-bar-project.vue";

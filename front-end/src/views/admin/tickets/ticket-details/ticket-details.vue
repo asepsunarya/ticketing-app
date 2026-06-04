@@ -32,7 +32,7 @@
       </div>
       <div class="space-y-4 mt-12">
         <div class="font-semibold font-lg">
-          Attachments ({{ ticketStore.selected.files.length }})
+          Attachments ({{ ticketStore.selected.files?.length || 0 }})
         </div>
         <div class="flex gap-x-4">
           <div
@@ -146,6 +146,34 @@
       </div>
 
       <div class="border rounded space-y-4">
+        <div class="font-semibold border-b p-4">Komentar</div>
+        <div class="px-4 space-y-3" v-if="ticketStore.selected.comments?.length">
+          <div
+            v-for="(comment, index) in ticketStore.selected.comments"
+            :key="index"
+            class="border rounded p-3 text-sm"
+          >
+            <div class="flex justify-between text-zinc-500 mb-1">
+              <span>{{ comment.createdBy?.name || comment.createdBy?.email }}</span>
+              <span>{{ comment.createdAt ? formatDateString(comment.createdAt) : "" }}</span>
+            </div>
+            <div>{{ comment.description }}</div>
+          </div>
+        </div>
+        <div v-else class="px-4 text-sm text-zinc-500">Belum ada komentar.</div>
+        <div class="px-4 pb-4 space-y-3">
+          <textarea
+            v-model="comment"
+            class="textarea textarea-bordered w-full min-h-[100px]"
+            placeholder="Tambahkan komentar untuk customer/tim"
+          />
+          <button class="btn btn-sm btn-primary" @click="handleAddComment">
+            Kirim Komentar
+          </button>
+        </div>
+      </div>
+
+      <div class="border rounded space-y-4">
         <div class="font-semibold border-b p-4">Keterangan</div>
         <div class="px-4 pb-2 flex items-center text-sm">
           <div class="w-2/5 font-bold text-zinc-500">Terakhir Diubah</div>
@@ -197,6 +225,7 @@
 <script setup lang="ts">
 import { useTicketStore } from "@/stores/ticket";
 import {
+  addTicketComment,
   getTicketDetail,
   updateTickets,
 } from "@/views/admin/tickets/services/tickets.service";
@@ -216,6 +245,7 @@ const router = useRouter();
 const route = useRoute();
 const ticketStore = useTicketStore();
 const fetchStatus = ref<string>("");
+const comment = ref("");
 
 async function handleGetTicketDetail() {
   fetchStatus.value = "loading";
@@ -257,6 +287,22 @@ function handleChange(menu: any) {
         solution: "",
       });
       break;
+  }
+}
+
+async function handleAddComment() {
+  if (!comment.value.trim()) {
+    toast("Komentar harus diisi", { type: "error" });
+    return;
+  }
+  try {
+    await addTicketComment(ticketStore.selected?._id, comment.value);
+    comment.value = "";
+    toast("Berhasil menambahkan komentar", { type: "success" });
+    await handleGetTicketDetail();
+  } catch (error) {
+    console.log("error : ", error);
+    toast("Gagal menambahkan komentar", { type: "error" });
   }
 }
 

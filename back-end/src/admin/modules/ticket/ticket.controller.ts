@@ -13,7 +13,13 @@ import {
 import { TicketService } from './ticket.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuardAdmin } from '@/auth/modules/auth/guards/jwt-auth-admin.guard';
-import { CreateTicketDto, PaginateTicketDto } from './ticket.dto';
+import { JwtAuthGuard } from '@/auth/modules/auth/guards/jwt-auth.guard';
+import {
+  CreateCustomerTicketDto,
+  CreateTicketCommentDto,
+  CreateTicketDto,
+  PaginateTicketDto,
+} from './ticket.dto';
 import { ParamIdDto } from '@/global/dto/param-id.dto';
 import { User } from '@/global/entity/user.entity';
 
@@ -32,11 +38,18 @@ export class TicketController {
     return await this.ticketService.paginate(query, String(user._id));
   }
 
-  @Get(':id')
+  @Get('customer/list')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuardAdmin)
-  async detail(@Param() { id }: ParamIdDto) {
-    return await this.ticketService.findOne(id);
+  @UseGuards(JwtAuthGuard)
+  async paginateCustomer(@Query() query: PaginateTicketDto, @Req() { user }) {
+    return await this.ticketService.paginateCustomer(query, String(user._id));
+  }
+
+  @Get('customer/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  async detailCustomer(@Param() { id }: ParamIdDto, @Req() { user }) {
+    return await this.ticketService.findCustomerTicket(id, String(user._id));
   }
 
   @Get('count/:id')
@@ -46,11 +59,41 @@ export class TicketController {
     return await this.ticketService.count(id, user);
   }
 
-  @Post()
+  @Get(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuardAdmin)
-  async create(@Body() body: CreateTicketDto, @Req() { user }) {
-    return await this.ticketService.create(body, user);
+  async detail(@Param() { id }: ParamIdDto) {
+    return await this.ticketService.findOne(id);
+  }
+
+  @Post('customer')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  async createCustomer(@Body() body: CreateCustomerTicketDto, @Req() { user }) {
+    return await this.ticketService.createCustomerTicket(body, user);
+  }
+
+  @Post(':id/comment')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuardAdmin)
+  async createCommentAdmin(
+    @Param() { id }: ParamIdDto,
+    @Body() body: CreateTicketCommentDto,
+    @Req() { user },
+  ) {
+    return await this.ticketService.addComment(id, body.description, user);
+  }
+
+  @Post('customer/:id/comment')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  async createCommentCustomer(
+    @Param() { id }: ParamIdDto,
+    @Body() body: CreateTicketCommentDto,
+    @Req() { user },
+  ) {
+    await this.ticketService.findCustomerTicket(id, String(user._id));
+    return await this.ticketService.addComment(id, body.description, user);
   }
 
   @Put(':id')

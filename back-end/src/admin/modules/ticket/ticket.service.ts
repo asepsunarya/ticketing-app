@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Ticket, PaginateTicket } from './ticket.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { TicketDocument } from './ticket.model';
@@ -43,6 +43,39 @@ export class TicketService {
     return await this.ticketModel.findOne({ _id: new Types.ObjectId(id) });
   }
 
+  async findCustomerTicket(id: string, userId: string) {
+    const ticket = await this.ticketModel.findOne({
+      _id: new Types.ObjectId(id),
+      'createdBy._id': new Types.ObjectId(userId),
+    });
+    if (!ticket) throw new NotFoundException('Ticket not found');
+    return ticket;
+  }
+
+  async paginateCustomer(query: PaginateTicket, userId: string) {
+    const filter = {
+      'createdBy._id': new Types.ObjectId(userId),
+      createdAt: {
+        $gte: new Date(Number(query.year), 0, 1),
+        $lt: new Date(Number(query.year) + 1, 0, 1),
+      },
+    };
+
+    if (query.projectId) filter['projectId'] = new Types.ObjectId(query.projectId);
+    if (query.status && query.status != 'undefined') filter['status'] = query.status;
+    if (query.search) {
+      filter['$or'] = [
+        { feature: new RegExp(query.search, 'i') },
+        { description: new RegExp(query.search, 'i') },
+      ];
+    }
+
+    return await this.ticketModel.paginate(filter, {
+      page: query.page,
+      limit: query.limit,
+    });
+  }
+
   async count(projectId: string, user: User) {
     const [all, me, open, inprogress, closed, pending] = await Promise.all([
       this.generateCount(projectId, 'all'),
@@ -76,6 +109,51 @@ export class TicketService {
       ticket['assignedBy._id'] = new Types.ObjectId(body.assignedBy._id);
     }
     return await this.ticketModel.create(ticket);
+  }
+
+  async createCustomerTicket(
+    body: Pick<Ticket, 'projectId' | 'feature' | 'description' | 'urgencyLevel' | 'releaseStatus' | 'files'>,
+    { _id, name, email, photo }: User,
+  ) {
+    const customer = {
+      _id: new Types.ObjectId(_id),
+      name,
+      email,
+      photo,
+    };
+    return await this.ticketModel.create({
+      projectId: new Types.ObjectId(body.projectId),
+      feature: body.feature,
+      description: body.description,
+      email,
+      urgencyLevel: body.urgencyLevel,
+      releaseStatus: body.releaseStatus,
+      status: 'open',
+      reportBy: customer,
+      createdBy: customer,
+      files: body.files || [],
+      comments: [],
+    });
+  }
+
+  async addComment(id: string, description: string, { _id, name, email, photo }: User) {
+    return await this.ticketModel.updateOne(
+      { _id: new Types.ObjectId(id) },
+      {
+        $push: {
+          comments: {
+            description,
+            createdBy: {
+              _id: new Types.ObjectId(_id),
+              name,
+              email,
+              photo,
+            },
+            createdAt: new Date(),
+          },
+        },
+      },
+    );
   }
 
   async update(body: Ticket, id: string, user: User) {

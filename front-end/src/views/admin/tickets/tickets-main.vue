@@ -110,16 +110,8 @@
         Tiket akan tampil di sini
       </div>
       <div class="text-zinc-400 text-center text-lg">
-        Buat tiket untuk mulai tracking bugs agar rekan timmu bisa ternotice.
-        Tambahkan tiket sekarang.
+        Tiket yang dibuat oleh customer akan tampil di halaman ini.
       </div>
-
-      <ui-button
-        text="Buat Tiket"
-        type="default"
-        custom-class="!px-4 !m-0 text-lg"
-        for="add-ticket-modal-top-bar"
-      />
     </div>
   </template>
 
@@ -132,7 +124,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
 import uiInput from "@/components/input/ui-input.vue";
-import uiButton from "@/components/button/ui-button.vue";
 import {
   getTickets,
   updateTickets,

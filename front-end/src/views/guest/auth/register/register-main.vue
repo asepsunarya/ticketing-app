@@ -3,11 +3,9 @@
     <div class="w-1/2 h-full bg-white">
       <header-layout />
       <login-card title="Selamat Datang">
-        <div class="text-sm-medium mt-4">
-          Lorem ipsum dolor sit amet consectetur adipisicing
+        <div class="text-sm-medium my-4">
+          Daftar sebagai customer untuk membuat tiket kendala aplikasi.
         </div>
-        <login-google />
-        <login-separator description="Atau" />
         <register-form />
       </login-card>
     </div>
@@ -22,8 +20,6 @@
 
 <script setup lang="ts">
 import loginCard from "../components/auth-card.vue";
-import LoginGoogle from "../components/auth-google.vue";
-import LoginSeparator from "../components/auth-separator.vue";
 import HeaderLayout from "../layouts/header-layout.vue";
 import RegisterForm from "./components/register-form.vue";
 </script>

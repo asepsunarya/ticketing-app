@@ -13,6 +13,7 @@ import {
 import { ProjectService } from './project.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuardAdmin } from '@/auth/modules/auth/guards/jwt-auth-admin.guard';
+import { JwtAuthGuard } from '@/auth/modules/auth/guards/jwt-auth.guard';
 import { CreateProjectDto, PaginateProjectDto } from './project.dto';
 import { ParamIdDto } from '@/global/dto/param-id.dto';
 
@@ -20,6 +21,13 @@ import { ParamIdDto } from '@/global/dto/param-id.dto';
 @Controller('project')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
+
+  @Get('customer/list')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  async paginateForCustomer(@Query() query: PaginateProjectDto) {
+    return await this.projectService.paginate(query);
+  }
 
   @Get(':id')
   @ApiBearerAuth()
