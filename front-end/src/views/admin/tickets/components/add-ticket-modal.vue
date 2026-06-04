@@ -144,7 +144,7 @@ const projectMemberStore = useProjectMemberStore();
 
 const isLoadingSubmit = ref<boolean>(false);
 const uploadStatus = ref<string>("");
-const urgencyLevels = [5, 4, 3, 2, 1];
+const urgencyLevels = ['dedicated', 'priority', 'standard'];
 const releaseStatus = [
   { key: "new", value: "Baru" },
   { key: "old", value: "Lama" },
@@ -155,7 +155,7 @@ const form = reactive({
   feature: "",
   description: "",
   file: "",
-  urgencyLevel: "",
+  urgencyLevel: "standard",
   releaseStatus: "",
 });
 

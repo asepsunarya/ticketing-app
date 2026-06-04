@@ -36,7 +36,7 @@ export class CreateTicketDto {
   @ApiProperty({ default: 'user@manypage.id' })
   email: string;
 
-  @ApiProperty({ default: 1 })
+  @ApiProperty({ default: 'standard' })
   urgencyLevel: string;
 
   @ApiProperty()
@@ -74,7 +74,7 @@ export class CreateCustomerTicketDto {
   @ApiProperty({ default: '' })
   description: string;
 
-  @ApiProperty({ default: 1 })
+  @ApiProperty({ default: 'standard' })
   urgencyLevel: string;
 
   @ApiProperty({ default: 'old' })

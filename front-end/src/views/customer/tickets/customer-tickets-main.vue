@@ -42,7 +42,6 @@
               <th scope="col" class="px-6 py-3 font-semibold">Fitur</th>
               <th scope="col" class="px-6 py-3 font-semibold">Deskripsi</th>
               <th scope="col" class="px-6 py-3 font-semibold">Status</th>
-              <th scope="col" class="px-6 py-3 font-semibold">Prioritas</th>
               <th scope="col" class="px-6 py-3 font-semibold">Lampiran</th>
               <th scope="col" class="px-6 py-3 font-semibold">Tanggal</th>
             </tr>
@@ -57,14 +56,13 @@
                 {{ ticket.description }}
               </td>
               <td class="px-6 py-3 capitalize">{{ ticket.status }}</td>
-              <td class="px-6 py-3">{{ ticket.urgencyLevel }}</td>
               <td class="px-6 py-3">{{ ticket.files?.length || 0 }} file</td>
               <td class="px-6 py-3">{{ new Date(ticket.createdAt).toLocaleDateString('id') }}</td>
             </tr>
           </tbody>
           <tbody v-else>
             <tr>
-              <td colspan="6" class="px-6 py-16 text-center text-zinc-500">
+              <td colspan="5" class="px-6 py-16 text-center text-zinc-500">
                 Belum ada tiket. Klik “Buat Tiket” untuk membuat tiket pertama.
               </td>
             </tr>

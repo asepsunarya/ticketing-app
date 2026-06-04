@@ -72,16 +72,6 @@
       </div>
 
       <div class="w-1/2">
-        <ui-select v-model="form.urgencyLevel" label="Tingkat Urgensi">
-          <option value="" disabled>Pilih tingkat urgensi</option>
-          <option v-for="level in urgencyLevels" :key="level" :value="String(level)">
-            {{ level }}
-          </option>
-        </ui-select>
-        <template v-if="v$.$error && v$.urgencyLevel.$invalid">
-          <span class="label-text-alt text-error mt-2">Tingkat Urgensi harus diisi</span>
-        </template>
-
         <ui-select v-model="form.releaseStatus" label="Status Rilis">
           <option v-for="status in releaseStatus" :key="status.key" :value="status.key">
             {{ status.value }}
@@ -135,7 +125,6 @@ const isLoadingSubmit = ref(false);
 const uploadStatus = ref('');
 const selectedFiles = ref<string[]>([]);
 const selectedRawFiles = ref<File[]>([]);
-const urgencyLevels = [5, 4, 3, 2, 1];
 const releaseStatus = [
   { key: 'new', value: 'Baru' },
   { key: 'old', value: 'Lama' },
@@ -146,7 +135,7 @@ const form = reactive({
   feature: '',
   description: '',
   file: '',
-  urgencyLevel: '',
+  urgencyLevel: 'standard',
   releaseStatus: 'old',
 });
 
@@ -154,7 +143,6 @@ const rules = {
   projectId: { required },
   feature: { required },
   description: { required },
-  urgencyLevel: { required },
 };
 
 const v$ = useVuelidate(rules, form);
@@ -225,7 +213,7 @@ function clearForm() {
   form.feature = '';
   form.description = '';
   form.file = '';
-  form.urgencyLevel = '';
+  form.urgencyLevel = 'standard';
   form.releaseStatus = 'old';
   selectedFiles.value = [];
   selectedRawFiles.value = [];
