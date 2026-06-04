@@ -146,8 +146,8 @@ const router = useRouter();
 const route = useRoute();
 const ticketStore = useTicketStore();
 const projectStore = useProjectStore();
-const years = ["2023", "2024"];
-const selectedYear = ref("2024");
+const years = ["2023", "2024", "2025", "2026"];
+const selectedYear = ref("2026");
 
 async function handleGetTickets(status = "") {
   ticketStore.filter.year = selectedYear.value;

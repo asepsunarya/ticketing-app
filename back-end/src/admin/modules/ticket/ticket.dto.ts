@@ -8,7 +8,7 @@ export class PaginateTicketDto extends PaginationDto {
   @ApiProperty({ default: '' })
   projectId: string;
 
-  @ApiProperty({ default: '2024' })
+  @ApiProperty({ default: '2026' })
   year: string;
 
   @ApiProperty({ default: '' })

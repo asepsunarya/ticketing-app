@@ -11,7 +11,30 @@ export class PeopleService {
     @InjectModel('people')
     private peopleModel: Model<PeopleDocument> &
       AggregatePaginateModel<PeopleDocument>,
-  ) {}
+  ) {
+    this.ensureProjectMemberIndexes();
+  }
+
+  private async ensureProjectMemberIndexes() {
+    try {
+      const indexes = await this.peopleModel.collection.indexes();
+      const legacyUniqueUserIndex = indexes.find((index) => {
+        const keys = Object.keys(index.key || {});
+        return index.unique && keys.length === 1 && index.key.userId === 1;
+      });
+
+      if (legacyUniqueUserIndex?.name) {
+        await this.peopleModel.collection.dropIndex(legacyUniqueUserIndex.name);
+      }
+
+      await this.peopleModel.collection.createIndex(
+        { projectId: 1, userId: 1 },
+        { unique: true, name: 'project_user_unique' },
+      );
+    } catch (error) {
+      console.log('error ensuring people indexes: ', error);
+    }
+  }
 
   async paginate(query: PaginatePeople) {
     const filter = {
@@ -56,6 +79,8 @@ export class PeopleService {
   }
 
   async create(body: People, { _id, email }: User) {
+    await this.ensureProjectMemberIndexes();
+
     const people = {
       ...body,
       userId: new Types.ObjectId(body.userId),
@@ -65,7 +90,23 @@ export class PeopleService {
         email,
       },
     };
-    return await this.peopleModel.create(people);
+
+    const { role, ...peopleOnInsert } = people;
+
+    return await this.peopleModel.findOneAndUpdate(
+      {
+        projectId: people.projectId,
+        userId: people.userId,
+      },
+      {
+        $set: {
+          role,
+          updatedAt: new Date(),
+        },
+        $setOnInsert: peopleOnInsert,
+      },
+      { new: true, upsert: true },
+    );
   }
 
   async update(body: People, id: string) {
