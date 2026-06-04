@@ -24,6 +24,18 @@ export type TicketReportLatest = {
   updatedAt: string | Date;
 };
 
+export type TicketReportAssignee = {
+  _id: string;
+  name?: string;
+  email?: string;
+  photo?: string;
+  total: number;
+  open: number;
+  inprogress: number;
+  pending: number;
+  closed: number;
+};
+
 export type TicketReportResult = {
   year: number;
   status: TicketReportStatus;
@@ -31,6 +43,7 @@ export type TicketReportResult = {
     assigned: number;
     unassigned: number;
   };
+  assignees: TicketReportAssignee[];
   handling: {
     handled: number;
     unhandled: number;

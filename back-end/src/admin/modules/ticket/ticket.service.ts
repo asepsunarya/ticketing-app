@@ -87,7 +87,14 @@ export class TicketService {
       },
     };
 
-    const [statusSummary, assignmentSummary, urgencySummary, monthlySummary, latestTickets] = await Promise.all([
+    const [
+      statusSummary,
+      assignmentSummary,
+      assigneeSummary,
+      urgencySummary,
+      monthlySummary,
+      latestTickets,
+    ] = await Promise.all([
       this.ticketModel.aggregate([
         { $match: baseFilter },
         { $group: { _id: '$status', count: { $sum: 1 } } },
@@ -118,6 +125,23 @@ export class TicketService {
             closed: { $sum: { $cond: [{ $eq: ['$status', 'closed'] }, 1, 0] } },
           },
         },
+      ]),
+      this.ticketModel.aggregate([
+        { $match: { ...baseFilter, 'assignedBy._id': { $exists: true } } },
+        {
+          $group: {
+            _id: '$assignedBy._id',
+            name: { $first: '$assignedBy.name' },
+            email: { $first: '$assignedBy.email' },
+            photo: { $first: '$assignedBy.photo' },
+            total: { $sum: 1 },
+            open: { $sum: { $cond: [{ $eq: ['$status', 'open'] }, 1, 0] } },
+            inprogress: { $sum: { $cond: [{ $eq: ['$status', 'inprogress'] }, 1, 0] } },
+            pending: { $sum: { $cond: [{ $eq: ['$status', 'pending'] }, 1, 0] } },
+            closed: { $sum: { $cond: [{ $eq: ['$status', 'closed'] }, 1, 0] } },
+          },
+        },
+        { $sort: { total: -1, name: 1 } },
       ]),
       this.ticketModel.aggregate([
         { $match: baseFilter },
@@ -187,6 +211,17 @@ export class TicketService {
         assigned: assignment.assigned,
         unassigned: assignment.unassigned,
       },
+      assignees: assigneeSummary.map((item) => ({
+        _id: item._id,
+        name: item.name,
+        email: item.email,
+        photo: item.photo,
+        total: item.total,
+        open: item.open,
+        inprogress: item.inprogress,
+        pending: item.pending,
+        closed: item.closed,
+      })),
       handling: {
         handled: assignment.handled,
         unhandled: Math.max(statusCounts.all - assignment.handled, 0),

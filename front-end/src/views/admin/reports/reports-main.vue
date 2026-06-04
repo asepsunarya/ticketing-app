@@ -7,11 +7,21 @@
           Pantau statistik tiket dan progres penanganan tiket pada proyek ini.
         </div>
       </div>
-      <ui-select v-model="selectedYear" class="w-40" @change="handleGetReport">
-        <option v-for="year in years" :key="year" :value="year">
-          {{ year }}
-        </option>
-      </ui-select>
+      <div class="flex gap-3">
+        <button
+          class="px-4 py-2 rounded-lg bg-primary text-white text-sm disabled:bg-zinc-300"
+          :disabled="!report"
+          @click="exportCsv"
+        >
+          <i class="bi bi-download me-1"></i>
+          Export CSV
+        </button>
+        <ui-select v-model="selectedYear" class="w-40" @change="handleGetReport">
+          <option v-for="year in years" :key="year" :value="year">
+            {{ year }}
+          </option>
+        </ui-select>
+      </div>
     </div>
 
     <div v-if="loading" class="mt-10 text-zinc-500">Memuat laporan...</div>
@@ -75,6 +85,37 @@
             <div class="font-semibold text-right">{{ month.all }}</div>
           </div>
         </div>
+      </div>
+
+      <div class="border rounded-xl p-5 bg-white shadow-sm mt-8">
+        <div class="font-semibold text-lg mb-4">Jumlah Assign Tiket per Anggota</div>
+        <div v-if="report.assignees.length" class="relative overflow-x-auto">
+          <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-black border-b">
+              <tr>
+                <th class="px-4 py-3 font-semibold">Anggota</th>
+                <th class="px-4 py-3 font-semibold">Email</th>
+                <th class="px-4 py-3 font-semibold">Total Assign</th>
+                <th class="px-4 py-3 font-semibold">Open</th>
+                <th class="px-4 py-3 font-semibold">In Progress</th>
+                <th class="px-4 py-3 font-semibold">Pending</th>
+                <th class="px-4 py-3 font-semibold">Closed</th>
+              </tr>
+            </thead>
+            <tbody class="text-black">
+              <tr v-for="assignee in report.assignees" :key="assignee._id" class="border-b hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium">{{ assignee.name || '-' }}</td>
+                <td class="px-4 py-3">{{ assignee.email || '-' }}</td>
+                <td class="px-4 py-3 font-semibold">{{ assignee.total }}</td>
+                <td class="px-4 py-3">{{ assignee.open }}</td>
+                <td class="px-4 py-3">{{ assignee.inprogress }}</td>
+                <td class="px-4 py-3">{{ assignee.pending }}</td>
+                <td class="px-4 py-3">{{ assignee.closed }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-else class="text-zinc-400">Belum ada tiket yang di-assign ke anggota pada tahun ini.</div>
       </div>
 
       <div class="border rounded-xl p-5 bg-white shadow-sm mt-8">
@@ -154,6 +195,77 @@ function getStatusLabel(status: string) {
 
 function formatDate(date: string | Date) {
   return new Date(date).toLocaleDateString("id");
+}
+
+function csvValue(value: string | number | undefined | null) {
+  const text = String(value ?? "");
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+function exportCsv() {
+  if (!report.value) return;
+
+  const rows: (string | number)[][] = [
+    ["Laporan Tiket", projectStore.selected?.name || "", selectedYear.value],
+    [],
+    ["Ringkasan"],
+    ["Total Tiket", report.value.status.all],
+    ["Open", report.value.status.open],
+    ["In Progress", report.value.status.inprogress],
+    ["Pending", report.value.status.pending],
+    ["Closed", report.value.status.closed],
+    ["Tiket Ditugaskan", report.value.assignment.assigned],
+    ["Belum Ditugaskan", report.value.assignment.unassigned],
+    ["Sudah Ditangani", report.value.handling.handled],
+    ["Belum Ditangani", report.value.handling.unhandled],
+    ["Rasio Selesai", `${report.value.handling.completionRate}%`],
+    ["Rata-rata Penanganan", `${report.value.handling.averageClosedDays} hari`],
+    [],
+    ["Jumlah Assign Tiket per Anggota"],
+    ["Anggota", "Email", "Total Assign", "Open", "In Progress", "Pending", "Closed"],
+    ...report.value.assignees.map((assignee) => [
+      assignee.name || "-",
+      assignee.email || "-",
+      assignee.total,
+      assignee.open,
+      assignee.inprogress,
+      assignee.pending,
+      assignee.closed,
+    ]),
+    [],
+    ["Tren Tiket per Bulan"],
+    ["Bulan", "Total", "Open", "In Progress", "Pending", "Closed"],
+    ...report.value.monthly.map((month) => [
+      monthNames[month.month - 1],
+      month.all,
+      month.open,
+      month.inprogress,
+      month.pending,
+      month.closed,
+    ]),
+    [],
+    ["Aktivitas Tiket Terbaru"],
+    ["Fitur", "Status", "Prioritas", "Assignee", "Reporter", "Update Terakhir"],
+    ...report.value.latestTickets.map((ticket) => [
+      ticket.feature,
+      getStatusLabel(ticket.status),
+      ticket.urgencyLevel || "-",
+      ticket.assignedBy?.name || "Belum ditugaskan",
+      ticket.reportBy?.name || "-",
+      formatDate(ticket.updatedAt),
+    ]),
+  ];
+
+  const csv = rows.map((row) => row.map(csvValue).join(",")).join("\n");
+  const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `laporan-tiket-${projectStore.selected?.code || "project"}-${selectedYear.value}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
 
 async function handleGetReport() {
