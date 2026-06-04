@@ -17,14 +17,22 @@ class User {
   photo?: string;
 }
 
+const UserSchemaDefinition = {
+  _id: Types.ObjectId,
+  email: String,
+  name: String,
+  photo: String,
+};
+
+const TicketCommentSchemaDefinition = {
+  description: String,
+  createdBy: UserSchemaDefinition,
+  createdAt: { type: Date, default: now },
+};
+
 class TicketComment {
-  @Prop()
   description: string;
-
-  @Prop()
   createdBy: User;
-
-  @Prop({ type: Date, default: now() })
   createdAt: Date;
 }
 
@@ -81,7 +89,7 @@ export class TicketModel {
   @Prop()
   note?: string;
 
-  @Prop({ type: [TicketComment], default: [] })
+  @Prop({ type: [TicketCommentSchemaDefinition], default: [] })
   comments?: TicketComment[];
 }
 
