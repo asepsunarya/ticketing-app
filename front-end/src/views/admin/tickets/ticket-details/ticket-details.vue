@@ -1,7 +1,7 @@
 <template>
-  <div v-if="fetchStatus == 'success'" class="relative lg:flex gap-x-8">
+  <div v-if="fetchStatus == 'success'" class="relative lg:flex gap-x-8 pb-8">
     <div
-      class="lg:w-3/5 space-y-8 relative overflow-y-auto lg:h-[93vh] pt-8 scrollbar-custom hover:scrollbar-thumb-zinc-300"
+      class="lg:w-3/5 space-y-8 relative pt-8"
     >
       <div class="font-semibold text-2xl text-zinc-600">
         {{ ticketStore.selected.description }}
@@ -129,18 +129,6 @@
           <div class="w-2/5 font-bold text-zinc-500">Email User</div>
           <div class="w-3/5 flex gap-x-2 items-center text-zinc-500">
             {{ ticketStore.selected.email }}
-          </div>
-        </div>
-        <div class="px-4 pb-2 flex items-center text-sm">
-          <div class="w-2/5 font-bold text-zinc-500">Prioritas</div>
-          <div class="w-3/5 flex gap-x-2 items-center text-zinc-500">
-            {{ ticketStore.selected.urgencyLevel }}
-          </div>
-        </div>
-        <div class="px-4 pb-2 flex items-center text-sm">
-          <div class="w-2/5 font-bold text-zinc-500">Status Rilis Fitur</div>
-          <div class="w-3/5 flex gap-x-2 items-center text-zinc-500">
-            {{ ticketStore.selected.releaseStatus == "old" ? "Lama" : "Baru" }}
           </div>
         </div>
       </div>
@@ -323,12 +311,7 @@ onMounted(async () => {
 });
 </script>
 
-<style>
-@media (min-width: 1024px) {
-  body {
-    overflow: hidden !important;
-  }
-}
+<style scoped>
 video {
   object-fit: cover;
 }

@@ -84,6 +84,17 @@ export class TicketController {
     return await this.ticketService.addComment(id, body.description, user);
   }
 
+  @Put('customer/:id/reopen')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  async reopenCustomerTicket(@Param() { id }: ParamIdDto, @Req() { user }) {
+    return await this.ticketService.reopenCustomerTicket(
+      id,
+      String(user._id),
+      user,
+    );
+  }
+
   @Post('customer/:id/comment')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)

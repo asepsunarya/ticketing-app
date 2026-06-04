@@ -33,6 +33,13 @@ export async function addCustomerTicketComment(ticketId: string, description: st
   });
 }
 
+export async function reopenCustomerTicket(ticketId: string) {
+  return await axios<void>({
+    method: 'PUT',
+    url: `/admin/ticket/customer/${ticketId}/reopen`,
+  });
+}
+
 export async function getCustomerProjects() {
   return await axios<CustomerProjectsResult>({
     method: 'GET',

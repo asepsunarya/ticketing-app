@@ -136,6 +136,27 @@ export class TicketService {
     });
   }
 
+  async reopenCustomerTicket(id: string, userId: string, user: User) {
+    await this.findCustomerTicket(id, userId);
+    return await this.ticketModel.updateOne(
+      { _id: new Types.ObjectId(id) },
+      {
+        $set: {
+          status: 'open',
+          reason: '',
+          solution: '',
+          lastUpdatedBy: {
+            _id: new Types.ObjectId(user?._id),
+            name: user?.name,
+            email: user?.email,
+            photo: user?.photo,
+          },
+          updatedAt: new Date(),
+        },
+      },
+    );
+  }
+
   async addComment(id: string, description: string, { _id, name, email, photo }: User) {
     return await this.ticketModel.updateOne(
       { _id: new Types.ObjectId(id) },

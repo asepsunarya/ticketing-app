@@ -51,7 +51,7 @@ export class CreateTicketDto {
   @ApiProperty({ type: UserDto })
   assignedBy?: UserDto;
 
-  @ApiProperty()
+  @ApiProperty({ type: [String], required: false })
   files?: string[];
 
   @ApiProperty({ required: false })
@@ -80,7 +80,7 @@ export class CreateCustomerTicketDto {
   @ApiProperty({ default: 'old' })
   releaseStatus: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: [String], required: false })
   files?: string[];
 }
 

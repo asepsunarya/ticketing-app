@@ -42,14 +42,15 @@
       </div>
 
       <div class="flex">
-        <ui-input
-          v-model="form.file"
-          @change="uploadFile"
-          type="file"
-          label="File Pendukung"
-          :multiple="true"
-          custom-class="!file-input !file-input-bordered !file-input-ghost !file-input-sm !max-w-sm p-0"
-        />
+        <div class="form-control">
+          <label class="label">File Pendukung</label>
+          <input
+            type="file"
+            multiple
+            class="file-input file-input-bordered file-input-ghost file-input-sm max-w-sm"
+            @change="handleSelectFiles"
+          />
+        </div>
         <span
           v-if="uploadStatus === 'loading'"
           class="mt-8 ml-4 loading loading-spinner text-zinc-400"
@@ -62,6 +63,9 @@
           v-else-if="uploadStatus === 'error'"
           class="self-end mb-1 ml-2 bi bi-x text-xl text-error"
         />
+      </div>
+      <div v-if="selectedRawFiles.length && uploadStatus !== 'success'" class="text-sm text-zinc-500">
+        {{ selectedRawFiles.length }} file dipilih. File akan diupload saat tiket disimpan.
       </div>
       <div v-if="selectedFiles.length" class="text-sm text-zinc-500">
         {{ selectedFiles.length }} file berhasil dilampirkan
@@ -130,6 +134,7 @@ const emits = defineEmits<{
 const isLoadingSubmit = ref(false);
 const uploadStatus = ref('');
 const selectedFiles = ref<string[]>([]);
+const selectedRawFiles = ref<File[]>([]);
 const urgencyLevels = [5, 4, 3, 2, 1];
 const releaseStatus = [
   { key: 'new', value: 'Baru' },
@@ -160,13 +165,14 @@ async function handleSubmitForm() {
 
   try {
     isLoadingSubmit.value = true;
+    const files = await uploadSelectedFiles();
     await createCustomerTicket({
       projectId: form.projectId,
       feature: form.feature,
       description: form.description,
       urgencyLevel: form.urgencyLevel,
       releaseStatus: form.releaseStatus,
-      files: selectedFiles.value,
+      files,
     });
 
     clearForm();
@@ -181,26 +187,36 @@ async function handleSubmitForm() {
   }
 }
 
-async function uploadFile(files: File[]) {
+function handleSelectFiles(event: Event) {
+  const target = event.target as HTMLInputElement;
+  selectedRawFiles.value = Array.from(target.files || []);
   selectedFiles.value = [];
-  if (files.length > 0) {
-    try {
-      uploadStatus.value = 'loading';
-      const storage = getStorage();
-      for (const file of files) {
-        const fileRef = storageRef(storage, `tickets/${Date.now()}-${file.name}`);
-        await uploadBytes(fileRef, file);
-        const downloadURL = await getDownloadURL(fileRef);
-        selectedFiles.value.push(downloadURL);
-      }
-      uploadStatus.value = 'success';
-    } catch (error) {
-      console.log(error);
-      uploadStatus.value = 'error';
-      toast('Gagal mengupload file', { type: 'error' });
+  uploadStatus.value = selectedRawFiles.value.length ? 'selected' : '';
+}
+
+async function uploadSelectedFiles() {
+  if (!selectedRawFiles.value.length) return selectedFiles.value;
+  if (selectedFiles.value.length === selectedRawFiles.value.length) return selectedFiles.value;
+
+  try {
+    uploadStatus.value = 'loading';
+    const storage = getStorage();
+    const uploadedFiles: string[] = [];
+    for (const file of selectedRawFiles.value) {
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
+      const fileRef = storageRef(storage, `tickets/${Date.now()}-${safeName}`);
+      await uploadBytes(fileRef, file);
+      const downloadURL = await getDownloadURL(fileRef);
+      uploadedFiles.push(downloadURL);
     }
-  } else {
-    uploadStatus.value = '';
+    selectedFiles.value = uploadedFiles;
+    uploadStatus.value = 'success';
+    return uploadedFiles;
+  } catch (error) {
+    console.log(error);
+    uploadStatus.value = 'error';
+    toast('Gagal mengupload file', { type: 'error' });
+    throw error;
   }
 }
 
@@ -212,6 +228,7 @@ function clearForm() {
   form.urgencyLevel = '';
   form.releaseStatus = 'old';
   selectedFiles.value = [];
+  selectedRawFiles.value = [];
   uploadStatus.value = '';
   v$.value.$reset();
 }

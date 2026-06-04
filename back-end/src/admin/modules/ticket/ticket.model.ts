@@ -71,7 +71,7 @@ export class TicketModel {
   @Prop({ type: Date, default: now() })
   updatedAt: Date;
 
-  @Prop()
+  @Prop({ type: [String], default: [] })
   files: string[];
 
   @Prop()
