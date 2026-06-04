@@ -19,6 +19,7 @@ import {
   CreateTicketCommentDto,
   CreateTicketDto,
   PaginateTicketDto,
+  ReportTicketDto,
 } from './ticket.dto';
 import { ParamIdDto } from '@/global/dto/param-id.dto';
 import { User } from '@/global/entity/user.entity';
@@ -36,6 +37,13 @@ export class TicketController {
     @Req() { user }: { user: User },
   ) {
     return await this.ticketService.paginate(query, String(user._id));
+  }
+
+  @Get('report')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuardAdmin)
+  async report(@Query() query: ReportTicketDto) {
+    return await this.ticketService.report(query.projectId, query.year);
   }
 
   @Get('customer/list')

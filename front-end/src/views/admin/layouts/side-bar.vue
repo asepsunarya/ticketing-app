@@ -46,6 +46,13 @@ const menus = computed<Menu[]>(() => [
     active: isActive("tickets"),
   },
   {
+    name: "reports",
+    title: "Laporan",
+    icon: "bi-bar-chart",
+    redirect: `/admin/projects/${route.params.code}/reports`,
+    active: isActive("reports"),
+  },
+  {
     name: "settings",
     title: "Pengaturan",
     icon: "bi-gear-wide",
@@ -53,7 +60,11 @@ const menus = computed<Menu[]>(() => [
   },
 ]);
 
-const displayMenu = ref(route.meta.submenu);
+const displayMenu = ref(getDisplayMenu(route.meta.submenu));
+
+function getDisplayMenu(submenu: unknown) {
+  return ["tickets", "settings"].includes(String(submenu)) ? submenu : "";
+}
 
 function isActive(routeName: string) {
   return routeName === route.meta.submenu;
@@ -72,6 +83,13 @@ async function handleGetProject(code: string | string[]) {
     console.log("error : ", error);
   }
 }
+
+watch(
+  () => route.meta.submenu,
+  (submenu) => {
+    displayMenu.value = getDisplayMenu(submenu);
+  }
+);
 
 watch(
   () => route.params.code,

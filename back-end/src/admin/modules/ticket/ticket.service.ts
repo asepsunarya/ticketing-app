@@ -76,6 +76,130 @@ export class TicketService {
     });
   }
 
+
+  async report(projectId: string, year: string) {
+    const currentYear = Number(year) || new Date().getFullYear();
+    const baseFilter = {
+      projectId: new Types.ObjectId(projectId),
+      createdAt: {
+        $gte: new Date(currentYear, 0, 1),
+        $lt: new Date(currentYear + 1, 0, 1),
+      },
+    };
+
+    const [statusSummary, assignmentSummary, urgencySummary, monthlySummary, latestTickets] = await Promise.all([
+      this.ticketModel.aggregate([
+        { $match: baseFilter },
+        { $group: { _id: '$status', count: { $sum: 1 } } },
+      ]),
+      this.ticketModel.aggregate([
+        { $match: baseFilter },
+        {
+          $group: {
+            _id: null,
+            assigned: {
+              $sum: { $cond: [{ $ifNull: ['$assignedBy._id', false] }, 1, 0] },
+            },
+            unassigned: {
+              $sum: { $cond: [{ $ifNull: ['$assignedBy._id', false] }, 0, 1] },
+            },
+            handled: {
+              $sum: { $cond: [{ $in: ['$status', ['inprogress', 'pending', 'closed']] }, 1, 0] },
+            },
+            totalHandlingDays: {
+              $sum: {
+                $cond: [
+                  { $eq: ['$status', 'closed'] },
+                  { $divide: [{ $subtract: ['$updatedAt', '$createdAt'] }, 1000 * 60 * 60 * 24] },
+                  0,
+                ],
+              },
+            },
+            closed: { $sum: { $cond: [{ $eq: ['$status', 'closed'] }, 1, 0] } },
+          },
+        },
+      ]),
+      this.ticketModel.aggregate([
+        { $match: baseFilter },
+        { $group: { _id: '$urgencyLevel', count: { $sum: 1 } } },
+      ]),
+      this.ticketModel.aggregate([
+        { $match: baseFilter },
+        {
+          $group: {
+            _id: { month: { $month: '$createdAt' }, status: '$status' },
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { '_id.month': 1 } },
+      ]),
+      this.ticketModel
+        .find(baseFilter)
+        .sort({ updatedAt: -1 })
+        .limit(5)
+        .select('feature status urgencyLevel assignedBy reportBy createdAt updatedAt')
+        .lean(),
+    ]);
+
+    const statusCounts = statusSummary.reduce(
+      (acc, item) => ({ ...acc, [item._id || 'unknown']: item.count }),
+      { all: 0, open: 0, inprogress: 0, pending: 0, closed: 0 },
+    );
+    statusCounts.all = Object.values(statusCounts).reduce(
+      (total: number, count: number) => total + count,
+      0,
+    );
+
+    const assignment = assignmentSummary[0] || {
+      assigned: 0,
+      unassigned: 0,
+      handled: 0,
+      closed: 0,
+      totalHandlingDays: 0,
+    };
+
+    const urgency = urgencySummary.reduce(
+      (acc, item) => ({ ...acc, [item._id || 'unknown']: item.count }),
+      {},
+    );
+
+    const monthly = Array.from({ length: 12 }, (_, index) => ({
+      month: index + 1,
+      all: 0,
+      open: 0,
+      inprogress: 0,
+      pending: 0,
+      closed: 0,
+    }));
+    monthlySummary.forEach((item) => {
+      const monthIndex = Number(item._id.month) - 1;
+      const status = item._id.status || 'unknown';
+      if (monthly[monthIndex]) {
+        monthly[monthIndex].all += item.count;
+        monthly[monthIndex][status] = item.count;
+      }
+    });
+
+    return {
+      year: currentYear,
+      status: statusCounts,
+      assignment: {
+        assigned: assignment.assigned,
+        unassigned: assignment.unassigned,
+      },
+      handling: {
+        handled: assignment.handled,
+        unhandled: Math.max(statusCounts.all - assignment.handled, 0),
+        completionRate: statusCounts.all ? Math.round((Number(statusCounts.closed || 0) / statusCounts.all) * 100) : 0,
+        averageClosedDays: assignment.closed ? Number((assignment.totalHandlingDays / assignment.closed).toFixed(1)) : 0,
+      },
+      urgency,
+      monthly,
+      latestTickets,
+    };
+  }
+
+
   async count(projectId: string, user: User) {
     const [all, me, open, inprogress, closed, pending] = await Promise.all([
       this.generateCount(projectId, 'all'),

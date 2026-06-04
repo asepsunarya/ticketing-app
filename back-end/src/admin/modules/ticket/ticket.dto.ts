@@ -21,6 +21,15 @@ export class PaginateTicketDto extends PaginationDto {
   isAssigned?: boolean;
 }
 
+export class ReportTicketDto {
+  @IsNotEmpty()
+  @ApiProperty({ default: '658d2611d9a82ee5abff1fef' })
+  projectId: string;
+
+  @ApiProperty({ default: '2026' })
+  year: string;
+}
+
 export class CreateTicketDto {
   @ApiProperty({ default: '658d2611d9a82ee5abff1fef' })
   projectId: string;
