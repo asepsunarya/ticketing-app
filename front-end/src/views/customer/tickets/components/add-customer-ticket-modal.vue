@@ -67,6 +67,9 @@
       <div v-if="selectedRawFiles.length && uploadStatus !== 'success'" class="text-sm text-zinc-500">
         {{ selectedRawFiles.length }} file dipilih. File akan diupload saat tiket disimpan.
       </div>
+      <div v-if="uploadStatus === 'fallback'" class="text-sm text-warning">
+        Firebase Storage tidak tersedia, lampiran disimpan langsung ke data tiket.
+      </div>
       <div v-if="selectedFiles.length" class="text-sm text-zinc-500">
         {{ selectedFiles.length }} file berhasil dilampirkan
       </div>
@@ -118,6 +121,7 @@ const isLoadingSubmit = ref(false);
 const uploadStatus = ref('');
 const selectedFiles = ref<string[]>([]);
 const selectedRawFiles = ref<File[]>([]);
+const maxFallbackFileSize = 3 * 1024 * 1024;
 const form = reactive({
   projectId: '',
   feature: '',
@@ -172,26 +176,57 @@ async function uploadSelectedFiles() {
   if (!selectedRawFiles.value.length) return selectedFiles.value;
   if (selectedFiles.value.length === selectedRawFiles.value.length) return selectedFiles.value;
 
+  uploadStatus.value = 'loading';
   try {
-    uploadStatus.value = 'loading';
-    const storage = getStorage();
-    const uploadedFiles: string[] = [];
-    for (const file of selectedRawFiles.value) {
-      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
-      const fileRef = storageRef(storage, `tickets/${Date.now()}-${safeName}`);
-      await uploadBytes(fileRef, file);
-      const downloadURL = await getDownloadURL(fileRef);
-      uploadedFiles.push(downloadURL);
-    }
+    const uploadedFiles = await uploadFilesToFirebase(selectedRawFiles.value);
     selectedFiles.value = uploadedFiles;
     uploadStatus.value = 'success';
     return uploadedFiles;
   } catch (error) {
-    console.log(error);
-    uploadStatus.value = 'error';
-    toast('Gagal mengupload file', { type: 'error' });
-    throw error;
+    console.log('firebase upload failed, using data URL fallback: ', error);
+    const fallbackFiles = await convertFilesToDataUrls(selectedRawFiles.value);
+    selectedFiles.value = fallbackFiles;
+    uploadStatus.value = 'fallback';
+    toast('Firebase Storage tidak tersedia, lampiran disimpan langsung ke tiket', {
+      type: 'warning',
+    });
+    return fallbackFiles;
   }
+}
+
+async function uploadFilesToFirebase(files: File[]) {
+  const storage = getStorage();
+  const uploadedFiles: string[] = [];
+  for (const file of files) {
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
+    const fileRef = storageRef(storage, `tickets/${Date.now()}-${safeName}`);
+    await uploadBytes(fileRef, file);
+    const downloadURL = await getDownloadURL(fileRef);
+    uploadedFiles.push(downloadURL);
+  }
+  return uploadedFiles;
+}
+
+async function convertFilesToDataUrls(files: File[]) {
+  const oversizedFile = files.find((file) => file.size > maxFallbackFileSize);
+  if (oversizedFile) {
+    uploadStatus.value = 'error';
+    toast(`File ${oversizedFile.name} terlalu besar untuk fallback. Maksimal 3MB.`, {
+      type: 'error',
+    });
+    throw new Error('fallback file too large');
+  }
+
+  return await Promise.all(files.map(readFileAsDataUrl));
+}
+
+function readFileAsDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 
 function clearForm() {
