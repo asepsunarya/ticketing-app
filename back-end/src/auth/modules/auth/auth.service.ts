@@ -21,7 +21,8 @@ export class AuthService {
     role?: string | string[],
   ): Promise<any> {
     const query = { email };
-    if (role) query['role'] = role;
+    if (Array.isArray(role)) query['role'] = { $in: role };
+    else if (role) query['role'] = role;
     const user = await this.userService.getUser(query);
     if (!user) return null;
     const passwordValid = await bcrypt.compare(password, user.password);
