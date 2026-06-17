@@ -16,7 +16,7 @@ export class UserController {
     @Query() { role, search, includeSelf, page, limit }: GetUserDto,
     @Req() { user },
   ) {
-    const filterRole = role != 'user' ? { $ne: 'user' } : 'user';
+    const filterRole = role != 'customer' ? { $ne: 'customer' } : 'customer';
     const query = {
       role: filterRole,
       $or: [

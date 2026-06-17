@@ -21,7 +21,8 @@ export class AuthService {
     role?: string | string[],
   ): Promise<any> {
     const query = { email };
-    if (role) query['role'] = role;
+    if (Array.isArray(role)) query['role'] = { $in: role };
+    else if (role) query['role'] = role;
     const user = await this.userService.getUser(query);
     if (!user) return null;
     const passwordValid = await bcrypt.compare(password, user.password);
@@ -35,7 +36,7 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
-    const user = await this.validateUser(email, password, 'user');
+    const user = await this.validateUser(email, password, 'customer');
     if (user) {
       const payload = { userId: user._id, email: user.email, role: user.role };
       return {

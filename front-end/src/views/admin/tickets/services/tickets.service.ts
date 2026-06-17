@@ -48,3 +48,11 @@ export async function updateTickets(
     data: newTickets,
   });
 }
+
+export async function addTicketComment(ticketId: string, description: string) {
+  await axios<void>({
+    method: "POST",
+    url: `/admin/ticket/${ticketId}/comment`,
+    data: { description },
+  });
+}

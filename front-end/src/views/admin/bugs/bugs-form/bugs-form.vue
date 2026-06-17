@@ -125,7 +125,7 @@ const form = reactive({
 });
 
 const products = ["manypage", "manychat"];
-const urgencyLevels = ["5", "4", "3", "2", "1"];
+const urgencyLevels = ["dedicated", "priority", "standard"];
 const reporters = ["user", "admin", "product owner", "developer"];
 const releaseStatuses = ["baru", "lama"];
 </script>

@@ -52,6 +52,17 @@ export default [
       import("@/views/admin/tickets/ticket-details/ticket-details.vue"),
   },
   {
+    path: "/admin/projects/:code/reports",
+    name: "admin-projects-reports",
+    meta: {
+      requireAuth: true,
+      withSidebar: true,
+      menu: "project-reports",
+      submenu: "reports",
+    },
+    component: () => import("@/views/admin/reports/reports-main.vue"),
+  },
+  {
     path: "/admin/projects/:code/settings/details",
     name: "admin-projects-details",
     meta: {

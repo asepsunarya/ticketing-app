@@ -9,6 +9,31 @@ class User {
 
   @Prop()
   email: string;
+
+  @Prop()
+  name?: string;
+
+  @Prop()
+  photo?: string;
+}
+
+const UserSchemaDefinition = {
+  _id: Types.ObjectId,
+  email: String,
+  name: String,
+  photo: String,
+};
+
+const TicketCommentSchemaDefinition = {
+  description: String,
+  createdBy: UserSchemaDefinition,
+  createdAt: { type: Date, default: now },
+};
+
+class TicketComment {
+  description: string;
+  createdBy: User;
+  createdAt: Date;
 }
 
 @Schema()
@@ -46,7 +71,7 @@ export class TicketModel {
   @Prop({ type: Date, default: now() })
   updatedAt: Date;
 
-  @Prop()
+  @Prop({ type: [String], default: [] })
   files: string[];
 
   @Prop()
@@ -63,6 +88,9 @@ export class TicketModel {
 
   @Prop()
   note?: string;
+
+  @Prop({ type: [TicketCommentSchemaDefinition], default: [] })
+  comments?: TicketComment[];
 }
 
 export const TicketSchema = SchemaFactory.createForClass(TicketModel);

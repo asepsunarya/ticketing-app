@@ -71,7 +71,8 @@ const form = reactive({
 
 const selectedUser = computed(() => {
   return {
-    _id: userStore.selected?._id,
+    _id: userStore.selected?._id || "",
+    name: userStore.selected?.name,
     email: userStore.selected?.email,
     photo: userStore.selected?.photo,
   };
@@ -81,12 +82,12 @@ const rules = {
   role: { required },
 };
 
-const userRules = {
-  _id: { required },
-};
+const userRules = computed(() => {
+  return { _id: { required } };
+});
 
 const v$ = useVuelidate(rules, form);
-const v$$ = useVuelidate(userRules, selectedUser.value);
+const v$$ = useVuelidate(userRules, selectedUser);
 
 async function handleSubmitForm(): Promise<void> {
   const isValidated = await v$.value.$validate();
@@ -107,6 +108,8 @@ async function handleSubmitForm(): Promise<void> {
     closeModal("add-project-member-modal");
     userStore.clearSelected();
     form.role = "";
+    v$.value.$reset();
+    v$$.value.$reset();
   } catch (error) {
     toast("Gagal menambahkan anggota", { type: "error" });
     console.log("error : ", error);

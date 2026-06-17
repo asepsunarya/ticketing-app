@@ -18,7 +18,7 @@ export class JwtAdminStrategy extends PassportStrategy(Strategy, 'jwt-admin') {
     const roles = ['admin', 'programmer', 'customer-service', 'product-owner'];
     const admin = await this.userService.getUser({
       email: payload.email,
-      role: roles,
+      role: { $in: roles },
     });
     return admin;
   }

@@ -76,6 +76,7 @@ const form = reactive({
 const selectedUser = computed(() => {
   return {
     _id: userStore.selected?._id || "",
+    name: userStore.selected?.name,
     email: userStore.selected?.email,
     photo: userStore.selected?.photo,
   };
@@ -92,7 +93,7 @@ const userRules = computed(() => {
 });
 
 const v$ = useVuelidate(rules, form);
-const v$$ = useVuelidate(userRules, selectedUser.value);
+const v$$ = useVuelidate(userRules, selectedUser);
 
 async function handleSubmitForm(): Promise<void> {
   v$.value.$reset();
@@ -111,6 +112,12 @@ async function handleSubmitForm(): Promise<void> {
     };
 
     await createProjects(newProject);
+    form.name = "";
+    form.description = "";
+    form.code = "";
+    userStore.clearSelected();
+    v$.value.$reset();
+    v$$.value.$reset();
     emits("need-refresh");
     closeModal(props.id);
     toast("Berhasil menambahkan proyek", { type: "success" });

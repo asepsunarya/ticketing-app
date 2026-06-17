@@ -8,7 +8,7 @@ export class PaginateTicketDto extends PaginationDto {
   @ApiProperty({ default: '' })
   projectId: string;
 
-  @ApiProperty({ default: '2024' })
+  @ApiProperty({ default: '2026' })
   year: string;
 
   @ApiProperty({ default: '' })
@@ -19,6 +19,15 @@ export class PaginateTicketDto extends PaginationDto {
 
   @ApiProperty({ default: false, required: false })
   isAssigned?: boolean;
+}
+
+export class ReportTicketDto {
+  @IsNotEmpty()
+  @ApiProperty({ default: '658d2611d9a82ee5abff1fef' })
+  projectId: string;
+
+  @ApiProperty({ default: '2026' })
+  year: string;
 }
 
 export class CreateTicketDto {
@@ -36,7 +45,7 @@ export class CreateTicketDto {
   @ApiProperty({ default: 'user@manypage.id' })
   email: string;
 
-  @ApiProperty({ default: 1 })
+  @ApiProperty({ default: 'standard' })
   urgencyLevel: string;
 
   @ApiProperty()
@@ -51,7 +60,7 @@ export class CreateTicketDto {
   @ApiProperty({ type: UserDto })
   assignedBy?: UserDto;
 
-  @ApiProperty()
+  @ApiProperty({ type: [String], required: false })
   files?: string[];
 
   @ApiProperty({ required: false })
@@ -59,4 +68,33 @@ export class CreateTicketDto {
 
   @ApiProperty({ required: false })
   note?: string;
+}
+
+export class CreateCustomerTicketDto {
+  @IsNotEmpty()
+  @ApiProperty({ default: '658d2611d9a82ee5abff1fef' })
+  projectId: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ default: '' })
+  feature: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ default: '' })
+  description: string;
+
+  @ApiProperty({ default: 'standard' })
+  urgencyLevel: string;
+
+  @ApiProperty({ default: 'old' })
+  releaseStatus: string;
+
+  @ApiProperty({ type: [String], required: false })
+  files?: string[];
+}
+
+export class CreateTicketCommentDto {
+  @IsNotEmpty()
+  @ApiProperty({ default: '' })
+  description: string;
 }

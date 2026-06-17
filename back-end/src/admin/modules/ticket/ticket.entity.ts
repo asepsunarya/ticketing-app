@@ -23,4 +23,11 @@ export class Ticket {
   assignedBy?: User;
   solution?: string;
   note?: string;
+  comments?: TicketComment[];
+}
+
+export class TicketComment {
+  description: string;
+  createdBy?: User;
+  createdAt?: Date;
 }

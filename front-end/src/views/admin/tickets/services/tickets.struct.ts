@@ -1,6 +1,12 @@
 import type { PaginationResult } from "@/structs/pagination.struct";
 import type { User } from "@/views/user/services/user.struct";
 
+export type TicketComment = {
+  description: string;
+  createdBy?: User;
+  createdAt?: Date | string;
+};
+
 export type Ticket = {
   _id: string;
   projectId: string;
@@ -10,6 +16,7 @@ export type Ticket = {
   screenshot: string[];
   urgencyLevel: string;
   reportBy: User;
+  createdBy?: User;
   releaseStatus: string;
   status: string;
   createdAt: Date | string;
@@ -18,6 +25,7 @@ export type Ticket = {
   files: string[];
   reason?: string;
   note?: string;
+  comments?: TicketComment[];
 };
 
 export type GetTicketsDto = {

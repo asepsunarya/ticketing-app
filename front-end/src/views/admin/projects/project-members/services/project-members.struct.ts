@@ -3,7 +3,7 @@ import type { PaginationResult } from "@/structs/pagination.struct";
 export type GetProjectMemberDto = {
   page: number;
   limit: number;
-  projectId: string;
+  projectId?: string;
   search?: string;
 };
 
